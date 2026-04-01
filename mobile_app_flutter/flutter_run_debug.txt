@@ -1,0 +1,692 @@
+Launching lib\main.dart on motorola edge 50 fusion in debug mode...
+Running Gradle task 'assembleDebug'...                              9.8s
+√ Built build\app\outputs\flutter-apk\app-debug.apk
+Installing build\app\outputs\flutter-apk\app-debug.apk...           7.7s
+D/FlutterJNI(21472): Beginning load of flutter...
+D/FlutterJNI(21472): flutter (null) was loaded normally!
+I/flutter (21472): [IMPORTANT:flutter/shell/platform/android/android_context_vk_impeller.cc(62)] Using the Impeller rendering backend (Vulkan).
+D/FlutterGeolocator(21472): Attaching Geolocator to activity
+D/FlutterRenderer(21472): Width is zero. 0,0
+D/FlutterRenderer(21472): Width is zero. 0,0
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterGeolocator(21472): Creating service.
+D/FlutterGeolocator(21472): Binding to location service.
+D/FlutterGeolocator(21472): Geolocator foreground service connected
+D/FlutterGeolocator(21472): Initializing Geolocator services
+D/FlutterGeolocator(21472): Flutter engine connected. Connected engine count 1
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+Syncing files to device motorola edge 50 fusion...              
+I/Choreographer(21472): Skipped 75 frames!  The application may be doing too much work on its main thread.
+Syncing files to device motorola edge 50 fusion...                 183ms
+
+Flutter run key commands.
+r Hot reload. 
+R Hot restart.
+h List all available interactive commands.
+d Detach (terminate "flutter run" but leave application running).
+c Clear the screen
+q Quit (terminate the application on the device).
+
+A Dart VM Service on motorola edge 50 fusion is available at: http://127.0.0.1:50306/PeGTrXoG22Y=/
+The Flutter DevTools debugger and profiler on motorola edge 50 fusion is available at: http://127.0.0.1:50306/PeGTrXoG22Y=/devtools/?uri=ws://127.0.0.1:50306/PeGTrXoG22Y=/ws
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/InsetsController(21472): hide(ime(), fromIme=false)
+I/ImeTracker(21472): com.example.krushikadhara:92d58ac5: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+D/ProfileInstaller(21472): Installing profile for com.example.krushikadhara
+W/e.krushikadhara(21472): Unable to open libdolphin.so: dlopen failed: library "libdolphin.so" not found.
+W/e.krushikadhara(21472): userfaultfd: MOVE ioctl seems unsupported: Connection timed out
+D/VRI[MainActivity](21472): visibilityChanged oldVisibility=true newVisibility=false
+D/Surface (21472): Surface::disconnect
+D/BufferQueueProducer(21472): [1b99976 SurfaceView[com.example.krushikadhara/com.example.krushikadhara.MainActivity](BLAST)#7853(BLAST Consumer)pid:21472](id:53e000000001,api:1,p:21472,c:21472) disconnect: api 1
+D/Surface (21472): Surface::disconnect
+D/BufferQueueProducer(21472): [1b99976 SurfaceView[com.example.krushikadhara/com.example.krushikadhara.MainActivity](BLAST)#7853(BLAST Consumer)pid:21472](id:53e000000001,api:0,p:-1,c:21472) disconnect: api -1
+D/Surface (21472): Surface::disconnect
+D/BufferQueueProducer(21472): [com.example.krushikadhara/com.example.krushikadhara.MainActivity#7848(BLAST Consumer)pid:21472](id:53e000000000,api:1,p:21472,c:21472) disconnect: api 1
+D/ViewRootImpl(21472): Skipping stats log for color mode
+D/InsetsController(21472): hide(ime(), fromIme=false)
+I/ImeTracker(21472): com.example.krushikadhara:442bf7af: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+E/flutter (21472): [ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Asset 'shaders/stretch_effect.frag' manifest could not be decoded: INVALID_ARGUMENT: Payload does not have valid identifier.
+E/flutter (21472): #0      new FragmentProgram._fromAsset (dart:ui/painting.dart:5337:7)
+E/flutter (21472): #1      FragmentProgram.fromAsset.<anonymous closure> (dart:ui/painting.dart:5365:39)
+E/flutter (21472): #2      new Future.microtask.<anonymous closure> (dart:async/future.dart:287:40)
+E/flutter (21472): #3      _microtaskLoop (dart:async/schedule_microtask.dart:40:35)
+E/flutter (21472): #4      _startMicrotaskLoop (dart:async/schedule_microtask.dart:49:5)
+E/flutter (21472): 
+W/WindowOnBackDispatcher(21472): sendCancelIfRunning: isInProgress=false callback=io.flutter.embedding.android.FlutterActivity$1@ee0ac36
+I/ImeTracker(21472): com.example.krushikadhara:80ad449: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false
+D/InsetsController(21472): show(ime(), fromIme=false)
+D/InsetsController(21472): Setting requestedVisibleTypes to -1 (was -9)
+D/InputConnectionAdaptor(21472): The input method toggled cursor monitoring on
+W/InteractionJankMonitor(21472): Initializing without READ_DEVICE_CONFIG permission. enabled=true, interval=10, missedFrameThreshold=-1, frameTimeThreshold=-1, package=com.example.krushikadhara
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+I/ImeTracker(21472): com.example.krushikadhara:80ad449: onShown
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+E/flutter (21472): [ERROR:flutter/runtime/dart_vm_initializer.cc(40)] Unhandled Exception: Exception: Asset 'shaders/ink_sparkle.frag' manifest could not be decoded: INVALID_ARGUMENT: Payload does not have valid identifier.
+E/flutter (21472): #0      new FragmentProgram._fromAsset (dart:ui/painting.dart:5337:7)
+E/flutter (21472): #1      FragmentProgram.fromAsset.<anonymous closure> (dart:ui/painting.dart:5365:39)
+E/flutter (21472): #2      new Future.microtask.<anonymous closure> (dart:async/future.dart:287:40)
+E/flutter (21472): #3      _microtaskLoop (dart:async/schedule_microtask.dart:40:35)
+E/flutter (21472): #4      _startMicrotaskLoop (dart:async/schedule_microtask.dart:49:5)
+E/flutter (21472): 
+I/ImeTracker(21472): com.example.krushikadhara:da001b3e: onRequestHide at ORIGIN_CLIENT reason HIDE_SOFT_INPUT fromUser false
+D/InsetsController(21472): hide(ime(), fromIme=false)
+D/InsetsController(21472): Setting requestedVisibleTypes to -9 (was -1)
+D/CompatChangeReporter(21472): Compat change id reported: 395521150; UID 10315; state: ENABLED
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+I/ImeTracker(21472): system_server:5f903453: onCancelled at PHASE_CLIENT_ON_CONTROLS_CHANGED
+I/ImeTracker(21472): com.example.krushikadhara:7e29fde3: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false
+D/InsetsController(21472): show(ime(), fromIme=false)
+D/InsetsController(21472): Setting requestedVisibleTypes to -1 (was -9)
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+I/ImeTracker(21472): com.example.krushikadhara:7e29fde3: onCancelled at PHASE_CLIENT_ON_CONTROLS_CHANGED
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/InputConnectionAdaptor(21472): The input method toggled cursor monitoring on
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+I/ImeTracker(21472): com.example.krushikadhara:7e29fde3: onShown
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+I/ImeTracker(21472): system_server:44fcd2f9: onCancelled at PHASE_CLIENT_ON_CONTROLS_CHANGED
+I/ImeTracker(21472): com.example.krushikadhara:c856d508: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false
+D/InsetsController(21472): show(ime(), fromIme=false)
+I/ImeTracker(21472): com.example.krushikadhara:c856d508: onCancelled at PHASE_CLIENT_APPLY_ANIMATION
+D/InputConnectionAdaptor(21472): The input method toggled cursor monitoring on
+D/InputConnectionAdaptor(21472): The input method toggled cursor monitoring off
+D/InputConnectionAdaptor(21472): The input method toggled cursor monitoring on
+I/ImeTracker(21472): com.example.krushikadhara:529f42a3: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false
+D/InsetsController(21472): show(ime(), fromIme=false)
+I/ImeTracker(21472): com.example.krushikadhara:529f42a3: onCancelled at PHASE_CLIENT_APPLY_ANIMATION
+D/InputConnectionAdaptor(21472): The input method toggled cursor monitoring on
+D/InputConnectionAdaptor(21472): The input method toggled cursor monitoring off
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/InputConnectionAdaptor(21472): The input method toggled cursor monitoring on
+W/SystemServiceRegistry(21472): No service published for: moto_perf
+I/ImeTracker(21472): com.example.krushikadhara:1609e9ff: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false
+D/InsetsController(21472): show(ime(), fromIme=false)
+I/ImeTracker(21472): com.example.krushikadhara:1609e9ff: onCancelled at PHASE_CLIENT_APPLY_ANIMATION
+D/InputConnectionAdaptor(21472): The input method toggled cursor monitoring on
+D/InputConnectionAdaptor(21472): The input method toggled cursor monitoring off
+D/InputConnectionAdaptor(21472): The input method toggled cursor monitoring on
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+I/ImeTracker(21472): system_server:d39e2805: onCancelled at PHASE_CLIENT_ON_CONTROLS_CHANGED
+I/ImeTracker(21472): system_server:28f62b6c: onCancelled at PHASE_CLIENT_ON_CONTROLS_CHANGED
+W/WindowOnBackDispatcher(21472): sendCancelIfRunning: isInProgress=false callback=android.view.ImeBackAnimationController@2b50c0e
+D/InsetsController(21472): Setting requestedVisibleTypes to -9 (was -1)
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/InsetsController(21472): Setting requestedVisibleTypes to -1 (was -9)
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/InputConnectionAdaptor(21472): The input method toggled cursor monitoring on
+D/InputConnectionAdaptor(21472): The input method toggled cursor monitoring off
+D/InputConnectionAdaptor(21472): The input method toggled cursor monitoring on
+D/InsetsController(21472): Setting requestedVisibleTypes to -9 (was -1)
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+I/ImeTracker(21472): com.example.krushikadhara:bd8335c2: onRequestHide at ORIGIN_CLIENT reason HIDE_SOFT_INPUT_REQUEST_HIDE_WITH_CONTROL fromUser true
+W/WindowOnBackDispatcher(21472): sendCancelIfRunning: isInProgress=false callback=android.view.ImeBackAnimationController@2b50c0e
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/InsetsController(21472): hide(ime(), fromIme=false)
+I/ImeTracker(21472): com.example.krushikadhara:bd8335c2: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+W/RemoteInputConnectionImpl(21472): requestCursorUpdates on inactive InputConnection
+I/ImeTracker(21472): system_server:8e1cff2c: onCancelled at PHASE_CLIENT_ON_CONTROLS_CHANGED
+I/ImeTracker(21472): com.example.krushikadhara:8e6ffa1a: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false
+D/InsetsController(21472): show(ime(), fromIme=false)
+D/InsetsController(21472): Setting requestedVisibleTypes to -1 (was -9)
+D/InputConnectionAdaptor(21472): The input method toggled cursor monitoring on
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+I/ImeTracker(21472): com.example.krushikadhara:8e6ffa1a: onShown
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+I/ImeTracker(21472): com.example.krushikadhara:7e6eb0d2: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false
+D/InsetsController(21472): show(ime(), fromIme=false)
+I/ImeTracker(21472): com.example.krushikadhara:7e6eb0d2: onCancelled at PHASE_CLIENT_APPLY_ANIMATION
+D/InputConnectionAdaptor(21472): The input method toggled cursor monitoring on
+D/InputConnectionAdaptor(21472): The input method toggled cursor monitoring off
+D/InputConnectionAdaptor(21472): The input method toggled cursor monitoring on
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+I/ImeTracker(21472): com.example.krushikadhara:f954515b: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false
+D/InsetsController(21472): show(ime(), fromIme=false)
+I/ImeTracker(21472): com.example.krushikadhara:f954515b: onCancelled at PHASE_CLIENT_APPLY_ANIMATION
+I/ImeTracker(21472): com.example.krushikadhara:32af0281: onRequestShow at ORIGIN_CLIENT reason SHOW_SOFT_INPUT fromUser false
+D/InsetsController(21472): show(ime(), fromIme=false)
+I/ImeTracker(21472): com.example.krushikadhara:32af0281: onCancelled at PHASE_CLIENT_APPLY_ANIMATION
+D/InputConnectionAdaptor(21472): The input method toggled cursor monitoring on
+D/InputConnectionAdaptor(21472): The input method toggled cursor monitoring off
+D/InputConnectionAdaptor(21472): The input method toggled cursor monitoring on
+D/InsetsController(21472): Setting requestedVisibleTypes to -9 (was -1)
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+I/ImeTracker(21472): com.example.krushikadhara:e1618ad5: onRequestHide at ORIGIN_CLIENT reason HIDE_SOFT_INPUT_REQUEST_HIDE_WITH_CONTROL fromUser true
+W/WindowOnBackDispatcher(21472): sendCancelIfRunning: isInProgress=false callback=android.view.ImeBackAnimationController@2b50c0e
+D/InsetsController(21472): hide(ime(), fromIme=false)
+I/ImeTracker(21472): com.example.krushikadhara:e1618ad5: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/FlutterJNI(21472): Sending viewport metrics to the engine.
+D/InputConnectionAdaptor(21472): The input method toggled cursor monitoring on
+D/InputConnectionAdaptor(21472): The input method toggled cursor monitoring off
+D/InputConnectionAdaptor(21472): The input method toggled cursor monitoring on
+D/InputConnectionAdaptor(21472): The input method toggled cursor monitoring off
+I/ImeTracker(21472): system_server:26f9e812: onCancelled at PHASE_CLIENT_ON_CONTROLS_CHANGED
+D/VRI[MainActivity](21472): visibilityChanged oldVisibility=true newVisibility=false
+D/Surface (21472): Surface::disconnect
+D/BufferQueueProducer(21472): [1b99976 SurfaceView[com.example.krushikadhara/com.example.krushikadhara.MainActivity](BLAST)#7901(BLAST Consumer)pid:21472](id:53e000000003,api:1,p:21472,c:21472) disconnect: api 1
+D/Surface (21472): Surface::disconnect
+D/BufferQueueProducer(21472): [1b99976 SurfaceView[com.example.krushikadhara/com.example.krushikadhara.MainActivity](BLAST)#7901(BLAST Consumer)pid:21472](id:53e000000003,api:0,p:-1,c:21472) disconnect: api -1
+D/Surface (21472): Surface::disconnect
+D/BufferQueueProducer(21472): [com.example.krushikadhara/com.example.krushikadhara.MainActivity#7893(BLAST Consumer)pid:21472](id:53e000000002,api:1,p:21472,c:21472) disconnect: api 1
+Lost connection to device.
