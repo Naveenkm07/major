@@ -34,7 +34,7 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
   Map<String, dynamic>? _result;
   String? _error;
 
-  late final Stream<List<ConnectivityResult>> _connectivityStream;
+  late final Stream<ConnectivityResult> _connectivityStream;
 
   @override
   void initState() {
@@ -48,12 +48,12 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
   Future<void> _checkInitialConnectivity() async {
     final result = await Connectivity().checkConnectivity();
     setState(() {
-      _isOnline = !result.contains(ConnectivityResult.none);
+      _isOnline = result != ConnectivityResult.none;
     });
   }
 
-  Future<void> _onConnectivityChanged(List<ConnectivityResult> results) async {
-    final online = !results.contains(ConnectivityResult.none);
+  Future<void> _onConnectivityChanged(ConnectivityResult result) async {
+    final online = result != ConnectivityResult.none;
     setState(() => _isOnline = online);
 
     // ✅ Network came back AND we had a queued image → auto-retry
