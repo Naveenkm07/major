@@ -15,6 +15,7 @@ import 'services/voice_assistant_service.dart';
 import 'services/hive_storage_service.dart';
 import 'providers/weather_provider.dart';
 import 'providers/equipment_provider.dart';
+import 'providers/calendar_provider.dart';
 
 import 'screens/splash_screen.dart';
 import 'screens/auth/login_screen.dart';
@@ -68,6 +69,7 @@ class KrushikaDharaApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => VoiceAssistantService()),
         ChangeNotifierProvider(create: (_) => WeatherProvider()),
         ChangeNotifierProvider(create: (_) => EquipmentProvider()),
+        ChangeNotifierProvider(create: (_) => CalendarProvider()),
       ],
       child: MaterialApp(
         title: 'KrushikaDhara',
