@@ -132,3 +132,55 @@
 {"level":"info","message":"🕐 All cron jobs scheduled successfully","service":"krushikadhara-api","timestamp":"2026-06-02 22:00:34"}
 {"level":"info","message":"==================================================","service":"krushikadhara-api","timestamp":"2026-06-02 22:00:34"}
 {"level":"info","message":"✅ MongoDB Connected: localhost","service":"krushikadhara-api","timestamp":"2026-06-02 22:00:34"}
+{"level":"error","message":"Firebase initialization failed: Failed to parse private key: Error: Too few bytes to read ASN.1 value.","service":"krushikadhara-api","timestamp":"2026-06-02 23:47:49"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-06-02 23:47:49"}
+{"level":"info","message":"🌾 KrushikaDhara API running in development mode on port 5000","service":"krushikadhara-api","timestamp":"2026-06-02 23:47:49"}
+{"level":"info","message":"==================================================","service":"krushikadhara-api","timestamp":"2026-06-02 23:47:49"}
+{"level":"info","message":"🕐 Initializing cron job scheduler...","service":"krushikadhara-api","timestamp":"2026-06-02 23:47:49"}
+{"level":"info","message":"==================================================","service":"krushikadhara-api","timestamp":"2026-06-02 23:47:49"}
+{"level":"info","message":"  ✅ Weather update job: every 3 hours","service":"krushikadhara-api","timestamp":"2026-06-02 23:47:49"}
+{"level":"info","message":"  ✅ Market price refresh job: every 3 hours (+30 min offset)","service":"krushikadhara-api","timestamp":"2026-06-02 23:47:49"}
+{"level":"info","message":"  ✅ Government scheme check job: daily at 6:00 AM IST","service":"krushikadhara-api","timestamp":"2026-06-02 23:47:49"}
+{"level":"info","message":"==================================================","service":"krushikadhara-api","timestamp":"2026-06-02 23:47:49"}
+{"level":"info","message":"🕐 All cron jobs scheduled successfully","service":"krushikadhara-api","timestamp":"2026-06-02 23:47:49"}
+{"level":"info","message":"==================================================","service":"krushikadhara-api","timestamp":"2026-06-02 23:47:49"}
+{"level":"info","message":"✅ MongoDB Connected: localhost","service":"krushikadhara-api","timestamp":"2026-06-02 23:47:49"}
+{"level":"error","message":"Firebase initialization failed: Failed to parse private key: Error: Too few bytes to read ASN.1 value.","service":"krushikadhara-api","timestamp":"2026-06-02 23:48:14"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-06-02 23:48:14"}
+{"level":"info","message":"🌾 KrushikaDhara API running in development mode on port 5000","service":"krushikadhara-api","timestamp":"2026-06-02 23:48:14"}
+{"level":"info","message":"==================================================","service":"krushikadhara-api","timestamp":"2026-06-02 23:48:14"}
+{"level":"info","message":"🕐 Initializing cron job scheduler...","service":"krushikadhara-api","timestamp":"2026-06-02 23:48:14"}
+{"level":"info","message":"==================================================","service":"krushikadhara-api","timestamp":"2026-06-02 23:48:14"}
+{"level":"info","message":"  ✅ Weather update job: every 3 hours","service":"krushikadhara-api","timestamp":"2026-06-02 23:48:14"}
+{"level":"info","message":"  ✅ Market price refresh job: every 3 hours (+30 min offset)","service":"krushikadhara-api","timestamp":"2026-06-02 23:48:14"}
+{"level":"info","message":"  ✅ Government scheme check job: daily at 6:00 AM IST","service":"krushikadhara-api","timestamp":"2026-06-02 23:48:14"}
+{"level":"info","message":"==================================================","service":"krushikadhara-api","timestamp":"2026-06-02 23:48:14"}
+{"level":"info","message":"🕐 All cron jobs scheduled successfully","service":"krushikadhara-api","timestamp":"2026-06-02 23:48:14"}
+{"level":"info","message":"==================================================","service":"krushikadhara-api","timestamp":"2026-06-02 23:48:14"}
+{"level":"info","message":"✅ MongoDB Connected: localhost","service":"krushikadhara-api","timestamp":"2026-06-02 23:48:14"}
+{"level":"error","message":"Firebase initialization failed: Failed to parse private key: Error: Too few bytes to read ASN.1 value.","service":"krushikadhara-api","timestamp":"2026-06-02 23:50:14"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-06-02 23:50:14"}
+{"level":"info","message":"🌾 KrushikaDhara API running in development mode on port 5000","service":"krushikadhara-api","timestamp":"2026-06-02 23:50:14"}
+{"level":"info","message":"==================================================","service":"krushikadhara-api","timestamp":"2026-06-02 23:50:14"}
+{"level":"info","message":"🕐 Initializing cron job scheduler...","service":"krushikadhara-api","timestamp":"2026-06-02 23:50:14"}
+{"level":"info","message":"==================================================","service":"krushikadhara-api","timestamp":"2026-06-02 23:50:14"}
+{"level":"info","message":"  ✅ Weather update job: every 3 hours","service":"krushikadhara-api","timestamp":"2026-06-02 23:50:14"}
+{"level":"info","message":"  ✅ Market price refresh job: every 3 hours (+30 min offset)","service":"krushikadhara-api","timestamp":"2026-06-02 23:50:14"}
+{"level":"info","message":"  ✅ Government scheme check job: daily at 6:00 AM IST","service":"krushikadhara-api","timestamp":"2026-06-02 23:50:14"}
+{"level":"info","message":"==================================================","service":"krushikadhara-api","timestamp":"2026-06-02 23:50:14"}
+{"level":"info","message":"🕐 All cron jobs scheduled successfully","service":"krushikadhara-api","timestamp":"2026-06-02 23:50:14"}
+{"level":"info","message":"==================================================","service":"krushikadhara-api","timestamp":"2026-06-02 23:50:14"}
+{"level":"info","message":"✅ MongoDB Connected: localhost","service":"krushikadhara-api","timestamp":"2026-06-02 23:50:14"}
+{"level":"error","message":"Firebase initialization failed: Failed to parse private key: Error: Too few bytes to read ASN.1 value.","service":"krushikadhara-api","timestamp":"2026-06-02 23:51:10"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-06-02 23:51:10"}
+{"level":"info","message":"🌾 KrushikaDhara API running in development mode on port 5000","service":"krushikadhara-api","timestamp":"2026-06-02 23:51:10"}
+{"level":"info","message":"==================================================","service":"krushikadhara-api","timestamp":"2026-06-02 23:51:10"}
+{"level":"info","message":"🕐 Initializing cron job scheduler...","service":"krushikadhara-api","timestamp":"2026-06-02 23:51:10"}
+{"level":"info","message":"==================================================","service":"krushikadhara-api","timestamp":"2026-06-02 23:51:10"}
+{"level":"info","message":"  ✅ Weather update job: every 3 hours","service":"krushikadhara-api","timestamp":"2026-06-02 23:51:10"}
+{"level":"info","message":"  ✅ Market price refresh job: every 3 hours (+30 min offset)","service":"krushikadhara-api","timestamp":"2026-06-02 23:51:10"}
+{"level":"info","message":"  ✅ Government scheme check job: daily at 6:00 AM IST","service":"krushikadhara-api","timestamp":"2026-06-02 23:51:10"}
+{"level":"info","message":"==================================================","service":"krushikadhara-api","timestamp":"2026-06-02 23:51:10"}
+{"level":"info","message":"🕐 All cron jobs scheduled successfully","service":"krushikadhara-api","timestamp":"2026-06-02 23:51:10"}
+{"level":"info","message":"==================================================","service":"krushikadhara-api","timestamp":"2026-06-02 23:51:10"}
+{"level":"info","message":"✅ MongoDB Connected: localhost","service":"krushikadhara-api","timestamp":"2026-06-02 23:51:10"}

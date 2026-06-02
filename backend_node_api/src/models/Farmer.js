@@ -27,7 +27,6 @@ const farmerSchema = new mongoose.Schema(
         },
         passwordHash: {
             type: String,
-            required: [true, 'Password is required'],
             minlength: [6, 'Password must be at least 6 characters'],
             select: false, // never return in queries by default
         },
@@ -52,6 +51,16 @@ const farmerSchema = new mongoose.Schema(
         cropTypes: {
             type: [String],
             default: [],
+        },
+        soilType: {
+            type: String,
+            enum: ['Red Soil', 'Black Soil', 'Alluvial Soil', 'Laterite Soil', 'Sandy Soil', 'Clay Soil', 'Other', null],
+            default: null,
+        },
+        irrigationType: {
+            type: String,
+            enum: ['Drip', 'Sprinkler', 'Rainfed', 'Canal', 'Tube Well', 'Other', null],
+            default: null,
         },
         preferredLanguage: {
             type: String,

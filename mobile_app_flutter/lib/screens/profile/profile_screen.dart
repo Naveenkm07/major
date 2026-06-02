@@ -157,9 +157,51 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     
                     const SizedBox(height: 24),
 
-                    // My Crops
-                    Text(AppLocale.t(context, 'my_crops'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87)),
+                    // My Crops & Farm Details Header
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(AppLocale.t(context, 'my_crops'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87)),
+                        GestureDetector(
+                          onTap: () async {
+                            if (_user != null) {
+                              final result = await Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (_) => EditFarmDetailsScreen(user: _user!)),
+                              );
+                              if (result == true) _fetchData();
+                            }
+                          },
+                          child: Row(
+                            children: [
+                              Text(AppLocale.t(context, 'edit'), style: const TextStyle(color: AppTheme.primaryGreen, fontWeight: FontWeight.bold)),
+                              const SizedBox(width: 4),
+                              const Icon(Icons.edit, size: 16, color: AppTheme.primaryGreen),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                     const SizedBox(height: 12),
+                    
+                    // Farm Details Overview
+                    if (_user?.farmDetails?.landArea != null || _user?.farmDetails?.soilType != null || _user?.farmDetails?.irrigationType != null)
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        margin: const EdgeInsets.only(bottom: 12),
+                        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
+                        child: Column(
+                          children: [
+                            if (_user?.farmDetails?.landArea != null)
+                              _buildFarmDetailRow('Farm Size', '${_user!.farmDetails!.landArea} Acres', Icons.landscape_outlined),
+                            if (_user?.farmDetails?.soilType != null)
+                              _buildFarmDetailRow('Soil Type', _user!.farmDetails!.soilType!, Icons.layers_outlined),
+                            if (_user?.farmDetails?.irrigationType != null)
+                              _buildFarmDetailRow('Irrigation', _user!.farmDetails!.irrigationType!, Icons.water_drop_outlined),
+                          ],
+                        ),
+                      ),
+
                     Container(
                       padding: const EdgeInsets.all(16),
                       width: double.infinity,
@@ -357,10 +399,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       crossAxisSpacing: 16,
       mainAxisSpacing: 16,
       children: [
-        _buildStatCard(AppLocale.t(context, 'disease_scans'), '12', Icons.bug_report_outlined, Colors.orange),
-        _buildStatCard(AppLocale.t(context, 'market_alerts'), '48', Icons.trending_up, Colors.blue),
-        _buildStatCard(AppLocale.t(context, 'community_posts'), '5', Icons.forum_outlined, Colors.purple),
-        _buildStatCard(AppLocale.t(context, 'schemes_applied'), '2', Icons.assignment_outlined, Colors.green),
+        _buildStatCard(AppLocale.t(context, 'disease_scans'), '${_user?.stats?.diseaseScans ?? 0}', Icons.bug_report_outlined, Colors.orange),
+        _buildStatCard(AppLocale.t(context, 'market_alerts'), '${_user?.stats?.marketAlerts ?? 0}', Icons.trending_up, Colors.blue),
+        _buildStatCard(AppLocale.t(context, 'community_posts'), '${_user?.stats?.communityPosts ?? 0}', Icons.forum_outlined, Colors.purple),
+        _buildStatCard(AppLocale.t(context, 'schemes_applied'), '${_user?.stats?.schemesApplied ?? 0}', Icons.assignment_outlined, Colors.green),
       ],
     );
   }
@@ -396,6 +438,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Text(label, style: const TextStyle(color: Colors.black87, fontWeight: FontWeight.w500)),
           const SizedBox(width: 6),
           Text(emoji),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildFarmDetailRow(String label, String value, IconData icon) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: Row(
+        children: [
+          Icon(icon, color: AppTheme.primaryGreen, size: 20),
+          const SizedBox(width: 12),
+          Text(label, style: TextStyle(color: Colors.grey.shade600, fontSize: 14)),
+          const Spacer(),
+          Text(value, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
         ],
       ),
     );

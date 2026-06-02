@@ -40,16 +40,16 @@ class _OtpScreenState extends State<OtpScreen> {
       // Navigate to Home on success
       if (mounted) {
         final user = FirebaseAuth.instance.currentUser;
-        if (user != null && (user.displayName == null || user.displayName!.isEmpty)) {
-          Navigator.pushNamedAndRemoveUntil(context, '/setup-profile', (route) => false, arguments: isEnglish);
-        } else {
-          // Fetch location immediately upon login for returning users
-          final loc = await LocationService.getCurrentLocation();
-          if (loc != null && mounted) {
-            final auth = Provider.of<AuthProvider>(context, listen: false);
-            await auth.updateProfile(loc);
+        if (user != null) {
+          // Sync with Node.js backend
+          if (user.phoneNumber != null) {
+            final authProvider = Provider.of<AuthProvider>(context, listen: false);
+            await authProvider.firebaseSync(user.phoneNumber!);
           }
-          if (mounted) {
+
+          if (user.displayName == null || user.displayName!.isEmpty) {
+            Navigator.pushNamedAndRemoveUntil(context, '/setup-profile', (route) => false, arguments: isEnglish);
+          } else {
             Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
           }
         }
