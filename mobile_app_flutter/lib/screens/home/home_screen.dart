@@ -8,6 +8,7 @@ import '../chatbot/chatbot_screen.dart';
 import '../../services/location_service.dart';
 import '../../providers/auth_provider.dart';
 import '../../core/locale.dart';
+import '../../widgets/language_toggle.dart';
 import '../../providers/weather_provider.dart';
 import '../../providers/market_provider.dart';
 import '../../providers/calendar_provider.dart';
@@ -134,6 +135,8 @@ class _DashboardPage extends StatelessWidget {
                     ),
                     Row(
                       children: [
+                        const LanguageToggle(isDarkBackground: true),
+                        const SizedBox(width: 12),
                         Container(
                           padding: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
@@ -187,7 +190,7 @@ class _DashboardPage extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text('This Week\'s Tasks', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppTheme.textPrimary)),
+                Text(AppLocale.t(context, 'todays_tips'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppTheme.textPrimary)),
                 TextButton(
                   onPressed: () => Navigator.pushNamed(context, '/crop-calendar'),
                   child: const Text('View all', style: TextStyle(color: Colors.grey)),
@@ -203,11 +206,10 @@ class _DashboardPage extends StatelessWidget {
 
         const SliverToBoxAdapter(child: SizedBox(height: 24)),
 
-        // Mandi Prices Section
-        const SliverToBoxAdapter(
+        SliverToBoxAdapter(
           child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 24),
-            child: Text('Mandi Prices', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppTheme.textPrimary)),
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Text(AppLocale.t(context, 'market_prices').replaceAll('\n', ' '), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppTheme.textPrimary)),
           ),
         ),
         
@@ -249,7 +251,7 @@ class _DashboardPage extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('$location • Now', style: const TextStyle(color: Colors.grey, fontSize: 13)),
+                  Text('$location • ${AppLocale.t(context, 'refresh')}', style: const TextStyle(color: Colors.grey, fontSize: 13)),
                   const SizedBox(height: 8),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -266,7 +268,7 @@ class _DashboardPage extends StatelessWidget {
                     children: [
                       const Icon(Icons.water_drop_outlined, color: Colors.blue, size: 16),
                       const SizedBox(width: 4),
-                      Text('Soil moisture: $moisture%', style: const TextStyle(color: Colors.grey, fontSize: 13)),
+                      Text('${AppLocale.t(context, 'humidity')}: $moisture%', style: const TextStyle(color: Colors.grey, fontSize: 13)),
                     ],
                   ),
                 ],
@@ -281,12 +283,12 @@ class _DashboardPage extends StatelessWidget {
 
   Widget _buildQuickActions(BuildContext context) {
     final List<Map<String, dynamic>> actions = [
-      {'title': 'Pest\nDetection', 'icon': Icons.camera_alt_rounded, 'color': Colors.red, 'route': '/disease-detection'},
-      {'title': 'Market\nPrices', 'icon': Icons.trending_up_rounded, 'color': Colors.blue, 'route': '/market-prices'},
-      {'title': 'Crop\nCalendar', 'icon': Icons.calendar_month_rounded, 'color': Colors.green, 'route': '/crop-calendar'},
-      {'title': 'Equipment\nRental', 'icon': Icons.agriculture_rounded, 'color': Colors.teal, 'route': '/equipment-rental'},
-      {'title': 'Crop\nInsurance', 'icon': Icons.security_rounded, 'color': Colors.orange, 'route': '/insurance'},
-      {'title': 'Govt\nSchemes', 'icon': Icons.account_balance_rounded, 'color': Colors.purple, 'route': '/schemes'},
+      {'title': AppLocale.t(context, 'pest_detection'), 'icon': Icons.camera_alt_rounded, 'color': Colors.red, 'route': '/disease-detection'},
+      {'title': AppLocale.t(context, 'market_prices'), 'icon': Icons.trending_up_rounded, 'color': Colors.blue, 'route': '/market-prices'},
+      {'title': AppLocale.t(context, 'crop_calendar'), 'icon': Icons.calendar_month_rounded, 'color': Colors.green, 'route': '/crop-calendar'},
+      {'title': AppLocale.t(context, 'equipment_rental'), 'icon': Icons.agriculture_rounded, 'color': Colors.teal, 'route': '/equipment-rental'},
+      {'title': AppLocale.t(context, 'crop_insurance'), 'icon': Icons.security_rounded, 'color': Colors.orange, 'route': '/insurance'},
+      {'title': AppLocale.t(context, 'govt_schemes'), 'icon': Icons.account_balance_rounded, 'color': Colors.purple, 'route': '/schemes'},
     ];
 
     return Padding(
@@ -294,7 +296,7 @@ class _DashboardPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text('Quick Actions', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppTheme.textPrimary)),
+          Text(AppLocale.t(context, 'quick_actions'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppTheme.textPrimary)),
           const SizedBox(height: 16),
           GridView.builder(
             padding: EdgeInsets.zero,
@@ -356,27 +358,27 @@ class _DashboardPage extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         children: [
-          const _TaskCard(
+          _TaskCard(
             icon: Icons.water_drop_outlined,
             iconColor: Colors.blue,
-            title: 'Water Crops',
-            time: 'Today • 6:00 AM',
+            title: AppLocale.t(context, 'irrigation_tip'),
+            time: AppLocale.t(context, 'irrigation_desc'),
             isCompleted: true,
           ),
           const SizedBox(height: 12),
-          const _TaskCard(
+          _TaskCard(
             icon: Icons.eco_outlined,
             iconColor: AppTheme.primaryGreen,
-            title: 'Apply Fertilizer (Urea)',
-            time: 'Tomorrow',
+            title: AppLocale.t(context, 'weather_tip'),
+            time: AppLocale.t(context, 'weather_desc'),
             isCompleted: false,
           ),
           const SizedBox(height: 12),
           _TaskCard(
             icon: Icons.bug_report_outlined,
             iconColor: Colors.orange.shade700,
-            title: 'Pest Inspection',
-            time: 'Wed • Field 2',
+            title: AppLocale.t(context, 'pest_alert'),
+            time: AppLocale.t(context, 'pest_desc'),
             isCompleted: false,
             isWarning: true,
           ),
