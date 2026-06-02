@@ -75,6 +75,14 @@ class ApiService {
     return data;
   }
 
+  Future<Map<String, dynamic>> firebaseSync(String phoneNumber) async {
+    final res = await post('/auth/firebase-sync', {'phoneNumber': phoneNumber});
+    if (res['success'] == true && res['token'] != null) {
+      await saveToken(res['token']);
+    }
+    return res;
+  }
+
   Future<Map<String, dynamic>> register(Map<String, dynamic> userData) async {
     final data = await post('/auth/register', userData);
     if (data['success'] == true && data['token'] != null) {
@@ -234,7 +242,7 @@ Respond entirely in $language language.
           'Authorization': 'Bearer $grokApiKey',
         },
         body: jsonEncode({
-          'model': 'grok-2-latest',
+          'model': 'grok-2',
           'messages': [
             {'role': 'system', 'content': systemPrompt},
             {'role': 'user', 'content': question}
