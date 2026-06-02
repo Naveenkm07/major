@@ -242,7 +242,7 @@ Respond entirely in $language language.
           'Authorization': 'Bearer $grokApiKey',
         },
         body: jsonEncode({
-          'model': 'grok-2',
+          'model': 'grok-4.3',
           'messages': [
             {'role': 'system', 'content': systemPrompt},
             {'role': 'user', 'content': question}
