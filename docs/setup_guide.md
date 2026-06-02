@@ -61,6 +61,13 @@ flutter pub get
 flutter run               # Run on connected device/emulator
 ```
 
+#### Important: Firebase SMS Region Policy
+If you encounter errors sending SMS (OTP), you must configure the SMS Region Policy in the Firebase Console:
+1. Go to **Authentication** > **Settings** > **SMS Region Policy**.
+2. Change to "Allow only whitelisted regions" (or allow all).
+3. Search for and check **India (+91)** (or your testing region).
+4. Click **Save**.
+
 ## Environment Variables
 
 ### Backend `.env`
