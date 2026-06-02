@@ -27,7 +27,7 @@ class LanguageToggle extends StatelessWidget {
                 const Icon(Icons.translate_rounded, size: 16, color: AppTheme.primaryGreen),
                 const SizedBox(width: 4),
                 Text(
-                  _getLangLabel(locale.languageCode),
+                  locale.isKannada ? 'EN' : 'ಕ',
                   style: const TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
@@ -40,13 +40,5 @@ class LanguageToggle extends StatelessWidget {
         );
       },
     );
-  }
-
-  String _getLangLabel(String code) {
-    switch (code) {
-      case 'kn': return 'ಕ';
-      case 'hi': return 'हि';
-      default: return 'EN';
-    }
   }
 }
