@@ -27,9 +27,14 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     if (!mounted) return;
     
     final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      if (user.displayName == null || user.displayName!.trim().isEmpty) {
-        Navigator.pushReplacementNamed(context, '/setup-profile');
+    if (user != null && user.phoneNumber != null) {
+      // User is logged into Firebase. Sync with Node.js backend!
+      final authProvider = Provider.of<AuthProvider>(context, listen: false);
+      await authProvider.firebaseSync(user.phoneNumber!);
+      
+      final dbUser = authProvider.user;
+      if (dbUser == null || dbUser.name.isEmpty || dbUser.name.toLowerCase() == 'farmer') {
+        Navigator.pushReplacementNamed(context, '/setup-profile', arguments: true);
       } else {
         Navigator.pushReplacementNamed(context, '/home');
       }
