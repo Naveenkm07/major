@@ -16,6 +16,7 @@ import 'services/hive_storage_service.dart';
 import 'providers/weather_provider.dart';
 import 'providers/equipment_provider.dart';
 import 'providers/calendar_provider.dart';
+import 'providers/notification_provider.dart';
 
 import 'screens/splash_screen.dart';
 import 'screens/auth/login_screen.dart';
@@ -36,6 +37,7 @@ import 'screens/profile/profile_screen.dart';
 import 'screens/marketplace/marketplace_screen.dart';
 import 'screens/insurance/insurance_screen.dart';
 import 'screens/profile/help_support_screen.dart';
+import 'screens/notifications/notifications_screen.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -81,6 +83,7 @@ class KrushikaDharaApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => WeatherProvider()),
         ChangeNotifierProvider(create: (_) => EquipmentProvider()),
         ChangeNotifierProvider(create: (_) => CalendarProvider()),
+        ChangeNotifierProvider(create: (_) => NotificationProvider()),
       ],
       child: MaterialApp(
         title: 'KrushikaDhara',
@@ -106,6 +109,7 @@ class KrushikaDharaApp extends StatelessWidget {
           '/equipment-rental': (_) => const MarketplaceScreen(),
           '/insurance': (_) => const InsuranceScreen(),
           '/help-support': (_) => const HelpSupportScreen(),
+          '/notifications': (_) => const NotificationsScreen(),
         },
       ),
     );
