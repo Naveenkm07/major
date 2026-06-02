@@ -132,13 +132,29 @@ class _DashboardPage extends StatelessWidget {
                         Text(userName, style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
                       ],
                     ),
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(Icons.notifications_none_rounded, color: Colors.white),
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.2),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(Icons.notifications_none_rounded, color: Colors.white),
+                        ),
+                        const SizedBox(width: 12),
+                        GestureDetector(
+                          onTap: () => Navigator.pushNamed(context, '/profile'),
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.2),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(Icons.person_rounded, color: Colors.white),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
