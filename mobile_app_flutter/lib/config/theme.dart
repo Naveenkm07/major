@@ -19,7 +19,7 @@ class AppTheme {
   static const Color info = Color(0xFF1E88E5);
 
   // ─── Surface Colors ─────────────────────────────
-  static const Color background = Color(0xFFF5F7F5);
+  static const Color background = Color(0xFFF9FBE7);
   static const Color surface = Color(0xFFFFFFFF);
   static const Color surfaceVariant = Color(0xFFF0F4F0);
   static const Color divider = Color(0xFFE0E0E0);

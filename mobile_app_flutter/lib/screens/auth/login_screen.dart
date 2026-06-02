@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../../providers/auth_provider.dart';
 import '../../config/theme.dart';
-import '../../core/locale.dart';
-import '../../widgets/language_toggle.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -13,92 +9,184 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _formKey = GlobalKey<FormState>();
-  final _emailCtrl = TextEditingController();
-  final _passwordCtrl = TextEditingController();
-  bool _obscure = true;
+  final _phoneCtrl = TextEditingController();
+  bool _isEnglish = true; // For the UI toggle
 
-  Future<void> _login() async {
-    if (!_formKey.currentState!.validate()) return;
-    final auth = Provider.of<AuthProvider>(context, listen: false);
-    final ok = await auth.login(_emailCtrl.text.trim(), _passwordCtrl.text);
-    if (ok && mounted) {
-      Navigator.pushReplacementNamed(context, '/home');
-    } else if (mounted && auth.error != null) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(auth.error!)));
-    }
+  void _getOtp() {
+    // For demo purposes, immediately navigate to home to show off the UI flow
+    Navigator.pushReplacementNamed(context, '/home');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppTheme.background, // The nice off-white from Figma
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const SizedBox(height: 16),
-                const Align(alignment: Alignment.topRight, child: LanguageToggle()),
-                const SizedBox(height: 24),
-                Container(
-                  padding: const EdgeInsets.all(16),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const SizedBox(height: 40),
+              
+              // Logo
+              Center(
+                child: Container(
+                  width: 100,
+                  height: 100,
                   decoration: BoxDecoration(
-                    color: AppTheme.primaryGreen.withOpacity(0.08),
-                    shape: BoxShape.circle,
+                    color: AppTheme.primaryGreen,
+                    borderRadius: BorderRadius.circular(24),
                   ),
-                  child: const Text('🌾', style: TextStyle(fontSize: 48), textAlign: TextAlign.center),
+                  child: const Icon(Icons.eco_rounded, color: Colors.white, size: 60),
                 ),
-                const SizedBox(height: 24),
-                Text(AppLocale.t(context, 'welcome'), style: Theme.of(context).textTheme.headlineLarge, textAlign: TextAlign.center),
-                const SizedBox(height: 6),
-                Text(AppLocale.t(context, 'login'), style: Theme.of(context).textTheme.bodyMedium, textAlign: TextAlign.center),
-                const SizedBox(height: 40),
-                TextFormField(
-                  controller: _emailCtrl,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(labelText: AppLocale.t(context, 'email'), prefixIcon: const Icon(Icons.email_outlined)),
-                  validator: (v) => (v == null || !v.contains('@')) ? AppLocale.t(context, 'invalid_email') : null,
+              ),
+              const SizedBox(height: 24),
+              
+              // Title
+              const Text(
+                'KrushikaDhara',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: AppTheme.primaryGreen,
                 ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: _passwordCtrl,
-                  obscureText: _obscure,
-                  decoration: InputDecoration(
-                    labelText: AppLocale.t(context, 'password'),
-                    prefixIcon: const Icon(Icons.lock_outlined),
-                    suffixIcon: IconButton(
-                      icon: Icon(_obscure ? Icons.visibility_off : Icons.visibility),
-                      onPressed: () => setState(() => _obscure = !_obscure),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 8),
+              const Text(
+                'ಸ್ಮಾರ್ಟ್ ಕೃಷಿ ಸಹಚರ',
+                style: TextStyle(fontSize: 16, color: Colors.grey),
+                textAlign: TextAlign.center,
+              ),
+              
+              const SizedBox(height: 48),
+              
+              // Language Selection
+              const Text(
+                'Choose Language / ಭಾಷೆ',
+                style: TextStyle(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.w500),
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () => setState(() => _isEnglish = true),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        decoration: BoxDecoration(
+                          color: _isEnglish ? AppTheme.primaryGreen : Colors.white,
+                          borderRadius: const BorderRadius.horizontal(left: Radius.circular(12)),
+                          border: Border.all(color: _isEnglish ? AppTheme.primaryGreen : Colors.grey.shade300),
+                        ),
+                        child: Text(
+                          'English',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: _isEnglish ? Colors.white : Colors.grey.shade600,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                  validator: (v) => (v == null || v.length < 6) ? AppLocale.t(context, 'min_password') : null,
-                ),
-                const SizedBox(height: 24),
-
-                Consumer<AuthProvider>(
-                  builder: (_, auth, __) => ElevatedButton(
-                    onPressed: auth.isLoading ? null : _login,
-                    child: auth.isLoading
-                        ? const SizedBox(width: 20, height: 20, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                        : Text(AppLocale.t(context, 'login')),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () => setState(() => _isEnglish = false),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        decoration: BoxDecoration(
+                          color: !_isEnglish ? AppTheme.primaryGreen : Colors.white,
+                          borderRadius: const BorderRadius.horizontal(right: Radius.circular(12)),
+                          border: Border.all(color: !_isEnglish ? AppTheme.primaryGreen : Colors.grey.shade300),
+                        ),
+                        child: Text(
+                          'ಕನ್ನಡ',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: !_isEnglish ? Colors.white : Colors.grey.shade600,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
+                ],
+              ),
+              
+              const SizedBox(height: 32),
+              
+              // Phone Input
+              const Text(
+                'Phone Number',
+                style: TextStyle(fontSize: 14, color: Colors.grey, fontWeight: FontWeight.w500),
+              ),
+              const SizedBox(height: 12),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: Colors.grey.shade300),
                 ),
-                const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                child: Row(
                   children: [
-                    Text("${AppLocale.t(context, 'no_account')} "),
-                    TextButton(
-                      onPressed: () => Navigator.pushNamed(context, '/register'),
-                      child: Text(AppLocale.t(context, 'register'), style: const TextStyle(fontWeight: FontWeight.w600)),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      child: Icon(Icons.phone_outlined, color: Colors.grey),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.blue.shade700,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: const Text('+91', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: TextField(
+                        controller: _phoneCtrl,
+                        keyboardType: TextInputType.phone,
+                        decoration: const InputDecoration(
+                          hintText: '98765 43210',
+                          hintStyle: TextStyle(color: Colors.black87, fontSize: 16, letterSpacing: 1.5),
+                          border: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          fillColor: Colors.transparent,
+                          filled: false,
+                        ),
+                        style: const TextStyle(fontSize: 16, letterSpacing: 1.5, fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ],
                 ),
-              ],
-            ),
+              ),
+              
+              const Spacer(),
+              
+              // Get OTP Button
+              ElevatedButton(
+                onPressed: _getOtp,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppTheme.primaryGreen,
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  elevation: 0,
+                ),
+                child: const Text('Get OTP', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)),
+              ),
+              
+              const SizedBox(height: 24),
+              
+              // Terms
+              const Text(
+                'By continuing you agree to our Terms &\nPrivacy',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.grey, fontSize: 12, height: 1.5),
+              ),
+            ],
           ),
         ),
       ),
