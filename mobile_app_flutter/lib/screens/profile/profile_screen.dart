@@ -10,6 +10,7 @@ import '../../models/user_model.dart';
 import '../../providers/auth_provider.dart';
 import './edit_profile_screen.dart';
 import './my_crops_screen.dart';
+import './smart_notifications_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -266,7 +267,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     const SizedBox(height: 24),
                     
                     // Notifications
-                    Text(AppLocale.t(context, 'notifications'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87)),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(AppLocale.t(context, 'notifications'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87)),
+                        GestureDetector(
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => const SmartNotificationsScreen()),
+                          ),
+                          child: Row(
+                            children: [
+                              Text(AppLocale.t(context, 'edit'), style: const TextStyle(color: AppTheme.primaryGreen, fontWeight: FontWeight.bold)),
+                              const SizedBox(width: 4),
+                              const Icon(Icons.settings_outlined, size: 16, color: AppTheme.primaryGreen),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                     const SizedBox(height: 12),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
