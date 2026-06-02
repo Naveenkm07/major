@@ -41,13 +41,16 @@ class _OtpScreenState extends State<OtpScreen> {
       if (mounted) {
         final user = FirebaseAuth.instance.currentUser;
         if (user != null) {
+          final authProvider = Provider.of<AuthProvider>(context, listen: false);
+          
           // Sync with Node.js backend
           if (user.phoneNumber != null) {
-            final authProvider = Provider.of<AuthProvider>(context, listen: false);
             await authProvider.firebaseSync(user.phoneNumber!);
           }
 
-          if (user.displayName == null || user.displayName!.isEmpty) {
+          final dbUser = authProvider.user;
+          // If name is empty or default 'Farmer', ask them to set up their profile
+          if (dbUser == null || dbUser.name.isEmpty || dbUser.name.toLowerCase() == 'farmer') {
             Navigator.pushNamedAndRemoveUntil(context, '/setup-profile', (route) => false, arguments: isEnglish);
           } else {
             Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
