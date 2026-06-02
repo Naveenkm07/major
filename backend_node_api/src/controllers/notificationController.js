@@ -10,7 +10,7 @@ const { ApiError, asyncHandler } = require('../utils/helpers');
 // @route   POST /api/v1/notifications/send
 // @access  Private (admin or system)
 exports.sendNotification = asyncHandler(async (req, res) => {
-    const { farmerId, title, message, type = 'system' } = req.body;
+    const { farmerId, title, message, title_kn, message_kn, type = 'system' } = req.body;
 
     if (!title || !message) {
         throw new ApiError(400, 'Title and message are required');
@@ -19,10 +19,10 @@ exports.sendNotification = asyncHandler(async (req, res) => {
     let result;
     if (farmerId) {
         // Send to specific farmer
-        result = await notificationService.sendToFarmer(farmerId, title, message, type);
+        result = await notificationService.sendToFarmer(farmerId, title, message, title_kn, message_kn, type);
     } else {
         // Broadcast to all farmers
-        result = await notificationService.broadcast(title, message, type);
+        result = await notificationService.broadcast(title, message, title_kn, message_kn, type);
     }
 
     res.status(200).json({ success: true, data: result });

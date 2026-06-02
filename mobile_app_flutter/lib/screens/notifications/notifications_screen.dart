@@ -112,7 +112,7 @@ class NotificationsScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              item.title,
+                              !isEnglish && item.titleKn != null && item.titleKn!.isNotEmpty ? item.titleKn! : item.title,
                               style: textStyle.copyWith(
                                 fontWeight: isRead ? FontWeight.normal : FontWeight.bold,
                                 fontSize: 16,
@@ -121,7 +121,7 @@ class NotificationsScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              item.message,
+                              !isEnglish && item.messageKn != null && item.messageKn!.isNotEmpty ? item.messageKn! : item.message,
                               style: textStyle.copyWith(
                                 color: Colors.grey.shade700,
                                 fontSize: 14,

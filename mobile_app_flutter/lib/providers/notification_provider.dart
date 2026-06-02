@@ -1,64 +1,50 @@
 import 'package:flutter/material.dart';
 import '../models/notification_item.dart';
+import '../services/api_service.dart';
 
 class NotificationProvider extends ChangeNotifier {
   List<NotificationItem> _notifications = [];
+  bool _isLoading = false;
 
   List<NotificationItem> get notifications => _notifications;
   int get unreadCount => _notifications.where((n) => !n.isRead).length;
+  bool get isLoading => _isLoading;
 
   NotificationProvider() {
-    _loadInitialMockNotifications();
+    fetchNotifications();
   }
 
-  void _loadInitialMockNotifications() {
-    // Generate realistic mock notifications
-    _notifications = [
-      NotificationItem(
-        id: '1',
-        title: 'Market Alert: Tomato Prices',
-        message: 'Tomato prices have increased by 4% in Mandya APMC market.',
-        timestamp: DateTime.now().subtract(const Duration(minutes: 5)),
-        type: 'market',
-        isRead: false,
-      ),
-      NotificationItem(
-        id: '2',
-        title: 'New Feature: Equipment Rental',
-        message: 'You can now rent tractors and other equipment directly from the app!',
-        timestamp: DateTime.now().subtract(const Duration(hours: 2)),
-        type: 'feature',
-        isRead: false,
-      ),
-      NotificationItem(
-        id: '3',
-        title: 'Weather Warning',
-        message: 'Heavy rainfall expected tomorrow in your district. Please secure your harvested crops.',
-        timestamp: DateTime.now().subtract(const Duration(days: 1)),
-        type: 'weather',
-        isRead: true,
-      ),
-      NotificationItem(
-        id: '4',
-        title: 'Disease Alert: Rice Blast',
-        message: 'High humidity increases risk of Rice Blast. Monitor your fields closely.',
-        timestamp: DateTime.now().subtract(const Duration(days: 2)),
-        type: 'alert',
-        isRead: true,
-      ),
-    ];
+  Future<void> fetchNotifications() async {
+    _isLoading = true;
     notifyListeners();
-  }
-
-  void markAsRead(String id) {
-    final index = _notifications.indexWhere((n) => n.id == id);
-    if (index != -1 && !_notifications[index].isRead) {
-      _notifications[index].isRead = true;
+    try {
+      final res = await ApiService().getNotifications();
+      if (res['success'] == true) {
+        final List<dynamic> data = res['data'];
+        _notifications = data.map((json) => NotificationItem.fromJson(json)).toList();
+      }
+    } catch (e) {
+      debugPrint('Error fetching notifications: $e');
+    } finally {
+      _isLoading = false;
       notifyListeners();
     }
   }
 
-  void markAllAsRead() {
+  Future<void> markAsRead(String id) async {
+    final index = _notifications.indexWhere((n) => n.id == id);
+    if (index != -1 && !_notifications[index].isRead) {
+      _notifications[index].isRead = true;
+      notifyListeners();
+      try {
+        await ApiService().markNotificationRead(id);
+      } catch (e) {
+        debugPrint('Error marking read: $e');
+      }
+    }
+  }
+
+  Future<void> markAllAsRead() async {
     bool hasUnread = false;
     for (var n in _notifications) {
       if (!n.isRead) {
@@ -68,6 +54,11 @@ class NotificationProvider extends ChangeNotifier {
     }
     if (hasUnread) {
       notifyListeners();
+      try {
+        await ApiService().markAllNotificationsRead();
+      } catch (e) {
+        debugPrint('Error marking all read: $e');
+      }
     }
   }
 

@@ -143,6 +143,26 @@ class ApiService {
   }
 
   // ═══════════════════════════════════════════════════
+  // Notifications (Node.js backend)
+  // ═══════════════════════════════════════════════════
+
+  Future<Map<String, dynamic>> getNotifications({bool unreadOnly = false}) async {
+    return get('/notifications', query: {if (unreadOnly) 'unreadOnly': 'true'});
+  }
+
+  Future<Map<String, dynamic>> markNotificationRead(String id) async {
+    return put('/notifications/$id/read', {});
+  }
+
+  Future<Map<String, dynamic>> markAllNotificationsRead() async {
+    return put('/notifications/read-all', {});
+  }
+
+  Future<Map<String, dynamic>> sendAdminNotification(Map<String, dynamic> data) async {
+    return post('/notifications/send', data);
+  }
+
+  // ═══════════════════════════════════════════════════
   // AI Service: Pest Detection (Python FastAPI)
   // ═══════════════════════════════════════════════════
 

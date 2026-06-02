@@ -13,10 +13,18 @@ const notificationSchema = new mongoose.Schema(
             required: [true, 'Notification title is required'],
             maxlength: [200, 'Title cannot exceed 200 characters'],
         },
+        title_kn: {
+            type: String,
+            maxlength: [200, 'Kannada title cannot exceed 200 characters'],
+        },
         message: {
             type: String,
             required: [true, 'Notification message is required'],
             maxlength: [1000, 'Message cannot exceed 1000 characters'],
+        },
+        message_kn: {
+            type: String,
+            maxlength: [1000, 'Kannada message cannot exceed 1000 characters'],
         },
         type: {
             type: String,
