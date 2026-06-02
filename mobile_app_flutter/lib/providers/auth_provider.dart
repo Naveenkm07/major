@@ -13,12 +13,29 @@ class UserLocation {
 
 class FarmDetails {
   final double? landArea;
+  final String? soilType;
+  final String? irrigationType;
   final List<String>? crops;
-  FarmDetails({this.landArea, this.crops});
-  factory FarmDetails.fromJson(Map<String, dynamic> json) => FarmDetails(
-        landArea: json['farmSize']?.toDouble(),
-        crops: (json['cropTypes'] as List?)?.map((e) => e.toString()).toList(),
-      );
+  FarmDetails({this.landArea, this.soilType, this.irrigationType, this.crops});
+  factory FarmDetails.fromJson(Map<String, dynamic> json) {
+    // Attempt to read crops from json['crops'], fallback to 'cropTypes'
+    var rawCrops = json['crops'] ?? json['cropTypes'];
+    List<String>? cropList;
+    if (rawCrops != null && rawCrops is List) {
+      if (rawCrops.isNotEmpty && rawCrops.first is Map) {
+        cropList = rawCrops.map((e) => e['name'].toString()).toList();
+      } else {
+        cropList = rawCrops.map((e) => e.toString()).toList();
+      }
+    }
+    
+    return FarmDetails(
+      landArea: json['farmSize']?.toDouble() ?? json['landArea']?.toDouble(),
+      soilType: json['soilType'],
+      irrigationType: json['irrigationType'],
+      crops: cropList,
+    );
+  }
 }
 
 class AppUser {
@@ -40,11 +57,9 @@ class AppUser {
         district: json['district'] ?? json['location']?['district'],
         state: json['state'] ?? json['location']?['state'],
       ),
-      farmDetails: FarmDetails(
-        landArea: json['farmSize']?.toDouble() ?? json['farmDetails']?['landArea']?.toDouble(),
-        crops: (json['cropTypes'] as List?)?.map((e) => e.toString()).toList()
-            ?? (json['farmDetails']?['crops'] as List?)?.map((e) => e.toString()).toList(),
-      ),
+      farmDetails: (json['farmDetails'] != null || json['farmSize'] != null || json['landArea'] != null)
+          ? FarmDetails.fromJson(json['farmDetails'] ?? json)
+          : null,
       preferredLanguage: json['preferredLanguage'],
     );
   }
