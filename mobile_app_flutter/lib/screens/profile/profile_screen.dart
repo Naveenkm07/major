@@ -34,7 +34,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('Profile', style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
+                      Row(
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.arrow_back, color: Colors.white),
+                            onPressed: () => Navigator.of(context).pop(),
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints(),
+                          ),
+                          const SizedBox(width: 12),
+                          const Text('Profile', style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
+                        ],
+                      ),
                       GestureDetector(
                         onTap: () {},
                         child: const Text('Edit', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
@@ -118,6 +129,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   
+                  const SizedBox(height: 24),
+                  
+                  // Admin Tools
+                  const Text('Admin Tools', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87)),
+                  const SizedBox(height: 12),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
+                    child: ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      leading: const Icon(Icons.admin_panel_settings, color: Colors.blue),
+                      title: const Text('Push Notification (Admin)', style: TextStyle(fontSize: 16, color: Colors.black87)),
+                      trailing: Icon(Icons.chevron_right, color: Colors.grey.shade400),
+                      onTap: () => Navigator.pushNamed(context, '/admin-notifications'),
+                    ),
+                  ),
+
                   const SizedBox(height: 24),
                   
                   // Settings & Support
