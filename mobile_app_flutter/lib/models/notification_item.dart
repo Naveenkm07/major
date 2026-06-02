@@ -2,6 +2,8 @@ class NotificationItem {
   final String id;
   final String title;
   final String message;
+  final String? titleKn;
+  final String? messageKn;
   final DateTime timestamp;
   final String type; // e.g., 'market', 'feature', 'weather', 'alert'
   bool isRead;
@@ -10,6 +12,8 @@ class NotificationItem {
     required this.id,
     required this.title,
     required this.message,
+    this.titleKn,
+    this.messageKn,
     required this.timestamp,
     required this.type,
     this.isRead = false,
@@ -17,12 +21,14 @@ class NotificationItem {
 
   factory NotificationItem.fromJson(Map<String, dynamic> json) {
     return NotificationItem(
-      id: json['id'],
+      id: json['_id'] ?? json['id'],
       title: json['title'],
       message: json['message'],
-      timestamp: DateTime.parse(json['timestamp']),
+      titleKn: json['title_kn'],
+      messageKn: json['message_kn'],
+      timestamp: DateTime.parse(json['createdAt'] ?? json['timestamp']),
       type: json['type'],
-      isRead: json['isRead'] ?? false,
+      isRead: json['readStatus'] ?? json['isRead'] ?? false,
     );
   }
 

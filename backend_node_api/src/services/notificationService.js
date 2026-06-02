@@ -41,12 +41,14 @@ initializeFirebase();
 // ═══════════════════════════════════════════════════════
 // Send push notification to a single farmer
 // ═══════════════════════════════════════════════════════
-const sendToFarmer = async (farmerId, title, message, type = 'system', metadata = {}) => {
+const sendToFarmer = async (farmerId, title, message, title_kn, message_kn, type = 'system', metadata = {}) => {
     // Save to DB (in-app notification)
     const notification = await Notification.create({
         farmerId,
         title,
         message,
+        title_kn,
+        message_kn,
         type,
         metadata,
     });
@@ -89,11 +91,11 @@ const sendToFarmer = async (farmerId, title, message, type = 'system', metadata 
 // ═══════════════════════════════════════════════════════
 // Send push notification to multiple farmers
 // ═══════════════════════════════════════════════════════
-const sendToMultiple = async (farmerIds, title, message, type = 'system', metadata = {}) => {
+const sendToMultiple = async (farmerIds, title, message, title_kn, message_kn, type = 'system', metadata = {}) => {
     const results = [];
     for (const farmerId of farmerIds) {
         try {
-            const notif = await sendToFarmer(farmerId, title, message, type, metadata);
+            const notif = await sendToFarmer(farmerId, title, message, title_kn, message_kn, type, metadata);
             results.push({ farmerId, success: true, notificationId: notif._id });
         } catch (err) {
             results.push({ farmerId, success: false, error: err.message });
@@ -105,13 +107,13 @@ const sendToMultiple = async (farmerIds, title, message, type = 'system', metada
 // ═══════════════════════════════════════════════════════
 // Broadcast to all farmers (or by filter)
 // ═══════════════════════════════════════════════════════
-const broadcast = async (title, message, type = 'system', filter = {}) => {
+const broadcast = async (title, message, title_kn, message_kn, type = 'system', filter = {}) => {
     const query = { isActive: true, ...filter };
     const farmers = await Farmer.find(query).select('_id').lean();
     const farmerIds = farmers.map((f) => f._id);
 
     logger.info(`Broadcasting "${title}" to ${farmerIds.length} farmers`);
-    return sendToMultiple(farmerIds, title, message, type);
+    return sendToMultiple(farmerIds, title, message, title_kn, message_kn, type);
 };
 
 // ═══════════════════════════════════════════════════════

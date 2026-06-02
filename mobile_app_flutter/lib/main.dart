@@ -38,6 +38,7 @@ import 'screens/marketplace/marketplace_screen.dart';
 import 'screens/insurance/insurance_screen.dart';
 import 'screens/profile/help_support_screen.dart';
 import 'screens/notifications/notifications_screen.dart';
+import 'screens/admin/admin_notification_screen.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -110,6 +111,7 @@ class KrushikaDharaApp extends StatelessWidget {
           '/insurance': (_) => const InsuranceScreen(),
           '/help-support': (_) => const HelpSupportScreen(),
           '/notifications': (_) => const NotificationsScreen(),
+          '/admin-notifications': (_) => const AdminNotificationScreen(),
         },
       ),
     );
