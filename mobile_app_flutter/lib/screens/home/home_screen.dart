@@ -128,7 +128,7 @@ class _DashboardPage extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('Namaskara 🙏', style: TextStyle(color: Colors.white70, fontSize: 16)),
+                        Text(AppLocale.t(context, 'namaskara'), style: const TextStyle(color: Colors.white70, fontSize: 16)),
                         const SizedBox(height: 4),
                         Text(userName, style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
                       ],
@@ -259,7 +259,7 @@ class _DashboardPage extends StatelessWidget {
                       Text('$temp°', style: const TextStyle(fontSize: 42, fontWeight: FontWeight.bold, color: AppTheme.primaryGreen, height: 1.0)),
                       Padding(
                         padding: const EdgeInsets.only(top: 8, left: 4),
-                        child: Text(desc, style: const TextStyle(fontSize: 16, color: Colors.grey)),
+                        child: Text(AppLocale.t(context, desc), style: const TextStyle(fontSize: 16, color: Colors.grey)),
                       ),
                     ],
                   ),
