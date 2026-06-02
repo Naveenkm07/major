@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider;
 import 'package:provider/provider.dart';
 import '../../config/theme.dart';
+import '../../core/locale.dart';
 import '../../services/api_service.dart';
 import '../../services/weather_service.dart';
 import '../../services/location_service.dart';
@@ -28,103 +29,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool _mandiAlerts = true;
   bool _diseaseAlerts = true;
   bool _weatherAlerts = false;
-  String _language = 'English';
-
-  final Map<String, Map<String, String>> _translations = {
-    'English': {
-      'profile': 'Profile',
-      'edit': 'Edit',
-      'farming_insights': 'Farming Insights',
-      'disease_scans': 'Disease Scans',
-      'market_alerts': 'Market Alerts',
-      'community_posts': 'Community Posts',
-      'schemes_applied': 'Schemes Applied',
-      'my_crops': 'My Crops',
-      'location': 'Location',
-      'notifications': 'Notifications',
-      'mandi_alerts': 'Mandi Price Alerts',
-      'disease_alerts': 'Disease Warning Alerts',
-      'weather_updates': 'Weather Updates',
-      'app_settings': 'App Settings',
-      'language': 'Language',
-      'admin_dashboard': 'Admin Dashboard',
-      'help_support': 'Help & Support',
-      'logout': 'Logout',
-      'no_crops': 'No crops added yet.',
-      'humidity': 'Humidity',
-      'detect_location': 'Tap to detect location',
-      'detecting': 'Detecting location...',
-    },
-    'ಕನ್ನಡ': {
-      'profile': 'ಪ್ರೊಫೈಲ್',
-      'edit': 'ತಿದ್ದುಪಡಿ',
-      'farming_insights': 'ಕೃಷಿ ಒಳನೋಟಗಳು',
-      'disease_scans': 'ರೋಗ ತಪಾಸಣೆ',
-      'market_alerts': 'ಮಾರುಕಟ್ಟೆ ಎಚ್ಚರಿಕೆ',
-      'community_posts': 'ಸಮುದಾಯ ಪೋಸ್ಟ್',
-      'schemes_applied': 'ಯೋಜನೆಗಳು',
-      'my_crops': 'ನನ್ನ ಬೆಳೆಗಳು',
-      'location': 'ಸ್ಥಳ',
-      'notifications': 'ಅಧಿಸೂಚನೆಗಳು',
-      'mandi_alerts': 'ಮಂಡಿ ದರ ಎಚ್ಚರಿಕೆ',
-      'disease_alerts': 'ರೋಗ ಮುನ್ನೆಚ್ಚರಿಕೆ',
-      'weather_updates': 'ಹವಾಮಾನ ಮಾಹಿತಿ',
-      'app_settings': 'ಆ್ಯಪ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳು',
-      'language': 'ಭಾಷೆ',
-      'admin_dashboard': 'ಅಡ್ಮಿನ್ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್',
-      'help_support': 'ಸಹಾಯ ಮತ್ತು ಬೆಂಬಲ',
-      'logout': 'ಲಾಗ್ ಔಟ್',
-      'no_crops': 'ಇನ್ನೂ ಯಾವುದೇ ಬೆಳೆಗಳನ್ನು ಸೇರಿಸಲಾಗಿಲ್ಲ.',
-      'humidity': 'ಆರ್ದ್ರತೆ',
-      'detect_location': 'ಸ್ಥಳ ಪತ್ತೆಹಚ್ಚಲು ಸ್ಪರ್ಶಿಸಿ',
-      'detecting': 'ಸ್ಥಳ ಪತ್ತೆಹಚ್ಚಲಾಗುತ್ತಿದೆ...',
-    },
-    'हिंदी': {
-      'profile': 'प्रोफ़ाइल',
-      'edit': 'संपादन',
-      'farming_insights': 'कृषि अंतर्दृष्टि',
-      'disease_scans': 'रोग स्कैन',
-      'market_alerts': 'बाजार अलर्ट',
-      'community_posts': 'सामुदायिक पोस्ट',
-      'schemes_applied': 'लागू योजनाएं',
-      'my_crops': 'मेरी फसलें',
-      'location': 'स्थान',
-      'notifications': 'सूचनाएं',
-      'mandi_alerts': 'मंडी भाव अलर्ट',
-      'disease_alerts': 'रोग चेतावनी अलर्ट',
-      'weather_updates': 'मौसम अपडेट',
-      'app_settings': 'ऐप सेटिंग्स',
-      'language': 'भाषा',
-      'admin_dashboard': 'एडमिन डैशबोर्ड',
-      'help_support': 'सहायता और समर्थन',
-      'logout': 'लॉग आउट',
-      'no_crops': 'अभी तक कोई फसल नहीं जोड़ी गई।',
-      'humidity': 'नमी',
-      'detect_location': 'स्थान खोजने के लिए टैप करें',
-      'detecting': 'स्थान खोजा जा रहा है...',
-    }
-  };
-
-  String _t(String key) {
-    return _translations[_language]?[key] ?? key;
-  }
 
   @override
   void initState() {
     super.initState();
     _fetchData();
-    _autoUpdateLocation(); // Auto-update location on screen load
-  }
-
-  /// Silently fetches GPS location in the background and saves to profile
-  Future<void> _autoUpdateLocation() async {
-    final loc = await LocationService.getCurrentLocation();
-    if (loc != null && mounted) {
-      final auth = Provider.of<AuthProvider>(context, listen: false);
-      await auth.updateProfile(loc);
-      // Re-fetch profile to show updated location
-      _fetchData();
-    }
   }
 
   Future<void> _fetchData() async {
@@ -132,11 +41,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     try {
       final profileData = await _apiService.getProfile();
       if (profileData['success'] == true) {
-        // Backend sends data under 'data' OR 'user'
         final raw = profileData['data'] ?? profileData['user'];
         _user = UserModel.fromJson(raw);
         
-        // Fetch weather if location is available
         if (_user?.location?.district != null) {
           try {
             _weather = await _weatherService.getWeather(_user!.location!.district!);
@@ -154,6 +61,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = Provider.of<AppLocale>(context);
+    
     if (_isLoading) {
       return const Scaffold(
         body: Center(child: CircularProgressIndicator(color: AppTheme.primaryGreen)),
@@ -191,7 +100,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               constraints: const BoxConstraints(),
                             ),
                             const SizedBox(width: 12),
-                            const Text('Profile', style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
+                            Text(AppLocale.t(context, 'profile'), style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
                           ],
                         ),
                         GestureDetector(
@@ -204,7 +113,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               if (result == true) _fetchData();
                             }
                           },
-                          child: const Text('Edit', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                          child: Text(AppLocale.t(context, 'edit'), style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
                         ),
                       ],
                     ),
@@ -217,13 +126,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: const Icon(Icons.person_outline, size: 50, color: AppTheme.primaryGreen),
                     ),
                     const SizedBox(height: 16),
-                    Text(_user?.name ?? 'Farmer', style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
+                    Text(_user?.name ?? AppLocale.t(context, 'Farmer'), style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
                     const SizedBox(height: 8),
                     Text(_user?.phone ?? 'No Phone Number', style: const TextStyle(color: Colors.white70, fontSize: 16)),
                     
                     if (_weather != null) ...[
                       const SizedBox(height: 24),
-                      _buildWeatherWidget(),
+                      _buildWeatherWidget(context),
                     ],
                   ],
                 ),
@@ -236,14 +145,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Farming Insights
-                    const Text('Farming Insights', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87)),
+                    Text(AppLocale.t(context, 'farming_insights'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87)),
                     const SizedBox(height: 12),
-                    _buildInsightsGrid(),
+                    _buildInsightsGrid(context),
                     
                     const SizedBox(height: 24),
 
                     // My Crops
-                    const Text('My Crops', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87)),
+                    Text(AppLocale.t(context, 'my_crops'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87)),
                     const SizedBox(height: 12),
                     Container(
                       padding: const EdgeInsets.all(16),
@@ -255,13 +164,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               runSpacing: 12,
                               children: _user!.farmDetails!.crops!.map((crop) => _buildCropTag(crop, _getCropEmoji(crop))).toList(),
                             )
-                          : const Text('No crops added yet.', style: TextStyle(color: Colors.grey)),
+                          : Text(AppLocale.t(context, 'no_crops'), style: const TextStyle(color: Colors.grey)),
                     ),
                     
                     const SizedBox(height: 24),
                     
                     // Location
-                    const Text('Location', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87)),
+                    Text(AppLocale.t(context, 'location'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87)),
                     const SizedBox(height: 12),
                     GestureDetector(
                       onTap: () async {
@@ -287,13 +196,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       children: [
                                         const SizedBox(width: 14, height: 14, child: CircularProgressIndicator(strokeWidth: 2, color: AppTheme.primaryGreen)),
                                         const SizedBox(width: 10),
-                                        Text('Detecting location...', style: TextStyle(fontSize: 15, color: Colors.grey.shade600)),
+                                        Text(AppLocale.t(context, 'detecting'), style: TextStyle(fontSize: 15, color: Colors.grey.shade600)),
                                       ],
                                     )
                                   : Text(
                                       _user?.location?.district != null
-                                          ? '${_user!.location!.district}, ${_user!.location!.state ?? ''}'
-                                          : 'Tap to detect location',
+                                          ? '${AppLocale.t(context, _user!.location!.district!)}, ${AppLocale.t(context, _user!.location!.state ?? '')}'
+                                          : AppLocale.t(context, 'detect_location'),
                                       style: const TextStyle(fontSize: 16),
                                     ),
                             ),
@@ -306,18 +215,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     const SizedBox(height: 24),
                     
                     // Notifications
-                    const Text('Notifications', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87)),
+                    Text(AppLocale.t(context, 'notifications'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87)),
                     const SizedBox(height: 12),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
                       child: Column(
                         children: [
-                          _buildNotificationToggle('Mandi Price Alerts', _mandiAlerts, (val) => setState(() => _mandiAlerts = val)),
+                          _buildNotificationToggle(AppLocale.t(context, 'mandi_alerts'), _mandiAlerts, (val) => setState(() => _mandiAlerts = val)),
                           const Divider(height: 1, color: Color(0xFFEEEEEE)),
-                          _buildNotificationToggle('Disease Warning Alerts', _diseaseAlerts, (val) => setState(() => _diseaseAlerts = val)),
+                          _buildNotificationToggle(AppLocale.t(context, 'disease_alerts'), _diseaseAlerts, (val) => setState(() => _diseaseAlerts = val)),
                           const Divider(height: 1, color: Color(0xFFEEEEEE)),
-                          _buildNotificationToggle('Weather Updates', _weatherAlerts, (val) => setState(() => _weatherAlerts = val)),
+                          _buildNotificationToggle(AppLocale.t(context, 'weather_updates'), _weatherAlerts, (val) => setState(() => _weatherAlerts = val)),
                         ],
                       ),
                     ),
@@ -325,7 +234,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     const SizedBox(height: 24),
 
                     // App Settings
-                    const Text('App Settings', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87)),
+                    Text(AppLocale.t(context, 'app_settings'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87)),
                     const SizedBox(height: 12),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -335,15 +244,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ListTile(
                             contentPadding: EdgeInsets.zero,
                             leading: const Icon(Icons.language, color: Colors.blue),
-                            title: const Text('Language', style: TextStyle(fontSize: 16)),
-                            trailing: Text(_language, style: const TextStyle(color: AppTheme.primaryGreen, fontWeight: FontWeight.bold)),
-                            onTap: _showLanguageDialog,
+                            title: Text(AppLocale.t(context, 'language'), style: const TextStyle(fontSize: 16)),
+                            trailing: Text(locale.isKannada ? 'ಕನ್ನಡ' : 'English', style: const TextStyle(color: AppTheme.primaryGreen, fontWeight: FontWeight.bold)),
+                            onTap: () => _showLanguageDialog(context),
                           ),
                           const Divider(height: 1, color: Color(0xFFEEEEEE)),
                           ListTile(
                             contentPadding: EdgeInsets.zero,
                             leading: const Icon(Icons.admin_panel_settings, color: Colors.orange),
-                            title: const Text('Admin Dashboard', style: TextStyle(fontSize: 16)),
+                            title: Text(AppLocale.t(context, 'admin_dashboard'), style: const TextStyle(fontSize: 16)),
                             trailing: Icon(Icons.chevron_right, color: Colors.grey.shade400),
                             onTap: () => Navigator.pushNamed(context, '/admin-notifications'),
                           ),
@@ -354,7 +263,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     const SizedBox(height: 24),
                     
                     // Help & Support
-                    const Text('Help & Support', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87)),
+                    Text(AppLocale.t(context, 'help_support'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87)),
                     const SizedBox(height: 12),
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -364,7 +273,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ListTile(
                             contentPadding: EdgeInsets.zero,
                             leading: const Icon(Icons.help_outline, color: AppTheme.primaryGreen),
-                            title: const Text('Help & Support', style: TextStyle(fontSize: 16, color: Colors.black87)),
+                            title: Text(AppLocale.t(context, 'help_support'), style: const TextStyle(fontSize: 16, color: Colors.black87)),
                             trailing: Icon(Icons.chevron_right, color: Colors.grey.shade400),
                             onTap: () => Navigator.pushNamed(context, '/help-support'),
                           ),
@@ -372,7 +281,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ListTile(
                             contentPadding: EdgeInsets.zero,
                             leading: const Icon(Icons.logout, color: Colors.red),
-                            title: const Text('Logout', style: TextStyle(fontSize: 16, color: Colors.red)),
+                            title: Text(AppLocale.t(context, 'logout'), style: const TextStyle(fontSize: 16, color: Colors.red)),
                             onTap: () async {
                               await FirebaseAuth.instance.signOut();
                               if (mounted) {
@@ -395,7 +304,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildWeatherWidget() {
+  Widget _buildWeatherWidget(BuildContext context) {
     final temp = _weather!['main']['temp'];
     final desc = _weather!['weather'][0]['description'];
     final icon = _weather!['weather'][0]['icon'];
@@ -421,11 +330,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
           const SizedBox(width: 20),
           const VerticalDivider(color: Colors.white24, width: 1),
           const SizedBox(width: 20),
-          const Column(
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Humidity', style: TextStyle(color: Colors.white70, fontSize: 10)),
-              Text('72%', style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
+              Text(AppLocale.t(context, 'humidity'), style: const TextStyle(color: Colors.white70, fontSize: 10)),
+              const Text('72%', style: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold)),
             ],
           ),
         ],
@@ -433,7 +342,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  Widget _buildInsightsGrid() {
+  Widget _buildInsightsGrid(BuildContext context) {
     return GridView.count(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -442,10 +351,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
       crossAxisSpacing: 16,
       mainAxisSpacing: 16,
       children: [
-        _buildStatCard('Disease Scans', '12', Icons.bug_report_outlined, Colors.orange),
-        _buildStatCard('Market Alerts', '48', Icons.trending_up, Colors.blue),
-        _buildStatCard('Community Posts', '5', Icons.forum_outlined, Colors.purple),
-        _buildStatCard('Schemes Applied', '2', Icons.assignment_outlined, Colors.green),
+        _buildStatCard(AppLocale.t(context, 'disease_scans'), '12', Icons.bug_report_outlined, Colors.orange),
+        _buildStatCard(AppLocale.t(context, 'market_alerts'), '48', Icons.trending_up, Colors.blue),
+        _buildStatCard(AppLocale.t(context, 'community_posts'), '5', Icons.forum_outlined, Colors.purple),
+        _buildStatCard(AppLocale.t(context, 'schemes_applied'), '2', Icons.assignment_outlined, Colors.green),
       ],
     );
   }
@@ -520,32 +429,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
-  void _showLanguageDialog() {
+  void _showLanguageDialog(BuildContext context) {
+    final locale = Provider.of<AppLocale>(context, listen: false);
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Select Language'),
+        title: Text(AppLocale.t(context, 'language')),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             ListTile(
               title: const Text('English'),
               onTap: () {
-                setState(() => _language = 'English');
+                locale.setLanguage('en');
                 Navigator.pop(context);
               },
             ),
             ListTile(
               title: const Text('ಕನ್ನಡ (Kannada)'),
               onTap: () {
-                setState(() => _language = 'ಕನ್ನಡ');
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: const Text('हिंदी (Hindi)'),
-              onTap: () {
-                setState(() => _language = 'हिंदी');
+                locale.setLanguage('kn');
                 Navigator.pop(context);
               },
             ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../config/theme.dart';
+import '../../core/locale.dart';
 import '../../services/api_service.dart';
 import '../../models/user_model.dart';
 
@@ -58,9 +60,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       await _apiService.put('/auth/update-profile', updateData);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Profile updated successfully!')),
+          SnackBar(content: Text(AppLocale.t(context, 'profile_updated'))),
         );
-        Navigator.pop(context, true); // Return true to indicate success
+        Navigator.pop(context, true);
       }
     } catch (e) {
       if (mounted) {
@@ -78,7 +80,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return Scaffold(
       backgroundColor: AppTheme.background,
       appBar: AppBar(
-        title: const Text('Edit Profile', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(AppLocale.t(context, 'edit'), style: const TextStyle(fontWeight: FontWeight.bold)),
         backgroundColor: AppTheme.primaryGreen,
         foregroundColor: Colors.white,
         elevation: 0,
@@ -90,23 +92,23 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _buildSectionTitle('Basic Information'),
+              _buildSectionTitle(AppLocale.t(context, 'basic_info')),
               const SizedBox(height: 16),
-              _buildTextField('Full Name', _nameCtrl, Icons.person_outline),
+              _buildTextField(AppLocale.t(context, 'full_name'), _nameCtrl, Icons.person_outline),
               const SizedBox(height: 16),
-              _buildTextField('Email Address', _emailCtrl, Icons.email_outlined, keyboardType: TextInputType.emailAddress),
+              _buildTextField(AppLocale.t(context, 'email'), _emailCtrl, Icons.email_outlined, keyboardType: TextInputType.emailAddress),
               
               const SizedBox(height: 32),
-              _buildSectionTitle('Farm Details'),
+              _buildSectionTitle(AppLocale.t(context, 'farm_details_title')),
               const SizedBox(height: 16),
-              _buildTextField('Land Area (Acres)', _landAreaCtrl, Icons.landscape_outlined, keyboardType: TextInputType.number),
+              _buildTextField(AppLocale.t(context, 'land_area'), _landAreaCtrl, Icons.landscape_outlined, keyboardType: TextInputType.number),
               const SizedBox(height: 16),
-              _buildDropdown('Soil Type', _soilType, _soilTypes, (val) => setState(() => _soilType = val)),
+              _buildDropdown(AppLocale.t(context, 'soil_type'), _soilType, _soilTypes, (val) => setState(() => _soilType = val)),
               const SizedBox(height: 16),
-              _buildDropdown('Irrigation Type', _irrigationType, _irrigationTypes, (val) => setState(() => _irrigationType = val)),
+              _buildDropdown(AppLocale.t(context, 'irrigation_type'), _irrigationType, _irrigationTypes, (val) => setState(() => _irrigationType = val)),
               
               const SizedBox(height: 32),
-              _buildSectionTitle('My Crops'),
+              _buildSectionTitle(AppLocale.t(context, 'my_crops')),
               const SizedBox(height: 12),
               Wrap(
                 spacing: 8,
@@ -146,7 +148,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       ),
-                      child: const Text('Save Changes', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                      child: Text(AppLocale.t(context, 'save_changes'), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                     ),
             ],
           ),
@@ -175,7 +177,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         filled: true,
         fillColor: Colors.white,
       ),
-      validator: (val) => val == null || val.isEmpty ? 'This field is required' : null,
+      validator: (val) => val == null || val.isEmpty ? AppLocale.t(context, 'required') : null,
     );
   }
 
