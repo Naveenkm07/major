@@ -200,8 +200,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 controller: _phoneCtrl,
                                 keyboardType: TextInputType.phone,
                                 decoration: const InputDecoration(
-                                  hintText: '98765 43210',
-                                  hintStyle: TextStyle(color: Colors.black87, fontSize: 16, letterSpacing: 1.5),
+                                  hintText: 'Enter phone number',
+                                  hintStyle: TextStyle(color: Colors.grey, fontSize: 16),
                                   border: InputBorder.none,
                                   enabledBorder: InputBorder.none,
                                   focusedBorder: InputBorder.none,
