@@ -45,7 +45,7 @@ class _EditFarmDetailsScreenState extends State<EditFarmDetailsScreen> {
     _selectedIrrigation = widget.user.farmDetails?.irrigationType;
     
     if (widget.user.farmDetails?.crops != null) {
-      _selectedCrops = List.from(widget.user.farmDetails!.crops!);
+      _selectedCrops = widget.user.farmDetails!.crops!.map((c) => c.name).toList();
     }
   }
 

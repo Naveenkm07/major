@@ -37,7 +37,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _landAreaCtrl = TextEditingController(text: widget.user.farmDetails?.landArea?.toString() ?? '');
     _soilType = widget.user.farmDetails?.soilType;
     _irrigationType = widget.user.farmDetails?.irrigationType;
-    _selectedCrops = List.from(widget.user.farmDetails?.crops ?? []);
+    _selectedCrops = widget.user.farmDetails?.crops?.map((c) => c.name).toList() ?? [];
   }
 
   Future<void> _saveProfile() async {
