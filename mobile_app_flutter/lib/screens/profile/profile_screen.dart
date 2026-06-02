@@ -30,6 +30,85 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool _weatherAlerts = false;
   String _language = 'English';
 
+  final Map<String, Map<String, String>> _translations = {
+    'English': {
+      'profile': 'Profile',
+      'edit': 'Edit',
+      'farming_insights': 'Farming Insights',
+      'disease_scans': 'Disease Scans',
+      'market_alerts': 'Market Alerts',
+      'community_posts': 'Community Posts',
+      'schemes_applied': 'Schemes Applied',
+      'my_crops': 'My Crops',
+      'location': 'Location',
+      'notifications': 'Notifications',
+      'mandi_alerts': 'Mandi Price Alerts',
+      'disease_alerts': 'Disease Warning Alerts',
+      'weather_updates': 'Weather Updates',
+      'app_settings': 'App Settings',
+      'language': 'Language',
+      'admin_dashboard': 'Admin Dashboard',
+      'help_support': 'Help & Support',
+      'logout': 'Logout',
+      'no_crops': 'No crops added yet.',
+      'humidity': 'Humidity',
+      'detect_location': 'Tap to detect location',
+      'detecting': 'Detecting location...',
+    },
+    'ಕನ್ನಡ': {
+      'profile': 'ಪ್ರೊಫೈಲ್',
+      'edit': 'ತಿದ್ದುಪಡಿ',
+      'farming_insights': 'ಕೃಷಿ ಒಳನೋಟಗಳು',
+      'disease_scans': 'ರೋಗ ತಪಾಸಣೆ',
+      'market_alerts': 'ಮಾರುಕಟ್ಟೆ ಎಚ್ಚರಿಕೆ',
+      'community_posts': 'ಸಮುದಾಯ ಪೋಸ್ಟ್',
+      'schemes_applied': 'ಯೋಜನೆಗಳು',
+      'my_crops': 'ನನ್ನ ಬೆಳೆಗಳು',
+      'location': 'ಸ್ಥಳ',
+      'notifications': 'ಅಧಿಸೂಚನೆಗಳು',
+      'mandi_alerts': 'ಮಂಡಿ ದರ ಎಚ್ಚರಿಕೆ',
+      'disease_alerts': 'ರೋಗ ಮುನ್ನೆಚ್ಚರಿಕೆ',
+      'weather_updates': 'ಹವಾಮಾನ ಮಾಹಿತಿ',
+      'app_settings': 'ಆ್ಯಪ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳು',
+      'language': 'ಭಾಷೆ',
+      'admin_dashboard': 'ಅಡ್ಮಿನ್ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್',
+      'help_support': 'ಸಹಾಯ ಮತ್ತು ಬೆಂಬಲ',
+      'logout': 'ಲಾಗ್ ಔಟ್',
+      'no_crops': 'ಇನ್ನೂ ಯಾವುದೇ ಬೆಳೆಗಳನ್ನು ಸೇರಿಸಲಾಗಿಲ್ಲ.',
+      'humidity': 'ಆರ್ದ್ರತೆ',
+      'detect_location': 'ಸ್ಥಳ ಪತ್ತೆಹಚ್ಚಲು ಸ್ಪರ್ಶಿಸಿ',
+      'detecting': 'ಸ್ಥಳ ಪತ್ತೆಹಚ್ಚಲಾಗುತ್ತಿದೆ...',
+    },
+    'हिंदी': {
+      'profile': 'प्रोफ़ाइल',
+      'edit': 'संपादन',
+      'farming_insights': 'कृषि अंतर्दृष्टि',
+      'disease_scans': 'रोग स्कैन',
+      'market_alerts': 'बाजार अलर्ट',
+      'community_posts': 'सामुदायिक पोस्ट',
+      'schemes_applied': 'लागू योजनाएं',
+      'my_crops': 'मेरी फसलें',
+      'location': 'स्थान',
+      'notifications': 'सूचनाएं',
+      'mandi_alerts': 'मंडी भाव अलर्ट',
+      'disease_alerts': 'रोग चेतावनी अलर्ट',
+      'weather_updates': 'मौसम अपडेट',
+      'app_settings': 'ऐप सेटिंग्स',
+      'language': 'भाषा',
+      'admin_dashboard': 'एडमिन डैशबोर्ड',
+      'help_support': 'सहायता और समर्थन',
+      'logout': 'लॉग आउट',
+      'no_crops': 'अभी तक कोई फसल नहीं जोड़ी गई।',
+      'humidity': 'नमी',
+      'detect_location': 'स्थान खोजने के लिए टैप करें',
+      'detecting': 'स्थान खोजा जा रहा है...',
+    }
+  };
+
+  String _t(String key) {
+    return _translations[_language]?[key] ?? key;
+  }
+
   @override
   void initState() {
     super.initState();
