@@ -22,9 +22,6 @@ class _LoginScreenState extends State<LoginScreen> {
   String get _signInText => _isEnglish ? 'Sign In' : 'ಲಾಗಿನ್ ಮಾಡಿ';
   String get _phoneLabel => _isEnglish ? 'Phone Number' : 'ಫೋನ್ ಸಂಖ್ಯೆ';
   String get _phoneHint => _isEnglish ? 'Enter phone number' : 'ಫೋನ್ ಸಂಖ್ಯೆ ನಮೂದಿಸಿ';
-  String get _termsText => _isEnglish
-      ? 'By continuing you agree to our Terms & Privacy'
-      : 'ಮುಂದುವರಿಯುವ ಮೂಲಕ ನೀವು ನಮ್ಮ ನಿಯಮಗಳಿಗೆ ಒಪ್ಪುತ್ತೀರಿ';
   String get _otpButtonText => _isEnglish ? 'Get OTP' : 'OTP ಪಡೆಯಿರಿ';
 
   Future<void> _getOtp() async {
@@ -246,19 +243,21 @@ class _LoginScreenState extends State<LoginScreen> {
                               Expanded(
                                 child: Padding(
                                   padding: const EdgeInsets.only(top: 12),
-                                  child: Text(
-                                    _termsText,
-                                    style: _isEnglish
-                                        ? const TextStyle(
-                                            color: Colors.grey,
-                                            fontSize: 12,
-                                            height: 1.5,
-                                          )
-                                        : GoogleFonts.notoSansKannada(
-                                            color: Colors.grey,
-                                            fontSize: 12,
-                                            height: 1.5,
-                                          ),
+                                  child: RichText(
+                                    text: TextSpan(
+                                      style: _isEnglish
+                                          ? const TextStyle(color: Colors.grey, fontSize: 12, height: 1.5, fontFamily: 'Roboto')
+                                          : GoogleFonts.notoSansKannada(color: Colors.grey, fontSize: 12, height: 1.5),
+                                      children: [
+                                        TextSpan(text: _isEnglish ? 'By continuing you agree to our ' : 'ಮುಂದುವರಿಯುವ ಮೂಲಕ ನೀವು ನಮ್ಮ '),
+                                        TextSpan(
+                                          text: _isEnglish ? 'Terms & Privacy' : 'ನಿಯಮಗಳು ಮತ್ತು ಗೌಪ್ಯತೆಗೆ',
+                                          style: const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+                                        ),
+                                        if (!_isEnglish)
+                                          const TextSpan(text: ' ಒಪ್ಪುತ್ತೀರಿ'),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
