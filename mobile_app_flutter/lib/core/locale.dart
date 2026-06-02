@@ -22,7 +22,13 @@ class AppLocale extends ChangeNotifier {
   }
 
   Future<void> toggleLanguage() async {
-    _languageCode = _languageCode == 'en' ? 'kn' : 'en';
+    if (_languageCode == 'en') {
+      _languageCode = 'kn';
+    } else if (_languageCode == 'kn') {
+      _languageCode = 'hi';
+    } else {
+      _languageCode = 'en';
+    }
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_prefKey, _languageCode);
     notifyListeners();
@@ -280,6 +286,29 @@ class AppLocale extends ChangeNotifier {
       'notifications': 'Notifications',
       'mark_all_read': 'Mark all as read',
       'no_notifications': 'No new notifications',
+
+      // ─── Profile ──────────────────────────────
+      'farming_insights': 'Farming Insights',
+      'disease_scans': 'Disease Scans',
+      'market_alerts': 'Market Alerts',
+      'community_posts': 'Community Posts',
+      'schemes_applied': 'Schemes Applied',
+      'my_crops': 'My Crops',
+      'app_settings': 'App Settings',
+      'admin_dashboard': 'Admin Dashboard',
+      'help_support': 'Help & Support',
+      'no_crops': 'No crops added yet.',
+      'detect_location': 'Tap to detect location',
+      'detecting': 'Detecting location...',
+      'edit': 'Edit',
+      'basic_info': 'Basic Information',
+      'farm_details_title': 'Farm Details',
+      'soil_type': 'Soil Type',
+      'irrigation_type': 'Irrigation Type',
+      'save_changes': 'Save Changes',
+      'mandi_alerts': 'Mandi Price Alerts',
+      'disease_alerts': 'Disease Warning Alerts',
+      'weather_updates': 'Weather Updates',
     },
 
     'kn': {
@@ -513,6 +542,89 @@ class AppLocale extends ChangeNotifier {
       'notifications': 'ಅಧಿಸೂಚನೆಗಳು',
       'mark_all_read': 'ಎಲ್ಲವನ್ನೂ ಓದಲಾಗಿದೆ ಎಂದು ಗುರುತಿಸಿ',
       'no_notifications': 'ಯಾವುದೇ ಹೊಸ ಅಧಿಸೂಚನೆಗಳಿಲ್ಲ',
+
+      // ─── Profile ──────────────────────────────
+      'farming_insights': 'ಕೃಷಿ ಒಳನೋಟಗಳು',
+      'disease_scans': 'ರೋಗ ತಪಾಸಣೆ',
+      'market_alerts': 'ಮಾರುಕಟ್ಟೆ ಎಚ್ಚರಿಕೆ',
+      'community_posts': 'ಸಮುದಾಯ ಪೋಸ್ಟ್',
+      'schemes_applied': 'ಯೋಜನೆಗಳು',
+      'my_crops': 'ನನ್ನ ಬೆಳೆಗಳು',
+      'app_settings': 'ಆ್ಯಪ್ ಸೆಟ್ಟಿಂಗ್‌ಗಳು',
+      'admin_dashboard': 'ಅಡ್ಮಿನ್ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್',
+      'help_support': 'ಸಹಾಯ ಮತ್ತು ಬೆಂಬಲ',
+      'no_crops': 'ಇನ್ನೂ ಯಾವುದೇ ಬೆಳೆಗಳನ್ನು ಸೇರಿಸಲಾಗಿಲ್ಲ.',
+      'detect_location': 'ಸ್ಥಳ ಪತ್ತೆಹಚ್ಚಲು ಸ್ಪರ್ಶಿಸಿ',
+      'detecting': 'ಸ್ಥಳ ಪತ್ತೆಹಚ್ಚಲಾಗುತ್ತಿದೆ...',
+      'edit': 'ತಿದ್ದುಪಡಿ',
+      'basic_info': 'ಮೂಲ ಮಾಹಿತಿ',
+      'farm_details_title': 'ಜಮೀನಿನ ವಿವರಗಳು',
+      'soil_type': 'ಮಣ್ಣಿನ ವಿಧ',
+      'irrigation_type': 'ನೀರಾವರಿ ವಿಧ',
+      'save_changes': 'ಬದಲಾವಣೆ ಉಳಿಸಿ',
+      'mandi_alerts': 'ಮಂಡಿ ದರ ಎಚ್ಚರಿಕೆ',
+      'disease_alerts': 'ರೋಗ ಮುನ್ನೆಚ್ಚರಿಕೆ',
+      'weather_updates': 'ಹವಾಮಾನ ಮಾಹಿತಿ',
+    },
+
+    'hi': {
+      // ─── Navigation ──────────────────────────
+      'dashboard': 'डैशबोर्ड',
+      'pest_scan': 'कीट स्कैन',
+      'market': 'बाजार',
+      'community': 'समुदाय',
+      'profile': 'प्रोफ़ाइल',
+
+      // ─── Home ────────────────────────────────
+      'app_name': 'KrushikaDhara',
+      'tagline': 'स्मार्ट फार्मिंग साथी',
+      'welcome': 'स्वागत है, किसान!',
+      'ask_ai': 'AI सहायक से पूछें',
+      'quick_actions': 'त्वरित कार्रवाई',
+      'todays_tips': 'आज के टिप्स',
+      'namaskara': 'नमस्ते 🙏',
+      'Sunny': 'धूप',
+      'Clear': 'साफ',
+      'Cloudy': 'बादल',
+      'Rainy': 'बारिश',
+      'humidity': 'नमी',
+
+      // ─── Feature Cards ───────────────────────
+      'pest_detection': 'कीट\nपहचान',
+      'market_prices': 'बाजार\nभाव',
+      'crop_calendar': 'फसल\nकैलेंडर',
+      'govt_schemes': 'सरकारी\nयोजनाएं',
+      'loan_guidance': 'ऋण\nमार्गदर्शन',
+      'farmer_connect': 'किसान\nसंपर्क',
+
+      // ─── General ─────────────────────────────
+      'language': 'भाषा',
+      'logout': 'लॉग आउट',
+      'save': 'सहेजें',
+      'refresh': 'रिफ्रेश',
+      
+      // ─── Profile ──────────────────────────────
+      'farming_insights': 'कृषि अंतर्दृष्टि',
+      'disease_scans': 'रोग स्कैन',
+      'market_alerts': 'बाजार अलर्ट',
+      'community_posts': 'सामुदायिक पोस्ट',
+      'schemes_applied': 'लागू योजनाएं',
+      'my_crops': 'मेरी फसलें',
+      'app_settings': 'ऐप सेटिंग्स',
+      'admin_dashboard': 'एडमिन डैशबोर्ड',
+      'help_support': 'सहायता और समर्थन',
+      'no_crops': 'अभी तक कोई फसल नहीं जोड़ी गई।',
+      'detect_location': 'स्थान खोजने के लिए टैप करें',
+      'detecting': 'स्थान खोजा जा रहा है...',
+      'edit': 'संपादन',
+      'basic_info': 'बुनियादी जानकारी',
+      'farm_details_title': 'फार्म विवरण',
+      'soil_type': 'मिट्टी का प्रकार',
+      'irrigation_type': 'सिंचाई का प्रकार',
+      'save_changes': 'बदलाव सहेजें',
+      'mandi_alerts': 'मंडी भाव अलर्ट',
+      'disease_alerts': 'रोग चेतावनी अलर्ट',
+      'weather_updates': 'मौसम अपडेट',
     },
   };
 }
