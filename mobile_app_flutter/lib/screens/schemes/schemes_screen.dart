@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../config/theme.dart';
+import '../../services/api_service.dart';
+import 'package:provider/provider.dart';
+import '../../providers/auth_provider.dart';
 
 class SchemesScreen extends StatefulWidget {
   const SchemesScreen({super.key});
@@ -11,6 +14,31 @@ class SchemesScreen extends StatefulWidget {
 class _SchemesScreenState extends State<SchemesScreen> {
   final List<String> _filters = ['All', 'Subsidies', 'Loans', 'Equipment'];
   int _selectedFilter = 0;
+  
+  final _api = ApiService();
+  List<dynamic> _schemes = [];
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchSchemes();
+  }
+
+  Future<void> _fetchSchemes() async {
+    try {
+      final res = await _api.getSchemes();
+      if (res['success'] == true) {
+        setState(() {
+          _schemes = res['data'] ?? [];
+        });
+      }
+    } catch (e) {
+      debugPrint('Error fetching schemes: $e');
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -117,38 +145,26 @@ class _SchemesScreenState extends State<SchemesScreen> {
 
           // ─── List ────────────────────
           Expanded(
-            child: ListView(
-              padding: const EdgeInsets.all(16),
-              children: [
-                _buildSchemeCard(
-                  origin: 'Karnataka Govt.',
-                  title: 'Krishi Bhagya',
-                  desc: 'Rainwater harvesting subsidy',
-                  benefitTitle: 'Benefit',
-                  benefitValue: '₹50,000',
-                  badge: 'Eligible',
-                ),
-                const SizedBox(height: 16),
-                _buildSchemeCard(
-                  origin: 'Central Govt.',
-                  title: 'PM-KISAN',
-                  desc: 'Direct income support for farmers',
-                  benefitTitle: 'Benefit',
-                  benefitValue: '₹6,000 /yr',
-                  badge: 'Eligible',
-                ),
-                const SizedBox(height: 16),
-                _buildSchemeCard(
-                  origin: 'DCC Bank',
-                  title: 'Kisan Credit Card',
-                  desc: 'Short-term crop loan @ 4% p.a.',
-                  benefitTitle: 'Benefit',
-                  benefitValue: 'Up to ₹3 L',
-                  badge: 'Check eligibility',
-                  isBadgeGrey: true,
-                ),
-              ],
-            ),
+            child: _isLoading
+                ? const Center(child: CircularProgressIndicator(color: AppTheme.primaryGreen))
+                : _schemes.isEmpty
+                    ? const Center(child: Text('No schemes found'))
+                    : ListView.builder(
+                        padding: const EdgeInsets.all(16),
+                        itemCount: _schemes.length,
+                        itemBuilder: (context, index) {
+                          final scheme = _schemes[index];
+                          return _buildSchemeCard(
+                            id: scheme['_id'] ?? scheme['id'],
+                            origin: scheme['provider'] ?? 'Govt.',
+                            title: scheme['title'] ?? '',
+                            desc: scheme['description'] ?? '',
+                            benefitTitle: 'Benefit',
+                            benefitValue: scheme['benefit'] ?? '',
+                            badge: scheme['eligibility'] ?? 'Check eligibility',
+                          );
+                        },
+                      ),
           ),
         ],
       ),
@@ -156,6 +172,7 @@ class _SchemesScreenState extends State<SchemesScreen> {
   }
 
   Widget _buildSchemeCard({
+    required String id,
     required String origin,
     required String title,
     required String desc,
@@ -164,6 +181,9 @@ class _SchemesScreenState extends State<SchemesScreen> {
     required String badge,
     bool isBadgeGrey = false,
   }) {
+    final auth = Provider.of<AuthProvider>(context);
+    final isBookmarked = auth.user?.savedSchemes.contains(id) ?? false;
+
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -178,26 +198,39 @@ class _SchemesScreenState extends State<SchemesScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(origin, style: TextStyle(color: Colors.grey.shade500, fontSize: 12)),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(
-                  color: isBadgeGrey ? Colors.grey.shade100 : AppTheme.primaryGreen,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Row(
-                  children: [
-                    if (!isBadgeGrey) const Icon(Icons.check_circle_outline, color: Colors.white, size: 14),
-                    if (!isBadgeGrey) const SizedBox(width: 4),
-                    Text(
-                      badge,
-                      style: TextStyle(
-                        color: isBadgeGrey ? Colors.grey.shade600 : Colors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
+              Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: isBadgeGrey ? Colors.grey.shade100 : AppTheme.primaryGreen,
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                  ],
-                ),
+                    child: Row(
+                      children: [
+                        if (!isBadgeGrey) const Icon(Icons.check_circle_outline, color: Colors.white, size: 14),
+                        if (!isBadgeGrey) const SizedBox(width: 4),
+                        Text(
+                          badge,
+                          style: TextStyle(
+                            color: isBadgeGrey ? Colors.grey.shade600 : Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  GestureDetector(
+                    onTap: () => auth.toggleSchemeBookmark(id),
+                    child: Icon(
+                      isBookmarked ? Icons.bookmark : Icons.bookmark_outline,
+                      color: isBookmarked ? AppTheme.primaryGreen : Colors.grey,
+                      size: 24,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

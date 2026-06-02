@@ -131,6 +131,8 @@ class ApiService {
 
   Future<Map<String, dynamic>> getLoans() async => get('/loans');
 
+  Future<Map<String, dynamic>> getEquipment() async => get('/equipment');
+
   // ═══════════════════════════════════════════════════
   // Community (Node.js backend)
   // ═══════════════════════════════════════════════════
@@ -179,7 +181,7 @@ class ApiService {
   /// Returns JSON with pest label, confidence, treatment, and prevention.
   Future<Map<String, dynamic>> detectPest(File imageFile) async {
     final token = await _getToken();
-    final uri = Uri.parse('${AppConstants.aiServiceUrl}/detect_pest');
+    final uri = Uri.parse('${AppConstants.backendBaseUrl}/pest-detect');
 
     final request = http.MultipartRequest('POST', uri);
     request.headers['Authorization'] = 'Bearer $token';
@@ -211,6 +213,22 @@ class ApiService {
     final streamedResponse = await request.send().timeout(const Duration(seconds: 30));
     final responseBody = await streamedResponse.stream.bytesToString();
     return jsonDecode(responseBody);
+  }
+
+  Future<Map<String, dynamic>> getScanHistory({int page = 1, int limit = 20}) async {
+    return get('/pest-detect/history', query: {'page': page.toString(), 'limit': limit.toString()});
+  }
+
+  // ═══════════════════════════════════════════════════
+  // Bookmarks
+  // ═══════════════════════════════════════════════════
+
+  Future<Map<String, dynamic>> toggleSchemeBookmark(String schemeId) async {
+    return post('/auth/bookmarks/schemes/$schemeId', {});
+  }
+
+  Future<Map<String, dynamic>> toggleEquipmentBookmark(String equipmentId) async {
+    return post('/auth/bookmarks/equipment/$equipmentId', {});
   }
 
   // ═══════════════════════════════════════════════════
@@ -252,7 +270,7 @@ Respond entirely in $language language.
           'Authorization': 'Bearer $grokApiKey',
         },
         body: jsonEncode({
-          'model': 'grok-beta',
+          'model': 'grok-4.3',
           'messages': [
             {'role': 'system', 'content': systemPrompt},
             {'role': 'user', 'content': question}

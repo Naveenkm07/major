@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../providers/equipment_provider.dart';
+import '../../providers/auth_provider.dart';
 import '../../config/theme.dart';
 import '../../core/locale.dart';
 import '../../widgets/language_toggle.dart';
 import '../../models/equipment_model.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider;
 
 class MarketplaceScreen extends StatefulWidget {
   const MarketplaceScreen({super.key});
@@ -354,7 +355,26 @@ class _EquipmentCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(item.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14), maxLines: 1),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(child: Text(item.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14), maxLines: 1)),
+                    Consumer<AuthProvider>(
+                      builder: (context, auth, child) {
+                        final isBookmarked = auth.user?.savedEquipment.contains(item.id) ?? false;
+                        return GestureDetector(
+                          onTap: () => auth.toggleEquipmentBookmark(item.id),
+                          child: Icon(
+                            isBookmarked ? Icons.bookmark : Icons.bookmark_outline,
+                            color: isBookmarked ? AppTheme.primaryGreen : Colors.grey,
+                            size: 20,
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
                 Text('₹${item.pricePerHour}/hr', style: const TextStyle(color: AppTheme.primaryGreen, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 4),
                 Row(

@@ -8,6 +8,8 @@ class UserModel {
   final LocationModel? location;
   final FarmDetailsModel? farmDetails;
   final UserStatsModel? stats;
+  final List<String> savedSchemes;
+  final List<String> savedEquipment;
 
   UserModel({
     required this.id,
@@ -19,6 +21,8 @@ class UserModel {
     this.location,
     this.farmDetails,
     this.stats,
+    this.savedSchemes = const [],
+    this.savedEquipment = const [],
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -43,6 +47,14 @@ class UserModel {
       farmDetails = FarmDetailsModel.fromJson(json);
     }
 
+    List<String> extractIds(dynamic list) {
+      if (list == null || list is! List) return [];
+      return list.map((e) {
+        if (e is Map) return e['_id']?.toString() ?? e['id']?.toString() ?? '';
+        return e.toString();
+      }).where((e) => e.isNotEmpty).toList();
+    }
+
     return UserModel(
       id: json['id'] ?? json['_id'] ?? '',
       name: json['name'] ?? '',
@@ -53,6 +65,8 @@ class UserModel {
       location: location,
       farmDetails: farmDetails,
       stats: json['stats'] != null ? UserStatsModel.fromJson(json['stats']) : null,
+      savedSchemes: extractIds(json['savedSchemes']),
+      savedEquipment: extractIds(json['savedEquipment']),
     );
   }
 }

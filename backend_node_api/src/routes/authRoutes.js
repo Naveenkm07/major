@@ -10,5 +10,8 @@ router.post('/firebase-sync', firebaseSync);
 router.get('/me', protect, getMe);
 router.put('/update-profile', protect, updateProfile);
 router.put('/fcm-token', protect, updateFcmToken);
+const { toggleSchemeBookmark, toggleEquipmentBookmark } = require('../controllers/authController');
+router.post('/bookmarks/schemes/:id', protect, toggleSchemeBookmark);
+router.post('/bookmarks/equipment/:id', protect, toggleEquipmentBookmark);
 
 module.exports = router;

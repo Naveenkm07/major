@@ -48,12 +48,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     final updateData = {
       'name': _nameCtrl.text.trim(),
       'email': _emailCtrl.text.trim(),
-      'farmDetails': {
-        'landArea': double.tryParse(_landAreaCtrl.text),
-        'soilType': _soilType,
-        'irrigationType': _irrigationType,
-        'crops': _selectedCrops,
-      }
+      'farmSize': double.tryParse(_landAreaCtrl.text),
+      'soilType': _soilType,
+      'irrigationType': _irrigationType,
+      'cropTypes': _selectedCrops,
     };
 
     try {

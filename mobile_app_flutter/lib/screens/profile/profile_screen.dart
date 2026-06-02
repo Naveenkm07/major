@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider;
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../config/theme.dart';
 import '../../core/locale.dart';
 import '../../services/api_service.dart';
@@ -8,9 +9,12 @@ import '../../services/weather_service.dart';
 import '../../services/location_service.dart';
 import '../../models/user_model.dart';
 import '../../providers/auth_provider.dart';
+import '../auth/login_screen.dart';
 import './edit_profile_screen.dart';
 import './my_crops_screen.dart';
 import './smart_notifications_screen.dart';
+import './disease_scan_history_screen.dart';
+import './bookmarks_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -214,7 +218,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ? Wrap(
                               spacing: 8,
                               runSpacing: 12,
-                              children: _user!.farmDetails!.crops!.map((crop) => _buildCropTag(crop, _getCropEmoji(crop))).toList(),
+                              children: _user!.farmDetails!.crops!.map((crop) => _buildCropTag(crop.name, _getCropEmoji(crop.name))).toList(),
                             )
                           : Text(AppLocale.t(context, 'no_crops'), style: const TextStyle(color: Colors.grey)),
                     ),
@@ -264,6 +268,51 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                     
+                    const SizedBox(height: 24),
+
+                    // My Activity
+                    const Text('My Activity', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87)),
+                    const SizedBox(height: 12),
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
+                      child: Column(
+                        children: [
+                          ListTile(
+                            leading: Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(color: AppTheme.accent.withOpacity(0.1), shape: BoxShape.circle),
+                              child: const Icon(Icons.history, color: AppTheme.accentDark),
+                            ),
+                            title: const Text('My Disease Scans', style: TextStyle(fontWeight: FontWeight.w600)),
+                            trailing: const Icon(Icons.chevron_right, color: Colors.grey),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (_) => const DiseaseScanHistoryScreen()),
+                              );
+                            },
+                          ),
+                          const Divider(height: 1, color: Color(0xFFEEEEEE), indent: 56),
+                          ListTile(
+                            leading: Container(
+                              padding: const EdgeInsets.all(8),
+                              decoration: BoxDecoration(color: AppTheme.primaryGreen.withOpacity(0.1), shape: BoxShape.circle),
+                              child: const Icon(Icons.bookmarks_outlined, color: AppTheme.primaryGreen),
+                            ),
+                            title: const Text('Saved Bookmarks', style: TextStyle(fontWeight: FontWeight.w600)),
+                            trailing: const Icon(Icons.chevron_right, color: Colors.grey),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (_) => const BookmarksScreen()),
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+
                     const SizedBox(height: 24),
                     
                     // Notifications
