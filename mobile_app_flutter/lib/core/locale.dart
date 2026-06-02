@@ -284,6 +284,12 @@ class AppLocale extends ChangeNotifier {
       'market': 'ಮಾರುಕಟ್ಟೆ',
       'community': 'ಸಮುದಾಯ',
       'profile': 'ಪ್ರೊಫೈಲ್',
+      
+      // ─── Dynamic Names & Locations (Demo) ────
+      'Naveen': 'ನವೀನ್',
+      'Mandya': 'ಮಂಡ್ಯ',
+      'Farmer': 'ರೈತ',
+
 
       // ─── Home ────────────────────────────────
       'app_name': 'ಕೃಷಿಕಾಧಾರ',
