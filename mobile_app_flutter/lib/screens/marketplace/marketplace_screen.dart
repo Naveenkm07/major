@@ -5,6 +5,7 @@ import '../../config/theme.dart';
 import '../../core/locale.dart';
 import '../../widgets/language_toggle.dart';
 import '../../models/equipment_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class MarketplaceScreen extends StatefulWidget {
   const MarketplaceScreen({super.key});
@@ -31,7 +32,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
         actions: const [LanguageToggle(), SizedBox(width: 10)],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => _showAddEquipmentDialog(context),
+        onPressed: () => _showAddEquipmentBottomSheet(context),
         label: Text(AppLocale.t(context, 'list_equipment')),
         icon: const Icon(Icons.add_business_rounded),
       ),
@@ -101,10 +102,140 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
     );
   }
 
-  void _showAddEquipmentDialog(BuildContext context) {
-    // Simplified add dialog for demo
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(AppLocale.t(context, 'feature_coming_soon'))),
+  void _showAddEquipmentBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
+      builder: (context) => const _AddEquipmentForm(),
+    );
+  }
+}
+
+class _AddEquipmentForm extends StatefulWidget {
+  const _AddEquipmentForm();
+
+  @override
+  State<_AddEquipmentForm> createState() => _AddEquipmentFormState();
+}
+
+class _AddEquipmentFormState extends State<_AddEquipmentForm> {
+  final _formKey = GlobalKey<FormState>();
+  String _name = '';
+  String _type = 'Tractor';
+  String _price = '';
+  String _phone = '';
+  String _desc = '';
+  bool _isLoading = false;
+
+  final List<String> _types = ['Tractor', 'Harvester', 'Plough', 'Seeder', 'Sprayer', 'Other'];
+
+  @override
+  void initState() {
+    super.initState();
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null && user.phoneNumber != null) {
+      _phone = user.phoneNumber!;
+    }
+  }
+
+  Future<void> _submit() async {
+    if (!_formKey.currentState!.validate()) return;
+    _formKey.currentState!.save();
+
+    setState(() => _isLoading = true);
+
+    final user = FirebaseAuth.instance.currentUser;
+    final data = {
+      'name': _name,
+      'type': _type,
+      'pricePerHour': double.tryParse(_price) ?? 0,
+      'contactPhone': _phone,
+      'description': _desc,
+      'owner': user?.uid ?? 'unknown_uid',
+      'ownerName': user?.displayName ?? 'Farmer',
+      'availability': true,
+    };
+
+    final success = await Provider.of<EquipmentProvider>(context, listen: false).addEquipment(data);
+    
+    if (mounted) {
+      setState(() => _isLoading = false);
+      if (success) {
+        Navigator.pop(context);
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Equipment added successfully!')));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Failed to add equipment.')));
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+        left: 24, right: 24, top: 24,
+      ),
+      child: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const Text('List New Equipment', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              const SizedBox(height: 24),
+              TextFormField(
+                decoration: InputDecoration(labelText: 'Equipment Name', border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
+                validator: (v) => v!.isEmpty ? 'Required' : null,
+                onSaved: (v) => _name = v!,
+              ),
+              const SizedBox(height: 16),
+              DropdownButtonFormField<String>(
+                value: _type,
+                decoration: InputDecoration(labelText: 'Type', border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
+                items: _types.map((t) => DropdownMenuItem(value: t, child: Text(t))).toList(),
+                onChanged: (v) => setState(() => _type = v!),
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                decoration: InputDecoration(labelText: 'Price Per Hour (₹)', border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
+                keyboardType: TextInputType.number,
+                validator: (v) => v!.isEmpty ? 'Required' : null,
+                onSaved: (v) => _price = v!,
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                initialValue: _phone,
+                decoration: InputDecoration(labelText: 'Contact Phone', border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
+                keyboardType: TextInputType.phone,
+                validator: (v) => v!.isEmpty ? 'Required' : null,
+                onSaved: (v) => _phone = v!,
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                decoration: InputDecoration(labelText: 'Description (Optional)', border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
+                maxLines: 2,
+                onSaved: (v) => _desc = v ?? '',
+              ),
+              const SizedBox(height: 24),
+              _isLoading
+                  ? const Center(child: CircularProgressIndicator())
+                  : ElevatedButton(
+                      onPressed: _submit,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppTheme.primaryGreen,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      ),
+                      child: const Text('List Equipment', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+                    ),
+              const SizedBox(height: 24),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

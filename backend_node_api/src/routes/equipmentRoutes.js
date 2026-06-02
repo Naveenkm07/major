@@ -12,7 +12,7 @@ const { protect } = require('../middleware/auth');
 
 router.route('/')
     .get(getAllEquipment)
-    .post(protect, addEquipment);
+    .post(addEquipment);
 
 router.route('/:id')
     .get(getEquipment)
