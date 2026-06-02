@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import '../../config/theme.dart';
-import '../../services/api_service.dart';
-import '../../core/locale.dart';
-import '../../widgets/language_toggle.dart';
 
 class SchemesScreen extends StatefulWidget {
   const SchemesScreen({super.key});
@@ -13,170 +9,234 @@ class SchemesScreen extends StatefulWidget {
 }
 
 class _SchemesScreenState extends State<SchemesScreen> {
-  final _api = ApiService();
-  List<dynamic> _schemes = [];
-  bool _isLoading = true;
-  String _selectedType = 'all';
-
-  @override
-  void initState() {
-    super.initState();
-    _loadSchemes();
-  }
-
-  Future<void> _loadSchemes() async {
-    setState(() => _isLoading = true);
-    try {
-      final data = await _api.getSchemes(type: _selectedType == 'all' ? null : _selectedType);
-      if (data['success'] == true) setState(() => _schemes = data['data']);
-    } catch (_) {}
-    setState(() => _isLoading = false);
-  }
+  final List<String> _filters = ['All', 'Subsidies', 'Loans', 'Equipment'];
+  int _selectedFilter = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocale.t(context, 'govt_schemes_title')),
-        actions: const [LanguageToggle(), SizedBox(width: 10)],
-      ),
+      backgroundColor: AppTheme.background,
       body: Column(
         children: [
-          // ─── Filter Chips ──────────────────────
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
-            child: Row(
-              children: ['all', 'central', 'state'].map((type) {
-                final selected = _selectedType == type;
-                final labelKey = type == 'state' ? 'state_schemes' : type;
-                return Padding(
-                  padding: const EdgeInsets.only(right: 8),
-                  child: ChoiceChip(
-                    label: Text(AppLocale.t(context, labelKey)),
-                    selected: selected,
-                    selectedColor: AppTheme.schemePurple.withOpacity(0.15),
-                    labelStyle: TextStyle(
-                      color: selected ? AppTheme.schemePurple : AppTheme.textSecondary,
-                      fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
+          // ─── Header ────────────────────
+          Container(
+            padding: const EdgeInsets.fromLTRB(16, 50, 16, 20),
+            color: AppTheme.primaryGreen,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('Schemes & Loans', style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
+                    Row(
+                      children: [
+                        const Icon(Icons.more_horiz, color: Colors.white),
+                        const SizedBox(width: 16),
+                        Container(width: 8, height: 16, decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(4))),
+                      ],
                     ),
-                    onSelected: (_) {
-                      setState(() => _selectedType = type);
-                      _loadSchemes();
-                    },
+                  ],
+                ),
+                const SizedBox(height: 20),
+                // Search Bar
+                Container(
+                  height: 48,
+                  decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(24)),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      hintText: 'Search schemes...',
+                      hintStyle: TextStyle(color: Colors.grey.shade400),
+                      prefixIcon: Icon(Icons.search, color: Colors.grey.shade400),
+                      border: InputBorder.none,
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    ),
                   ),
-                );
-              }).toList(),
+                ),
+              ],
             ),
           ),
 
-          // ─── Scheme Cards ─────────────────────
-          Expanded(
-            child: _isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : _schemes.isEmpty
-                    ? Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(Icons.search_off_rounded, size: 56, color: AppTheme.textHint),
-                            const SizedBox(height: 12),
-                            Text(AppLocale.t(context, 'no_schemes')),
-                          ],
-                        ),
-                      )
-                    : RefreshIndicator(
-                        onRefresh: _loadSchemes,
-                        child: ListView.builder(
-                          padding: const EdgeInsets.all(16),
-                          itemCount: _schemes.length,
-                          itemBuilder: (_, i) => _SchemeCard(scheme: _schemes[i]),
+          // ─── Filters ────────────────────
+          Container(
+            height: 60,
+            color: Colors.white,
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            child: ListView.builder(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              itemCount: _filters.length,
+              itemBuilder: (context, index) {
+                final isSelected = _selectedFilter == index;
+                return Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: GestureDetector(
+                    onTap: () => setState(() => _selectedFilter = index),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: isSelected ? AppTheme.primaryGreen : Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(color: isSelected ? AppTheme.primaryGreen : Colors.grey.shade300),
+                      ),
+                      child: Text(
+                        _filters[index],
+                        style: TextStyle(
+                          color: isSelected ? Colors.white : Colors.black87,
+                          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
                         ),
                       ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+
+          // ─── Scrollbar Indicator Placeholder ─────────
+          Container(
+            height: 20,
+            color: Colors.grey.shade800,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              children: [
+                const Icon(Icons.arrow_left, color: Colors.grey, size: 20),
+                Expanded(
+                  child: Container(
+                    height: 8,
+                    margin: const EdgeInsets.symmetric(horizontal: 4),
+                    decoration: BoxDecoration(color: Colors.grey.shade600, borderRadius: BorderRadius.circular(4)),
+                    alignment: Alignment.centerLeft,
+                    child: Container(width: 60, decoration: BoxDecoration(color: Colors.grey.shade400, borderRadius: BorderRadius.circular(4))),
+                  ),
+                ),
+                const Icon(Icons.arrow_right, color: Colors.grey, size: 20),
+              ],
+            ),
+          ),
+
+          // ─── List ────────────────────
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                _buildSchemeCard(
+                  origin: 'Karnataka Govt.',
+                  title: 'Krishi Bhagya',
+                  desc: 'Rainwater harvesting subsidy',
+                  benefitTitle: 'Benefit',
+                  benefitValue: '₹50,000',
+                  badge: 'Eligible',
+                ),
+                const SizedBox(height: 16),
+                _buildSchemeCard(
+                  origin: 'Central Govt.',
+                  title: 'PM-KISAN',
+                  desc: 'Direct income support for farmers',
+                  benefitTitle: 'Benefit',
+                  benefitValue: '₹6,000 /yr',
+                  badge: 'Eligible',
+                ),
+                const SizedBox(height: 16),
+                _buildSchemeCard(
+                  origin: 'DCC Bank',
+                  title: 'Kisan Credit Card',
+                  desc: 'Short-term crop loan @ 4% p.a.',
+                  benefitTitle: 'Benefit',
+                  benefitValue: 'Up to ₹3 L',
+                  badge: 'Check eligibility',
+                  isBadgeGrey: true,
+                ),
+              ],
+            ),
           ),
         ],
       ),
     );
   }
-}
 
-class _SchemeCard extends StatelessWidget {
-  final dynamic scheme;
-
-  const _SchemeCard({required this.scheme});
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildSchemeCard({
+    required String origin,
+    required String title,
+    required String desc,
+    required String benefitTitle,
+    required String benefitValue,
+    required String badge,
+    bool isBadgeGrey = false,
+  }) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 14),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppTheme.surface,
+        color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        boxShadow: AppTheme.softShadow,
+        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10, offset: const Offset(0, 4))],
       ),
-      child: Theme(
-        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-        child: ExpansionTile(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          tilePadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-          leading: Container(
-            width: 44, height: 44,
-            decoration: BoxDecoration(
-              color: (scheme['schemeType'] == 'central' ? AppTheme.schemePurple : AppTheme.calendarGreen).withOpacity(0.12),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Icon(
-              Icons.account_balance_rounded,
-              color: scheme['schemeType'] == 'central' ? AppTheme.schemePurple : AppTheme.calendarGreen,
-              size: 22,
-            ),
-          ),
-          title: Text(scheme['schemeName'] ?? scheme['title'] ?? '', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
-          subtitle: Text(scheme['ministry'] ?? '', style: const TextStyle(fontSize: 12)),
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(scheme['description'] ?? '', style: const TextStyle(fontSize: 13, height: 1.5, color: AppTheme.textSecondary)),
-                   if (scheme['benefits'] != null) ...[
-                    const SizedBox(height: 14),
-                    Text('✅ ${AppLocale.t(context, 'benefits')}:', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: AppTheme.success)),
-                    const SizedBox(height: 4),
-                    ...(scheme['benefits'] as List).map((b) => Padding(
-                          padding: const EdgeInsets.only(bottom: 2),
-                          child: Text('  • $b', style: const TextStyle(fontSize: 13, height: 1.4)),
-                        )),
-                  ],
-                  if (scheme['eligibility'] != null) ...[
-                    const SizedBox(height: 10),
-                    Text('📋 ${AppLocale.t(context, 'eligibility')}:', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: AppTheme.info)),
-                    const SizedBox(height: 4),
-                    ...(scheme['eligibility'] as List).map((e) => Padding(
-                          padding: const EdgeInsets.only(bottom: 2),
-                          child: Text('  • $e', style: const TextStyle(fontSize: 13, height: 1.4)),
-                        )),
-                  ],
-                  if (scheme['applicationLink'] != null && (scheme['applicationLink'] as String).isNotEmpty) ...[
-                    const SizedBox(height: 14),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        onPressed: () async {
-                          final url = Uri.parse(scheme['applicationLink']);
-                          if (await canLaunchUrl(url)) await launchUrl(url, mode: LaunchMode.externalApplication);
-                        },
-                        icon: const Icon(Icons.open_in_new_rounded, size: 18),
-                        label: Text(AppLocale.t(context, 'apply_now')),
-                        style: ElevatedButton.styleFrom(backgroundColor: AppTheme.schemePurple),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(origin, style: TextStyle(color: Colors.grey.shade500, fontSize: 12)),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: isBadgeGrey ? Colors.grey.shade100 : AppTheme.primaryGreen,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Row(
+                  children: [
+                    if (!isBadgeGrey) const Icon(Icons.check_circle_outline, color: Colors.white, size: 14),
+                    if (!isBadgeGrey) const SizedBox(width: 4),
+                    Text(
+                      badge,
+                      style: TextStyle(
+                        color: isBadgeGrey ? Colors.grey.shade600 : Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          Text(title, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87)),
+          const SizedBox(height: 4),
+          Text(desc, style: TextStyle(color: Colors.grey.shade600, fontSize: 14)),
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(benefitTitle, style: TextStyle(color: Colors.grey.shade500, fontSize: 12)),
+                  Text(benefitValue, style: const TextStyle(color: AppTheme.accent, fontSize: 18, fontWeight: FontWeight.bold)),
                 ],
               ),
-            ),
-          ],
-        ),
+              ElevatedButton(
+                onPressed: () {},
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppTheme.primaryGreen,
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                  elevation: 0,
+                ),
+                child: const Row(
+                  children: [
+                    Text('How to Apply', style: TextStyle(fontWeight: FontWeight.bold)),
+                    SizedBox(width: 4),
+                    Icon(Icons.arrow_forward, size: 16),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

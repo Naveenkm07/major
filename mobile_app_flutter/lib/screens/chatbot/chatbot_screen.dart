@@ -2,31 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/chat_provider.dart';
 import '../../config/theme.dart';
-import '../../core/locale.dart';
-import '../../widgets/language_toggle.dart';
 
-/// AI Chatbot Screen
-/// ┌────────────────────────────────────────┐
-/// │ AppBar: "AI Assistant 🤖" [Refresh]    │
-/// │ ┌──────────────────────────────────┐   │
-/// │ │   Empty state:                   │   │
-/// │ │   🤖 Icon + Greeting             │   │
-/// │ │   [Crop advice] [Pest help]      │   │
-/// │ │                                  │   │
-/// │ │   OR Message List:               │   │
-/// │ │   ┌────────────────┐   ← User    │   │
-/// │ │   │ User bubble    │             │   │
-/// │ │   └────────────────┘             │   │
-/// │ │       ┌────────────────┐ ← Bot   │   │
-/// │ │       │ Bot bubble     │         │   │
-/// │ │       └────────────────┘         │   │
-/// │ │   [ Typing indicator... ]        │   │
-/// │ └──────────────────────────────────┘   │
-/// │ [ Suggestion chips scrollable ]       │
-/// │ ┌──────────────────────────┐ [Send]   │
-/// │ │ Text input               │         │
-/// │ └──────────────────────────┘         │
-/// └────────────────────────────────────────┘
 class ChatbotScreen extends StatefulWidget {
   const ChatbotScreen({super.key});
 
@@ -35,17 +11,16 @@ class ChatbotScreen extends StatefulWidget {
 }
 
 class _ChatbotScreenState extends State<ChatbotScreen> {
-  final _messageController = TextEditingController();
   final _scrollController = ScrollController();
+  bool _isListening = false;
 
-  void _sendMessage([String? text]) {
-    final msg = (text ?? _messageController.text).trim();
-    if (msg.isEmpty) return;
-    _messageController.clear();
-
-    Provider.of<ChatProvider>(context, listen: false).sendMessage(msg);
-
-    Future.delayed(const Duration(milliseconds: 150), _scrollToBottom);
+  void _toggleListening() {
+    setState(() => _isListening = !_isListening);
+    if (!_isListening) {
+      // Simulate sending a voice message when they stop "listening"
+      Provider.of<ChatProvider>(context, listen: false).sendMessage("ನನ್ನ ಟೊಮ್ಯಾಟೋ ಎಲೆಗಳಲ್ಲಿ ಹಳದಿ ಚುಕ್ಕೆಗಳಿವೆ.");
+      Future.delayed(const Duration(milliseconds: 150), _scrollToBottom);
+    }
   }
 
   void _scrollToBottom() {
@@ -61,48 +36,90 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(AppLocale.t(context, 'ai_assistant')),
-        actions: [
-          const LanguageToggle(),
-          IconButton(
-            icon: const Icon(Icons.refresh_rounded),
-            tooltip: 'New conversation',
-            onPressed: () => Provider.of<ChatProvider>(context, listen: false).startNewSession(),
-          ),
-        ],
-      ),
+      backgroundColor: AppTheme.background,
       body: Column(
         children: [
+          // ─── Header ────────────────────
+          Container(
+            padding: const EdgeInsets.fromLTRB(16, 50, 16, 20),
+            color: AppTheme.primaryGreen,
+            child: Row(
+              children: [
+                GestureDetector(
+                  onTap: () => Navigator.pop(context),
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), shape: BoxShape.circle),
+                    child: const Icon(Icons.arrow_back, color: Colors.white, size: 20),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: const BoxDecoration(color: AppTheme.accent, shape: BoxShape.circle),
+                  child: const Icon(Icons.eco, color: Colors.white, size: 20),
+                ),
+                const SizedBox(width: 12),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('AI Assistant', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
+                    Row(
+                      children: [
+                        Container(width: 6, height: 6, decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle)),
+                        const SizedBox(width: 4),
+                        const Text('Online · Kannada', style: TextStyle(color: Colors.white70, fontSize: 12)),
+                      ],
+                    ),
+                  ],
+                ),
+                const Spacer(),
+                const Icon(Icons.more_horiz, color: Colors.white),
+              ],
+            ),
+          ),
+
           // ─── Messages Area ────────────────────
           Expanded(
             child: Consumer<ChatProvider>(
               builder: (_, chat, __) {
-                if (chat.messages.isEmpty) return _EmptyState(onSuggestionTap: _sendMessage);
-
                 return ListView.builder(
                   controller: _scrollController,
-                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-                  itemCount: chat.messages.length + (chat.isLoading ? 1 : 0),
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+                  itemCount: chat.messages.length + (_isListening || chat.isLoading ? 1 : 0),
                   itemBuilder: (_, i) {
-                    // Typing indicator
                     if (i == chat.messages.length) {
                       return Padding(
-                        padding: const EdgeInsets.only(top: 8),
+                        padding: const EdgeInsets.symmetric(vertical: 16),
                         child: Row(
+                          mainAxisAlignment: _isListening ? MainAxisAlignment.end : MainAxisAlignment.start,
                           children: [
-                            Container(
-                              padding: const EdgeInsets.all(12),
-                              decoration: BoxDecoration(color: AppTheme.surfaceVariant, borderRadius: BorderRadius.circular(16)),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
+                            if (_isListening) ...[
+                              Row(
                                 children: [
-                                  SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: AppTheme.primaryGreen)),
-                                  const SizedBox(width: 10),
-                                  Text(AppLocale.t(context, 'thinking'), style: TextStyle(color: AppTheme.textHint, fontSize: 13)),
+                                  Container(width: 4, height: 16, decoration: BoxDecoration(color: AppTheme.primaryGreen, borderRadius: BorderRadius.circular(2))),
+                                  const SizedBox(width: 4),
+                                  Container(width: 4, height: 24, decoration: BoxDecoration(color: AppTheme.primaryGreen, borderRadius: BorderRadius.circular(2))),
+                                  const SizedBox(width: 4),
+                                  Container(width: 4, height: 12, decoration: BoxDecoration(color: AppTheme.primaryGreen, borderRadius: BorderRadius.circular(2))),
+                                  const SizedBox(width: 8),
+                                  const Text('Listening...', style: TextStyle(color: Colors.grey)),
                                 ],
+                              )
+                            ] else ...[
+                              Container(
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(color: AppTheme.surfaceVariant, borderRadius: BorderRadius.circular(16)),
+                                child: const Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: AppTheme.primaryGreen)),
+                                    SizedBox(width: 10),
+                                    Text('Thinking...', style: TextStyle(color: Colors.grey, fontSize: 13)),
+                                  ],
+                                ),
                               ),
-                            ),
+                            ]
                           ],
                         ),
                       );
@@ -121,17 +138,17 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
             builder: (_, chat, __) {
               if (chat.suggestions.isEmpty || chat.isLoading) return const SizedBox.shrink();
               return Container(
-                height: 44,
-                padding: const EdgeInsets.symmetric(vertical: 4),
+                padding: const EdgeInsets.only(bottom: 16),
+                height: 50,
                 child: ListView(
                   scrollDirection: Axis.horizontal,
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   children: chat.suggestions.map((s) => Padding(
                     padding: const EdgeInsets.only(right: 8),
                     child: ActionChip(
-                      label: Text(s, style: const TextStyle(fontSize: 12)),
-                      backgroundColor: AppTheme.primaryGreen.withOpacity(0.08),
-                      onPressed: () => _sendMessage(s),
+                      label: Text(s, style: const TextStyle(fontSize: 14)),
+                      backgroundColor: Colors.grey.shade200,
+                      onPressed: () => Provider.of<ChatProvider>(context, listen: false).sendMessage(s),
                     ),
                   )).toList(),
                 ),
@@ -139,102 +156,37 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
             },
           ),
 
-          // ─── Input Bar ────────────────────────
+          // ─── Voice Input Bar ────────────────────────
           Container(
-            padding: const EdgeInsets.fromLTRB(16, 10, 10, 10),
+            width: double.infinity,
+            padding: const EdgeInsets.only(bottom: 40, top: 20),
             decoration: BoxDecoration(
               color: AppTheme.surface,
-              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 6, offset: const Offset(0, -2))],
+              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, -5))],
             ),
-            child: SafeArea(
-              top: false,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: TextField(
-                      controller: _messageController,
-                      textInputAction: TextInputAction.send,
-                      decoration: InputDecoration(
-                        hintText: AppLocale.t(context, 'ask_farming'),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(24), borderSide: BorderSide.none),
-                        filled: true,
-                        fillColor: AppTheme.surfaceVariant,
-                      ),
-                      onSubmitted: (_) => _sendMessage(),
+            child: Column(
+              children: [
+                GestureDetector(
+                  onTap: _toggleListening,
+                  child: Container(
+                    padding: const EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      color: _isListening ? AppTheme.accentDark : AppTheme.accent,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        if (_isListening) BoxShadow(color: AppTheme.accent.withOpacity(0.4), blurRadius: 20, spreadRadius: 10)
+                      ],
                     ),
+                    child: const Icon(Icons.mic, color: Colors.white, size: 36),
                   ),
-                  const SizedBox(width: 8),
-                  Container(
-                    decoration: const BoxDecoration(color: AppTheme.primaryGreen, shape: BoxShape.circle),
-                    child: IconButton(
-                      icon: const Icon(Icons.send_rounded, color: Colors.white, size: 20),
-                      onPressed: _sendMessage,
-                    ),
-                  ),
-                ],
-              ),
+                ),
+                const SizedBox(height: 12),
+                const Text('Tap and speak in Kannada', style: TextStyle(color: Colors.grey, fontSize: 14)),
+              ],
             ),
           ),
         ],
       ),
-    );
-  }
-}
-
-class _EmptyState extends StatelessWidget {
-  final void Function(String) onSuggestionTap;
-
-  const _EmptyState({required this.onSuggestionTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(color: AppTheme.chatIndigo.withOpacity(0.08), shape: BoxShape.circle),
-              child: Icon(Icons.smart_toy_rounded, size: 56, color: AppTheme.chatIndigo.withOpacity(0.5)),
-            ),
-            const SizedBox(height: 20),
-            Text(AppLocale.t(context, 'greeting'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
-            const SizedBox(height: 6),
-            Text(AppLocale.t(context, 'ask_anything'), style: TextStyle(color: AppTheme.textSecondary, fontSize: 14)),
-            const SizedBox(height: 28),
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              alignment: WrapAlignment.center,
-              children: [
-                _QuickChip(label: '🌾 ${AppLocale.t(context, 'pest_detection')}', onTap: () => onSuggestionTap('Give me crop advice')),
-                _QuickChip(label: '🐛 ${AppLocale.t(context, 'pest_detection')}', onTap: () => onSuggestionTap('How to control pests')),
-                _QuickChip(label: '📈 ${AppLocale.t(context, 'market_prices')}', onTap: () => onSuggestionTap('What are today\'s market prices')),
-                _QuickChip(label: '🏛️ ${AppLocale.t(context, 'govt_schemes')}', onTap: () => onSuggestionTap('Tell me about government schemes')),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _QuickChip extends StatelessWidget {
-  final String label;
-  final VoidCallback onTap;
-
-  const _QuickChip({required this.label, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return ActionChip(
-      label: Text(label, style: const TextStyle(fontSize: 13)),
-      backgroundColor: AppTheme.surfaceVariant,
-      onPressed: onTap,
     );
   }
 }
@@ -252,25 +204,24 @@ class _ChatBubble extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.only(
           top: 6,
-          bottom: 2,
-          left: isUser ? 48 : 0,
-          right: isUser ? 0 : 48,
+          bottom: 6,
+          left: isUser ? 60 : 0,
+          right: isUser ? 0 : 60,
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         decoration: BoxDecoration(
-          color: isUser ? AppTheme.primaryGreen : AppTheme.surfaceVariant,
-          borderRadius: BorderRadius.circular(18).copyWith(
+          color: isUser ? Colors.grey.shade200 : AppTheme.primaryGreen,
+          borderRadius: BorderRadius.circular(16).copyWith(
             bottomRight: isUser ? const Radius.circular(4) : null,
             bottomLeft: !isUser ? const Radius.circular(4) : null,
           ),
-          boxShadow: isUser ? null : AppTheme.softShadow,
         ),
         child: Text(
           content,
           style: TextStyle(
-            color: isUser ? Colors.white : AppTheme.textPrimary,
-            fontSize: 14,
-            height: 1.5,
+            color: isUser ? Colors.black87 : Colors.white,
+            fontSize: 15,
+            height: 1.4,
           ),
         ),
       ),

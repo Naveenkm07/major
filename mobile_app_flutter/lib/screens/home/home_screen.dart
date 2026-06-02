@@ -40,9 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
       if (mounted) {
         Provider.of<WeatherProvider>(context, listen: false).fetchWeather(loc['village'] ?? 'Bengaluru');
         // Pre-fetch market prices for home screen
-        Provider.of<MarketProvider>(context, listen: false).fetchPrices(loc['district'] ?? 'Mandya');
-        // Fetch tasks
-        Provider.of<CalendarProvider>(context, listen: false).fetchTasks();
+        Provider.of<MarketProvider>(context, listen: false).fetchPrices(state: loc['district'] ?? 'Mandya');
       }
     }
   }
@@ -82,16 +80,13 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Container(
-        margin: const EdgeInsets.only(top: 30),
-        child: FloatingActionButton(
-          backgroundColor: AppTheme.accent,
-          elevation: 4,
-          shape: const CircleBorder(),
-          onPressed: () => Navigator.pushNamed(context, '/voice-assistant'),
-          child: const Icon(Icons.mic_rounded, color: Colors.white, size: 32),
-        ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: AppTheme.accent,
+        elevation: 4,
+        shape: const CircleBorder(),
+        onPressed: () => Navigator.pushNamed(context, '/voice-assistant'),
+        child: const Icon(Icons.mic_rounded, color: Colors.white, size: 32),
       ),
     );
   }
@@ -104,7 +99,7 @@ class _DashboardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthProvider>(context);
     final userName = auth.user?.name ?? 'Ravi Kumar';
-    final location = auth.user?.location?['district'] ?? 'Mandya';
+    final location = auth.user?.location?.district ?? 'Mandya';
 
     return CustomScrollView(
       slivers: [
@@ -409,9 +404,10 @@ class _MandiCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text('$price/', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppTheme.textPrimary)),
-              const Text('kg', style: TextStyle(fontSize: 12, color: Colors.grey, padding: EdgeInsets.only(bottom: 3))),
+              const Text('kg', style: TextStyle(fontSize: 12, color: Colors.grey)),
             ],
-          ),
+            ),
+
           const SizedBox(height: 8),
           Text(trend, style: TextStyle(color: isUp ? AppTheme.primaryGreen : Colors.red, fontSize: 12, fontWeight: FontWeight.w600)),
         ],
