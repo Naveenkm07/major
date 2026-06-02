@@ -41,17 +41,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<void> _fetchData() async {
     setState(() => _isLoading = true);
     try {
-      final profileData = await _apiService.getProfile();
-      if (profileData['success'] == true) {
-        final raw = profileData['data'] ?? profileData['user'];
-        _user = UserModel.fromJson(raw);
-        
-        if (_user?.location?.district != null) {
-          try {
-            _weather = await _weatherService.getWeather(_user!.location!.district!);
-          } catch (e) {
-            debugPrint('Weather fetch error: $e');
-          }
+      final auth = Provider.of<AuthProvider>(context, listen: false);
+      await auth.checkAuth();
+      _user = auth.user;
+      
+      if (_user?.location?.district != null) {
+        try {
+          _weather = await _weatherService.getWeather(_user!.location!.district!);
+        } catch (e) {
+          debugPrint('Weather fetch error: $e');
         }
       }
     } catch (e) {
