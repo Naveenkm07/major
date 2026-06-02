@@ -116,6 +116,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ],
                     ),
                   ),
+                  
+                  const SizedBox(height: 24),
+                  
+                  // Settings & Support
+                  const Text('Settings & Support', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87)),
+                  const SizedBox(height: 12),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
+                    child: Column(
+                      children: [
+                        ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          leading: const Icon(Icons.help_outline, color: AppTheme.primaryGreen),
+                          title: const Text('Help & Support', style: TextStyle(fontSize: 16, color: Colors.black87)),
+                          trailing: Icon(Icons.chevron_right, color: Colors.grey.shade400),
+                          onTap: () => Navigator.pushNamed(context, '/help-support'),
+                        ),
+                      ],
+                    ),
+                  ),
+
                   const SizedBox(height: 40),
                 ],
               ),
