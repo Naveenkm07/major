@@ -167,7 +167,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             if (_user != null) {
                               final result = await Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (_) => EditFarmDetailsScreen(user: _user!)),
+                                MaterialPageRoute(builder: (_) => EditProfileScreen(user: _user!)),
                               );
                               if (result == true) _fetchData();
                             }

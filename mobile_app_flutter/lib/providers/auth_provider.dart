@@ -106,6 +106,28 @@ class AuthProvider extends ChangeNotifier {
     return false;
   }
 
+  Future<bool> firebaseSync(String phoneNumber) async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+    try {
+      final data = await _api.firebaseSync(phoneNumber);
+      if (data['success'] == true) {
+        _user = AppUser.fromJson(data['user']);
+        _isAuthenticated = true;
+        _isLoading = false;
+        notifyListeners();
+        return true;
+      }
+      _error = data['error'] ?? data['message'] ?? 'Sync failed';
+    } catch (e) {
+      _error = 'Connection error: $e';
+    }
+    _isLoading = false;
+    notifyListeners();
+    return false;
+  }
+
   Future<void> checkAuth() async {
     try {
       final data = await _api.getProfile();
