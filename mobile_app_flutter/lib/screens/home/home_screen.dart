@@ -157,6 +157,13 @@ class _DashboardPage extends StatelessWidget {
         
         const SliverToBoxAdapter(child: SizedBox(height: 100)), // Space for overlapping widget
 
+        // Quick Actions Section
+        SliverToBoxAdapter(
+          child: _buildQuickActions(context),
+        ),
+        
+        const SliverToBoxAdapter(child: SizedBox(height: 28)),
+
         // This Week's Tasks Section
         SliverToBoxAdapter(
           child: Padding(
@@ -253,6 +260,78 @@ class _DashboardPage extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  Widget _buildQuickActions(BuildContext context) {
+    final List<Map<String, dynamic>> actions = [
+      {'title': 'Pest\nDetection', 'icon': Icons.camera_alt_rounded, 'color': Colors.red, 'route': '/disease-detection'},
+      {'title': 'Market\nPrices', 'icon': Icons.trending_up_rounded, 'color': Colors.blue, 'route': '/market-prices'},
+      {'title': 'Crop\nCalendar', 'icon': Icons.calendar_month_rounded, 'color': Colors.green, 'route': '/crop-calendar'},
+      {'title': 'Equipment\nRental', 'icon': Icons.agriculture_rounded, 'color': Colors.teal, 'route': '/equipment-rental'},
+      {'title': 'Crop\nInsurance', 'icon': Icons.security_rounded, 'color': Colors.orange, 'route': '/insurance'},
+      {'title': 'Govt\nSchemes', 'icon': Icons.account_balance_rounded, 'color': Colors.purple, 'route': '/schemes'},
+    ];
+
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text('Quick Actions', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppTheme.textPrimary)),
+          const SizedBox(height: 16),
+          GridView.builder(
+            padding: EdgeInsets.zero,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              childAspectRatio: 0.85,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
+            ),
+            itemCount: actions.length,
+            itemBuilder: (context, index) {
+              final action = actions[index];
+              final MaterialColor color = action['color'];
+              return GestureDetector(
+                onTap: () => Navigator.pushNamed(context, action['route']),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: color.shade50,
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(color: color.shade100, width: 1),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: color.shade100,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(action['icon'], color: color.shade700, size: 28),
+                      ),
+                      const SizedBox(height: 12),
+                      Text(
+                        action['title'],
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: color.shade700,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          height: 1.2,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 
