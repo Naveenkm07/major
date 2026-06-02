@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../../config/theme.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -49,9 +50,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: const Icon(Icons.person_outline, size: 50, color: AppTheme.primaryGreen),
                   ),
                   const SizedBox(height: 16),
-                  const Text('Ravi Kumar', style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
+                  Text(FirebaseAuth.instance.currentUser?.displayName ?? 'Farmer', style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 8),
-                  const Text('+91 98765 43210', style: TextStyle(color: Colors.white70, fontSize: 16)),
+                  Text(FirebaseAuth.instance.currentUser?.phoneNumber ?? 'No Phone Number', style: const TextStyle(color: Colors.white70, fontSize: 16)),
                 ],
               ),
             ),

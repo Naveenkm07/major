@@ -21,6 +21,7 @@ import 'screens/splash_screen.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/auth/register_screen.dart';
 import 'screens/auth/otp_screen.dart';
+import 'screens/auth/setup_profile_screen.dart';
 import 'screens/home/home_screen.dart';
 import 'screens/crop_disease/disease_detection_screen.dart';
 import 'screens/market/market_prices_screen.dart';
@@ -91,6 +92,7 @@ class KrushikaDharaApp extends StatelessWidget {
           '/login': (_) => const LoginScreen(),
           '/register': (_) => const RegisterScreen(),
           '/otp': (_) => const OtpScreen(),
+          '/setup-profile': (_) => const SetupProfileScreen(),
           '/home': (_) => const HomeScreen(),
           '/disease-detection': (_) => const DiseaseDetectionScreen(),
           '/market-prices': (_) => const MarketPricesScreen(),
