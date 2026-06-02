@@ -5,6 +5,7 @@ import '../crop_disease/disease_detection_screen.dart';
 import '../market/market_prices_screen.dart';
 import '../community/community_screen.dart';
 import '../chatbot/chatbot_screen.dart';
+import '../profile/profile_screen.dart';
 import '../../services/location_service.dart';
 import '../../providers/auth_provider.dart';
 import '../../core/locale.dart';
@@ -52,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _DashboardPage(),
     DiseaseDetectionScreen(),
     MarketPricesScreen(),
-    CommunityScreen(),
+    ProfileScreen(),
   ];
 
   @override
