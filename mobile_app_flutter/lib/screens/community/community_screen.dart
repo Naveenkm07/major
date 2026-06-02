@@ -29,7 +29,22 @@ class _CommunityScreenState extends State<CommunityScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text('Community', style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
+                        Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                if (Navigator.canPop(context)) {
+                                  Navigator.pop(context);
+                                } else {
+                                  Navigator.pushReplacementNamed(context, '/home');
+                                }
+                              },
+                              child: const Icon(Icons.arrow_back, color: Colors.white),
+                            ),
+                            const SizedBox(width: 12),
+                            const Text('Community', style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
+                          ],
+                        ),
                         Row(
                           children: [
                             const Icon(Icons.more_horiz, color: Colors.white),
