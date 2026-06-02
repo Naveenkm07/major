@@ -20,6 +20,15 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
   bool _isLoading = false;
   Map<String, dynamic>? _result;
 
+  @override
+  void initState() {
+    super.initState();
+    // Automatically open the camera when the screen loads
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _pickImage(ImageSource.camera);
+    });
+  }
+
   Future<void> _pickImage(ImageSource source) async {
     try {
       final picked = await _picker.pickImage(source: source, maxWidth: 1024, imageQuality: 85);
@@ -286,21 +295,40 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
             ),
           ),
           
-          // Demo Button
+          // Demo Buttons
           if (!_isLoading && _result == null)
             Positioned(
               bottom: 40,
-              left: 40,
-              right: 40,
-              child: ElevatedButton.icon(
-                onPressed: () => _pickImage(ImageSource.gallery),
-                icon: const Icon(Icons.photo_library),
-                label: const Text('Upload Photo from Gallery'),
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  backgroundColor: AppTheme.primaryGreen,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                ),
+              left: 20,
+              right: 20,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: () => _pickImage(ImageSource.camera),
+                      icon: const Icon(Icons.camera_alt),
+                      label: const Text('Take Photo', style: TextStyle(fontWeight: FontWeight.bold)),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        backgroundColor: AppTheme.primaryGreen,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: () => _pickImage(ImageSource.gallery),
+                      icon: const Icon(Icons.photo_library, color: Colors.white),
+                      label: const Text('Gallery', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        side: BorderSide(color: Colors.white.withOpacity(0.5)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
         ],
