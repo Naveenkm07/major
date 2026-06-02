@@ -32,6 +32,16 @@ class _MarketPricesScreenState extends State<MarketPricesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            if (Navigator.canPop(context)) {
+              Navigator.pop(context);
+            } else {
+              Navigator.pushReplacementNamed(context, '/home');
+            }
+          },
+        ),
         title: Text(AppLocale.t(context, 'market_prices')),
         actions: const [LanguageToggle(), SizedBox(width: 10)],
       ),

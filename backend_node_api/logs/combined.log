@@ -77,3 +77,6 @@
 {"level":"info","message":"🕐 All cron jobs scheduled successfully","service":"krushikadhara-api","timestamp":"2026-06-02 21:20:38"}
 {"level":"info","message":"==================================================","service":"krushikadhara-api","timestamp":"2026-06-02 21:20:38"}
 {"level":"info","message":"✅ MongoDB Connected: localhost","service":"krushikadhara-api","timestamp":"2026-06-02 21:20:38"}
+{"level":"info","message":"[CRON] Starting market price refresh...","service":"krushikadhara-api","timestamp":"2026-06-02 21:30:00"}
+{"level":"error","message":"Market API fetch failed: Request failed with status code 403","service":"krushikadhara-api","timestamp":"2026-06-02 21:30:01"}
+{"level":"info","message":"[CRON] Market prices refreshed: 0 records (source: error)","service":"krushikadhara-api","timestamp":"2026-06-02 21:30:01"}
