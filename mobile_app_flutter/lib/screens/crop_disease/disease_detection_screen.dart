@@ -21,13 +21,25 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
   Map<String, dynamic>? _result;
 
   Future<void> _pickImage(ImageSource source) async {
-    final picked = await _picker.pickImage(source: source, maxWidth: 1024, imageQuality: 85);
-    if (picked != null) {
-      setState(() {
-        _imageFile = File(picked.path);
-        _result = null;
-      });
-      _detectDisease();
+    try {
+      final picked = await _picker.pickImage(source: source, maxWidth: 1024, imageQuality: 85);
+      if (picked != null) {
+        setState(() {
+          _imageFile = File(picked.path);
+          _result = null;
+        });
+        _detectDisease();
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Could not open camera/gallery. Please check permissions. Error: $e'),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 4),
+          ),
+        );
+      }
     }
   }
 
