@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../config/theme.dart';
+import '../../core/locale.dart';
 
 class HelpSupportScreen extends StatefulWidget {
   const HelpSupportScreen({super.key});
@@ -13,7 +14,7 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
   final String _helpLineNumber = '+919591502209';
   final String _supportEmail = 'support@krushikadhara.com';
 
-  Future<void> _makePhoneCall(String phoneNumber) async {
+  Future<void> _makePhoneCall(String phoneNumber, BuildContext context) async {
     final Uri launchUri = Uri(
       scheme: 'tel',
       path: phoneNumber,
@@ -21,11 +22,11 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
     if (await canLaunchUrl(launchUri)) {
       await launchUrl(launchUri);
     } else {
-      _showErrorSnackBar('Could not launch phone dialer.');
+      _showErrorSnackBar(AppLocale.t(context, 'error_phone'));
     }
   }
 
-  Future<void> _launchWhatsApp(String phoneNumber) async {
+  Future<void> _launchWhatsApp(String phoneNumber, BuildContext context) async {
     // Remove '+' and spaces for WhatsApp URL
     final String cleanNumber = phoneNumber.replaceAll(RegExp(r'[^\d]'), '');
     final Uri launchUri = Uri.parse('https://wa.me/$cleanNumber?text=Hello%20KrushikaDhara%20Support,%20I%20need%20help');
@@ -33,11 +34,11 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
     if (await canLaunchUrl(launchUri)) {
       await launchUrl(launchUri, mode: LaunchMode.externalApplication);
     } else {
-      _showErrorSnackBar('Could not launch WhatsApp. Is it installed?');
+      _showErrorSnackBar(AppLocale.t(context, 'error_whatsapp'));
     }
   }
 
-  Future<void> _sendEmail() async {
+  Future<void> _sendEmail(BuildContext context) async {
     final Uri launchUri = Uri(
       scheme: 'mailto',
       path: _supportEmail,
@@ -46,7 +47,7 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
     if (await canLaunchUrl(launchUri)) {
       await launchUrl(launchUri);
     } else {
-      _showErrorSnackBar('Could not launch email client.');
+      _showErrorSnackBar(AppLocale.t(context, 'error_email'));
     }
   }
 
@@ -81,7 +82,7 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
                     ),
                   ),
                   const SizedBox(width: 16),
-                  const Text('Help & Support', style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
+                  Text(AppLocale.t(context, 'help_support'), style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
                 ],
               ),
             ),
@@ -100,14 +101,14 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
                       children: [
                         const Icon(Icons.eco_outlined, color: Colors.white, size: 32),
                         const SizedBox(height: 16),
-                        const Text(
-                          'Need help in Kannada?',
-                          style: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
+                        Text(
+                          AppLocale.t(context, 'need_help_kannada'),
+                          style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 8),
-                        const Text(
-                          'Talk to our AI assistant anytime, free.',
-                          style: TextStyle(color: Colors.white, fontSize: 16),
+                        Text(
+                          AppLocale.t(context, 'talk_to_ai'),
+                          style: const TextStyle(color: Colors.white, fontSize: 16),
                         ),
                         const SizedBox(height: 20),
                         ElevatedButton(
@@ -119,7 +120,7 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
                             elevation: 0,
                           ),
-                          child: const Text('Start Voice Chat', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                          child: Text(AppLocale.t(context, 'start_voice_chat'), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                         ),
                       ],
                     ),
@@ -133,9 +134,9 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
                       Expanded(
                         child: _buildActionCard(
                           icon: Icons.phone_outlined,
-                          title: 'Call Helpline',
-                          subtitle: '$_helpLineNumber\nAvailable 24x7',
-                          onTap: () => _makePhoneCall(_helpLineNumber),
+                          title: AppLocale.t(context, 'call_helpline'),
+                          subtitle: '$_helpLineNumber\n${AppLocale.t(context, 'available_24x7')}',
+                          onTap: () => _makePhoneCall(_helpLineNumber, context),
                           color: AppTheme.primaryGreen,
                         ),
                       ),
@@ -143,9 +144,9 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
                       Expanded(
                         child: _buildActionCard(
                           icon: Icons.message_outlined,
-                          title: 'WhatsApp',
-                          subtitle: 'Instant Chat\nAvg reply 5 min',
-                          onTap: () => _launchWhatsApp(_helpLineNumber),
+                          title: AppLocale.t(context, 'whatsapp'),
+                          subtitle: '${AppLocale.t(context, 'instant_chat')}\n${AppLocale.t(context, 'avg_reply')}',
+                          onTap: () => _launchWhatsApp(_helpLineNumber, context),
                           color: const Color(0xFF25D366), // WhatsApp Green
                         ),
                       ),
@@ -157,9 +158,9 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
                   // Email Support
                   _buildActionCard(
                     icon: Icons.email_outlined,
-                    title: 'Email Support',
+                    title: AppLocale.t(context, 'email_support'),
                     subtitle: _supportEmail,
-                    onTap: _sendEmail,
+                    onTap: () => _sendEmail(context),
                     color: Colors.blue,
                     isHorizontal: true,
                   ),
@@ -176,30 +177,30 @@ class _HelpSupportScreenState extends State<HelpSupportScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text('Frequently Asked Questions', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                            Text(AppLocale.t(context, 'faq_title'), style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                             Icon(Icons.help_outline, color: Colors.grey.shade400, size: 20),
                           ],
                         ),
                         const SizedBox(height: 16),
                         _buildFaqTile(
-                          question: 'How do I scan a crop disease?',
-                          answer: 'Go to the "Scan" tab at the bottom of the screen. Tap the camera icon to take a photo of the affected leaf, or upload one from your gallery. The AI will analyze the image and provide treatment options.',
+                          question: AppLocale.t(context, 'faq_q1'),
+                          answer: AppLocale.t(context, 'faq_a1'),
                         ),
                         _buildFaqTile(
-                          question: 'How does the Voice Assistant work?',
-                          answer: 'Tap the yellow microphone button on the home screen. You can speak in Kannada, Hindi, or English. Ask things like "What is the price of tomatoes today?" or "How to apply urea?"',
+                          question: AppLocale.t(context, 'faq_q2'),
+                          answer: AppLocale.t(context, 'faq_a2'),
                         ),
                         _buildFaqTile(
-                          question: 'When are Mandi prices updated?',
-                          answer: 'Mandi prices are pulled directly from the Government of India (Data.gov.in) API and are updated daily at 6:00 AM IST.',
+                          question: AppLocale.t(context, 'faq_q3'),
+                          answer: AppLocale.t(context, 'faq_a3'),
                         ),
                         _buildFaqTile(
-                          question: 'How do I apply for a subsidy?',
-                          answer: 'Go to the "Govt Schemes" section. Browse the available central and state schemes. Tap "View Details" on a scheme to check eligibility and find the official application link.',
+                          question: AppLocale.t(context, 'faq_q4'),
+                          answer: AppLocale.t(context, 'faq_a4'),
                         ),
                         _buildFaqTile(
-                          question: 'Is my farm data kept private?',
-                          answer: 'Yes, your data is securely stored and is only used to provide personalized weather alerts, crop calendars, and relevant scheme notifications.',
+                          question: AppLocale.t(context, 'faq_q5'),
+                          answer: AppLocale.t(context, 'faq_a5'),
                         ),
                       ],
                     ),
