@@ -251,7 +251,27 @@ class _DashboardPage extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('${AppLocale.t(context, location)} • ${AppLocale.t(context, 'refresh')}', style: const TextStyle(color: Colors.grey, fontSize: 13)),
+                  GestureDetector(
+                    onTap: () async {
+                      // Fetch fresh location and weather
+                      final loc = await LocationService.getCurrentLocation();
+                      if (loc != null && context.mounted) {
+                        final auth = Provider.of<AuthProvider>(context, listen: false);
+                        await auth.updateProfile(loc); 
+                        Provider.of<WeatherProvider>(context, listen: false).fetchWeather(loc['village'] ?? 'Bengaluru');
+                        Provider.of<MarketProvider>(context, listen: false).fetchPrices(state: loc['district'] ?? 'Mandya');
+                      }
+                    },
+                    child: Row(
+                      children: [
+                        Text(AppLocale.t(context, location), style: const TextStyle(color: Colors.grey, fontSize: 13)),
+                        const Text(' • ', style: TextStyle(color: Colors.grey, fontSize: 13)),
+                        Text(AppLocale.t(context, 'refresh'), style: const TextStyle(color: AppTheme.primaryGreen, fontSize: 13, fontWeight: FontWeight.bold)),
+                        const SizedBox(width: 4),
+                        const Icon(Icons.refresh_rounded, size: 14, color: AppTheme.primaryGreen),
+                      ],
+                    ),
+                  ),
                   const SizedBox(height: 8),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
