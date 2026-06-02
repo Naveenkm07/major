@@ -70,6 +70,13 @@ class AppLocale extends ChangeNotifier {
       'ask_ai': 'Ask AI Assistant',
       'quick_actions': 'Quick Actions',
       'todays_tips': "Today's Tips",
+      'namaskara': 'Namaskara 🙏',
+      'Sunny': 'Sunny',
+      'Clear': 'Clear',
+      'Cloudy': 'Cloudy',
+      'Rainy': 'Rainy',
+      'Partly cloudy': 'Partly cloudy',
+      'Overcast': 'Overcast',
 
       // ─── Feature Cards ───────────────────────
       'pest_detection': 'Pest\nDetection',
@@ -270,6 +277,13 @@ class AppLocale extends ChangeNotifier {
       'ask_ai': 'AI ಸಹಾಯಕನನ್ನು ಕೇಳಿ',
       'quick_actions': 'ತ್ವರಿತ ಕ್ರಿಯೆಗಳು',
       'todays_tips': 'ಇಂದಿನ ಸಲಹೆಗಳು',
+      'namaskara': 'ನಮಸ್ಕಾರ 🙏',
+      'Sunny': 'ಬಿಸಿಲು',
+      'Clear': 'ಸ್ಪಷ್ಟ',
+      'Cloudy': 'ಮೋಡಕವಿದ',
+      'Rainy': 'ಮಳೆ',
+      'Partly cloudy': 'ಭಾಗಶಃ ಮೋಡಕವಿದ',
+      'Overcast': 'ಮುಸುಕಾದ',
 
       // ─── Feature Cards ───────────────────────
       'pest_detection': 'ರೋಗ\nಪತ್ತೆ',
