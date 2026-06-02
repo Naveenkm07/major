@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../providers/auth_provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../config/theme.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -26,10 +25,17 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   Future<void> _checkAuth() async {
     await Future.delayed(const Duration(seconds: 1));
     if (!mounted) return;
-    final auth = Provider.of<AuthProvider>(context, listen: false);
-    await auth.checkAuth();
-    if (!mounted) return;
-    Navigator.pushReplacementNamed(context, auth.isAuthenticated ? '/home' : '/login');
+    
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      if (user.displayName == null || user.displayName!.trim().isEmpty) {
+        Navigator.pushReplacementNamed(context, '/setup-profile');
+      } else {
+        Navigator.pushReplacementNamed(context, '/home');
+      }
+    } else {
+      Navigator.pushReplacementNamed(context, '/login');
+    }
   }
 
   @override

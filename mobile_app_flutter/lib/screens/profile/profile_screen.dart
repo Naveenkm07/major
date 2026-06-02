@@ -135,6 +135,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           trailing: Icon(Icons.chevron_right, color: Colors.grey.shade400),
                           onTap: () => Navigator.pushNamed(context, '/help-support'),
                         ),
+                        const Divider(height: 1, color: Color(0xFFEEEEEE)),
+                        ListTile(
+                          contentPadding: EdgeInsets.zero,
+                          leading: const Icon(Icons.logout, color: Colors.red),
+                          title: const Text('Logout', style: TextStyle(fontSize: 16, color: Colors.red)),
+                          onTap: () async {
+                            await FirebaseAuth.instance.signOut();
+                            if (mounted) {
+                              Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+                            }
+                          },
+                        ),
                       ],
                     ),
                   ),
