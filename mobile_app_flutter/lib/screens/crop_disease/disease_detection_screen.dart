@@ -23,10 +23,6 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
   @override
   void initState() {
     super.initState();
-    // Automatically open the camera when the screen loads
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _pickImage(ImageSource.camera);
-    });
   }
 
   Future<void> _pickImage(ImageSource source) async {
@@ -163,7 +159,16 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
             children: [
               Expanded(
                 child: OutlinedButton(
-                  onPressed: () => Navigator.pop(context),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Saved to My Disease Scans in Profile!'),
+                        backgroundColor: AppTheme.primaryGreen,
+                        duration: Duration(seconds: 3),
+                      ),
+                    );
+                  },
                   style: OutlinedButton.styleFrom(
                     side: const BorderSide(color: AppTheme.primaryGreen),
                     padding: const EdgeInsets.symmetric(vertical: 16),
@@ -175,7 +180,13 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
               const SizedBox(width: 12),
               Expanded(
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pop(context); // Close sheet
+                    // Ask the chatbot
+                    final chatMsg = 'How do I organically treat $pest?';
+                    // We can just push the chatbot screen, the user can type it. Or we can inject it via provider if imported, but to keep it simple:
+                    Navigator.pushNamed(context, '/chatbot');
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppTheme.primaryGreen,
                     padding: const EdgeInsets.symmetric(vertical: 16),
