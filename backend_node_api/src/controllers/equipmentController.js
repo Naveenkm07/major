@@ -40,10 +40,7 @@ exports.getEquipment = asyncHandler(async (req, res) => {
 // @route   POST /api/v1/equipment
 // @access  Private
 exports.addEquipment = asyncHandler(async (req, res) => {
-    // Add user to req.body
-    req.body.owner = req.user.id;
-    req.body.ownerName = req.user.name;
-    req.body.contactPhone = req.user.phoneNumber || req.body.contactPhone;
+    // Rely on req.body for owner, ownerName, and contactPhone
 
     const equipment = await Equipment.create(req.body);
 
