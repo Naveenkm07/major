@@ -25,6 +25,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final ApiService _api = ApiService();
+  final Set<String> _completedTips = {};
   int _currentIndex = 0;
 
   @override
@@ -409,7 +411,16 @@ class _DashboardPage extends StatelessWidget {
             iconColor: Colors.blue,
             title: AppLocale.t(context, 'irrigation_tip'),
             time: AppLocale.t(context, 'irrigation_desc'),
-            isCompleted: true,
+            isCompleted: _completedTips.contains('irrigation'),
+            onTap: () {
+              setState(() {
+                if (_completedTips.contains('irrigation')) {
+                  _completedTips.remove('irrigation');
+                } else {
+                  _completedTips.add('irrigation');
+                }
+              });
+            },
           ),
           const SizedBox(height: 12),
           _TaskCard(
@@ -417,7 +428,16 @@ class _DashboardPage extends StatelessWidget {
             iconColor: AppTheme.primaryGreen,
             title: AppLocale.t(context, 'weather_tip'),
             time: AppLocale.t(context, 'weather_desc'),
-            isCompleted: false,
+            isCompleted: _completedTips.contains('weather'),
+            onTap: () {
+              setState(() {
+                if (_completedTips.contains('weather')) {
+                  _completedTips.remove('weather');
+                } else {
+                  _completedTips.add('weather');
+                }
+              });
+            },
           ),
           const SizedBox(height: 12),
           _TaskCard(
@@ -427,6 +447,10 @@ class _DashboardPage extends StatelessWidget {
             time: AppLocale.t(context, 'pest_desc'),
             isCompleted: false,
             isWarning: true,
+            onTap: () {
+              // Navigate to disease scanner to check for pests
+              Navigator.pushNamed(context, '/disease-detection');
+            },
           ),
         ],
       ),
@@ -500,6 +524,7 @@ class _TaskCard extends StatelessWidget {
   final String time;
   final bool isCompleted;
   final bool isWarning;
+  final VoidCallback? onTap;
 
   const _TaskCard({
     required this.icon,
@@ -508,46 +533,50 @@ class _TaskCard extends StatelessWidget {
     required this.time,
     required this.isCompleted,
     this.isWarning = false,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.withOpacity(0.1)),
-        boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10, offset: const Offset(0, 4)),
-        ],
-      ),
-      child: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(12),
-            decoration: BoxDecoration(
-              color: isWarning ? Colors.orange.withOpacity(0.1) : Colors.grey.withOpacity(0.05),
-              borderRadius: BorderRadius.circular(12),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.grey.withOpacity(0.1)),
+          boxShadow: [
+            BoxShadow(color: Colors.black.withOpacity(0.02), blurRadius: 10, offset: const Offset(0, 4)),
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: isWarning ? Colors.orange.withOpacity(0.1) : Colors.grey.withOpacity(0.05),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(icon, color: isWarning ? Colors.orange : iconColor),
             ),
-            child: Icon(icon, color: isWarning ? Colors.orange : iconColor),
-          ),
-          const SizedBox(width: 16),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
-                const SizedBox(height: 4),
-                Text(time, style: const TextStyle(color: Colors.grey, fontSize: 13)),
-              ],
+            const SizedBox(width: 16),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
+                  const SizedBox(height: 4),
+                  Text(time, style: const TextStyle(color: Colors.grey, fontSize: 13)),
+                ],
+              ),
             ),
-          ),
-          if (isCompleted)
-            const Icon(Icons.check_circle_outline, color: AppTheme.primaryGreen)
-          else
-            const Icon(Icons.arrow_forward_ios_rounded, color: Colors.grey, size: 16),
-        ],
+            if (isCompleted)
+              const Icon(Icons.check_circle_outline, color: AppTheme.primaryGreen)
+            else
+              const Icon(Icons.arrow_forward_ios_rounded, color: Colors.grey, size: 16),
+          ],
+        ),
       ),
     );
   }
