@@ -78,6 +78,35 @@ class _VoiceAssistantScreenState extends State<VoiceAssistantScreen>
     await voice.speak(botResponse);
   }
 
+  Future<void> _sendTextQuery(String text) async {
+    final voice = Provider.of<VoiceAssistantService>(context, listen: false);
+    final chat = Provider.of<ChatProvider>(context, listen: false);
+
+    setState(() {
+      _lastQuestion = text;
+      _processing = true;
+    });
+
+    // Stop speaking if it was
+    if (voice.isSpeaking) voice.stopSpeaking();
+
+    final appLocale = Provider.of<AppLocale>(context, listen: false);
+    final langCode = appLocale.isKannada ? 'Kannada' : 'English';
+    await chat.sendMessage(text, language: langCode);
+
+    final messages = chat.messages;
+    final botResponse = messages.isNotEmpty && !messages.last.isUser
+        ? messages.last.content
+        : 'Sorry, I could not get a response.';
+
+    setState(() {
+      _lastAnswer = botResponse;
+      _processing = false;
+    });
+
+    await voice.speak(botResponse);
+  }
+
   @override
   Widget build(BuildContext context) {
     final locale = Provider.of<AppLocale>(context);
@@ -197,16 +226,19 @@ class _VoiceAssistantScreenState extends State<VoiceAssistantScreen>
                           text: locale.isKannada
                               ? '🌿 ಟೊಮೇಟೋ ಎಲೆ ಹಳದಿ ಆಗಿದೆ'
                               : '🌿 My tomato leaves turned yellow',
+                          onTap: () => _sendTextQuery(locale.isKannada ? 'ಟೊಮೇಟೋ ಎಲೆ ಹಳದಿ ಆಗಿದೆ' : 'My tomato leaves turned yellow'),
                         ),
                         _SuggestionChip(
                           text: locale.isKannada
                               ? '💰 ಇಂದಿನ ಮಾರುಕಟ್ಟೆ ಬೆಲೆ'
                               : '💰 Today\'s market price for rice',
+                          onTap: () => _sendTextQuery(locale.isKannada ? 'ಇಂದಿನ ಮಾರುಕಟ್ಟೆ ಬೆಲೆ' : 'Today\'s market price for rice'),
                         ),
                         _SuggestionChip(
                           text: locale.isKannada
                               ? '🏛️ ಸರ್ಕಾರಿ ಯೋಜನೆ ಮಾಹಿತಿ'
                               : '🏛️ Government scheme for farmers',
+                          onTap: () => _sendTextQuery(locale.isKannada ? 'ಸರ್ಕಾರಿ ಯೋಜನೆ ಮಾಹಿತಿ' : 'Government scheme for farmers'),
                         ),
                       ],
                     ],
@@ -344,19 +376,24 @@ class _ResultCard extends StatelessWidget {
 
 class _SuggestionChip extends StatelessWidget {
   final String text;
-  const _SuggestionChip({required this.text});
+  final VoidCallback onTap;
+  
+  const _SuggestionChip({required this.text, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      margin: const EdgeInsets.only(bottom: 8),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        color: AppTheme.surfaceVariant,
-        borderRadius: BorderRadius.circular(12),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        margin: const EdgeInsets.only(bottom: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          color: AppTheme.surfaceVariant,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Text(text, style: const TextStyle(fontSize: 14)),
       ),
-      child: Text(text, style: const TextStyle(fontSize: 14)),
     );
   }
 }
