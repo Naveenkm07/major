@@ -53,7 +53,7 @@ class _MarketplaceScreenState extends State<MarketplaceScreen> {
                 return Padding(
                   padding: const EdgeInsets.only(right: 8),
                   child: FilterChip(
-                    label: Text(type),
+                    label: Text(AppLocale.t(context, type.toLowerCase())),
                     selected: isSelected,
                     onSelected: (val) {
                       setState(() => _selectedType = type);
@@ -205,23 +205,23 @@ class _AddEquipmentFormState extends State<_AddEquipmentForm> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Text('List New Equipment', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              Text(AppLocale.t(context, 'list_new_equipment'), style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
               const SizedBox(height: 24),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Equipment Name', border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
+                decoration: InputDecoration(labelText: AppLocale.t(context, 'equipment_name'), border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
                 validator: (v) => v!.isEmpty ? 'Required' : null,
                 onSaved: (v) => _name = v!,
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
                 value: _type,
-                decoration: InputDecoration(labelText: 'Type', border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
-                items: _types.map((t) => DropdownMenuItem(value: t, child: Text(t))).toList(),
+                decoration: InputDecoration(labelText: AppLocale.t(context, 'type'), border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
+                items: _types.map((t) => DropdownMenuItem(value: t, child: Text(AppLocale.t(context, t.toLowerCase())))).toList(),
                 onChanged: (v) => setState(() => _type = v!),
               ),
               const SizedBox(height: 16),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Price Per Hour (₹)', border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
+                decoration: InputDecoration(labelText: AppLocale.t(context, 'price_per_hour'), border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
                 keyboardType: TextInputType.number,
                 validator: (v) => v!.isEmpty ? 'Required' : null,
                 onSaved: (v) => _price = v!,
@@ -229,7 +229,7 @@ class _AddEquipmentFormState extends State<_AddEquipmentForm> {
               const SizedBox(height: 16),
               TextFormField(
                 initialValue: _phone,
-                decoration: InputDecoration(labelText: 'Contact Phone', border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
+                decoration: InputDecoration(labelText: AppLocale.t(context, 'contact_phone'), border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
                 keyboardType: TextInputType.phone,
                 validator: (v) => v!.isEmpty ? 'Required' : null,
                 onSaved: (v) => _phone = v!,
@@ -244,12 +244,12 @@ class _AddEquipmentFormState extends State<_AddEquipmentForm> {
                         children: [
                           ListTile(
                             leading: const Icon(Icons.photo_library),
-                            title: const Text('Pick from Gallery'),
+                            title: Text(AppLocale.t(context, 'pick_from_gallery')),
                             onTap: () { Navigator.pop(c); _pickImage(ImageSource.gallery); },
                           ),
                           ListTile(
                             leading: const Icon(Icons.camera_alt),
-                            title: const Text('Take a Photo'),
+                            title: Text(AppLocale.t(context, 'take_a_photo')),
                             onTap: () { Navigator.pop(c); _pickImage(ImageSource.camera); },
                           ),
                         ],
@@ -273,19 +273,19 @@ class _AddEquipmentFormState extends State<_AddEquipmentForm> {
                           width: double.infinity,
                         ),
                       )
-                    : const Column(
+                    : Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.add_a_photo_rounded, color: AppTheme.primaryGreen, size: 36),
-                          SizedBox(height: 8),
-                          Text('Add Equipment Photo', style: TextStyle(color: AppTheme.primaryGreen, fontWeight: FontWeight.bold)),
+                          const Icon(Icons.add_a_photo_rounded, color: AppTheme.primaryGreen, size: 36),
+                          const SizedBox(height: 8),
+                          Text(AppLocale.t(context, 'add_equipment_photo'), style: const TextStyle(color: AppTheme.primaryGreen, fontWeight: FontWeight.bold)),
                         ],
                       ),
                 ),
               ),
               const SizedBox(height: 16),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Description (Optional)', border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
+                decoration: InputDecoration(labelText: AppLocale.t(context, 'description_optional'), border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
                 maxLines: 2,
                 onSaved: (v) => _desc = v ?? '',
               ),
@@ -299,7 +299,7 @@ class _AddEquipmentFormState extends State<_AddEquipmentForm> {
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       ),
-                      child: const Text('List Equipment', style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+                      child: Text(AppLocale.t(context, 'list_equipment'), style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
                     ),
               const SizedBox(height: 24),
             ],
