@@ -212,6 +212,51 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     
                     const SizedBox(height: 24),
                     
+                    // Farm Details
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Farm Details', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87)),
+                        GestureDetector(
+                          onTap: () async {
+                            if (_user != null) {
+                              final result = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => EditFarmDetailsScreen(user: _user!),
+                                ),
+                              );
+                              if (result == true) _fetchData();
+                            }
+                          },
+                          child: Row(
+                            children: [
+                              Text(AppLocale.t(context, 'edit'), style: const TextStyle(color: AppTheme.primaryGreen, fontWeight: FontWeight.bold)),
+                              const SizedBox(width: 4),
+                              const Icon(Icons.edit, size: 16, color: AppTheme.primaryGreen),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      width: double.infinity,
+                      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildDetailRow('Farm Size', _user?.farmDetails?.landArea != null ? '${_user!.farmDetails!.landArea} Acres' : 'Not set'),
+                          const Divider(height: 16),
+                          _buildDetailRow('Soil Type', _user?.farmDetails?.soilType ?? 'Not set'),
+                          const Divider(height: 16),
+                          _buildDetailRow('Irrigation Method', _user?.farmDetails?.irrigationType ?? 'Not set'),
+                        ],
+                      ),
+                    ),
+                    
+                    const SizedBox(height: 24),
                     // Location
                     Text(AppLocale.t(context, 'location'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87)),
                     const SizedBox(height: 12),
@@ -434,6 +479,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Text(title, style: TextStyle(fontSize: 12, color: Colors.grey.shade600)),
         ],
       ),
+    );
+  }
+
+  Widget _buildDetailRow(String label, String value) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(label, style: TextStyle(color: Colors.grey.shade600, fontSize: 14)),
+        Text(value, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
+      ],
     );
   }
 
