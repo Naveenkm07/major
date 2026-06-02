@@ -11,6 +11,8 @@ import '../screens/loans/loans_screen.dart';
 import '../screens/community/community_screen.dart';
 import '../screens/chatbot/chatbot_screen.dart';
 import '../screens/profile/profile_screen.dart';
+import '../screens/profile/edit_profile_screen.dart';
+import '../models/user_model.dart';
 
 class AppRoutes {
   static const String splash = '/';
@@ -25,6 +27,7 @@ class AppRoutes {
   static const String community = '/community';
   static const String chatbot = '/chatbot';
   static const String profile = '/profile';
+  static const String editProfile = '/edit-profile';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -52,6 +55,9 @@ class AppRoutes {
         return _buildRoute(const ChatbotScreen());
       case profile:
         return _buildRoute(const ProfileScreen());
+      case editProfile:
+        final user = settings.arguments as UserModel;
+        return _buildRoute(EditProfileScreen(user: user));
       default:
         return _buildRoute(
           const Scaffold(body: Center(child: Text('Route not found'))),
