@@ -5,7 +5,8 @@ import '../core/locale.dart';
 import '../config/theme.dart';
 
 class LanguageToggle extends StatelessWidget {
-  const LanguageToggle({super.key});
+  final bool isDarkBackground;
+  const LanguageToggle({super.key, this.isDarkBackground = false});
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +17,9 @@ class LanguageToggle extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
             decoration: BoxDecoration(
-              color: AppTheme.primaryGreen.withOpacity(0.1),
+              color: isDarkBackground ? Colors.white : AppTheme.primaryGreen.withOpacity(0.1),
               borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: AppTheme.primaryGreen.withOpacity(0.3)),
+              border: Border.all(color: isDarkBackground ? Colors.white : AppTheme.primaryGreen.withOpacity(0.3)),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
