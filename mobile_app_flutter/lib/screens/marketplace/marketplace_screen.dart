@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../providers/equipment_provider.dart';
 import '../../config/theme.dart';
 import '../../core/locale.dart';
@@ -127,8 +129,26 @@ class _AddEquipmentFormState extends State<_AddEquipmentForm> {
   String _phone = '';
   String _desc = '';
   bool _isLoading = false;
+  String? _base64Image;
+  final ImagePicker _picker = ImagePicker();
 
   final List<String> _types = ['Tractor', 'Harvester', 'Plough', 'Seeder', 'Sprayer', 'Other'];
+
+  Future<void> _pickImage(ImageSource source) async {
+    try {
+      final pickedFile = await _picker.pickImage(source: source, maxWidth: 800, imageQuality: 70);
+      if (pickedFile != null) {
+        final bytes = await pickedFile.readAsBytes();
+        setState(() {
+          _base64Image = 'data:image/jpeg;base64,' + base64Encode(bytes);
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Failed to pick image: $e')));
+      }
+    }
+  }
 
   @override
   void initState() {
@@ -155,6 +175,7 @@ class _AddEquipmentFormState extends State<_AddEquipmentForm> {
       'owner': user?.uid ?? 'unknown_uid',
       'ownerName': user?.displayName ?? 'Farmer',
       'availability': true,
+      if (_base64Image != null) 'images': [_base64Image],
     };
 
     final success = await Provider.of<EquipmentProvider>(context, listen: false).addEquipment(data);
@@ -214,6 +235,55 @@ class _AddEquipmentFormState extends State<_AddEquipmentForm> {
                 onSaved: (v) => _phone = v!,
               ),
               const SizedBox(height: 16),
+              GestureDetector(
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (c) => SafeArea(
+                      child: Wrap(
+                        children: [
+                          ListTile(
+                            leading: const Icon(Icons.photo_library),
+                            title: const Text('Pick from Gallery'),
+                            onTap: () { Navigator.pop(c); _pickImage(ImageSource.gallery); },
+                          ),
+                          ListTile(
+                            leading: const Icon(Icons.camera_alt),
+                            title: const Text('Take a Photo'),
+                            onTap: () { Navigator.pop(c); _pickImage(ImageSource.camera); },
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+                child: Container(
+                  height: 140,
+                  decoration: BoxDecoration(
+                    color: AppTheme.primaryGreen.withOpacity(0.05),
+                    border: Border.all(color: AppTheme.primaryGreen.withOpacity(0.3)),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: _base64Image != null 
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.memory(
+                          base64Decode(_base64Image!.split(',').last),
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                        ),
+                      )
+                    : const Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.add_a_photo_rounded, color: AppTheme.primaryGreen, size: 36),
+                          SizedBox(height: 8),
+                          Text('Add Equipment Photo', style: TextStyle(color: AppTheme.primaryGreen, fontWeight: FontWeight.bold)),
+                        ],
+                      ),
+                ),
+              ),
+              const SizedBox(height: 16),
               TextFormField(
                 decoration: InputDecoration(labelText: 'Description (Optional)', border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
                 maxLines: 2,
@@ -261,13 +331,22 @@ class _EquipmentCard extends StatelessWidget {
                 color: AppTheme.primaryGreen.withOpacity(0.1),
                 borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
               ),
-              child: Center(
-                child: Icon(
-                  item.type == 'Tractor' ? Icons.agriculture_rounded : Icons.precision_manufacturing_rounded,
-                  size: 48,
-                  color: AppTheme.primaryGreen,
-                ),
-              ),
+              child: item.images.isNotEmpty && item.images.first.startsWith('data:image')
+                  ? ClipRRect(
+                      borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+                      child: Image.memory(
+                        base64Decode(item.images.first.split(',').last),
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                      ),
+                    )
+                  : Center(
+                      child: Icon(
+                        item.type == 'Tractor' ? Icons.agriculture_rounded : Icons.precision_manufacturing_rounded,
+                        size: 48,
+                        color: AppTheme.primaryGreen,
+                      ),
+                    ),
             ),
           ),
           Padding(
