@@ -34,15 +34,16 @@ class AppUser {
       id: json['_id'] ?? '',
       name: json['name'] ?? '',
       email: json['email'],
-      phone: json['phoneNumber'],
+      phone: json['phoneNumber'] ?? json['phone'],
       location: UserLocation(
-        village: json['village'],
-        district: json['district'],
-        state: json['state'],
+        village: json['village'] ?? json['location']?['village'],
+        district: json['district'] ?? json['location']?['district'],
+        state: json['state'] ?? json['location']?['state'],
       ),
       farmDetails: FarmDetails(
-        landArea: json['farmSize']?.toDouble(),
-        crops: (json['cropTypes'] as List?)?.map((e) => e.toString()).toList(),
+        landArea: json['farmSize']?.toDouble() ?? json['farmDetails']?['landArea']?.toDouble(),
+        crops: (json['cropTypes'] as List?)?.map((e) => e.toString()).toList()
+            ?? (json['farmDetails']?['crops'] as List?)?.map((e) => e.toString()).toList(),
       ),
       preferredLanguage: json['preferredLanguage'],
     );
