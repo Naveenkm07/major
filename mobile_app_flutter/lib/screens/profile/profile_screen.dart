@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider;
+import 'package:provider/provider.dart';
 import '../../config/theme.dart';
 import '../../services/api_service.dart';
 import '../../services/weather_service.dart';
+import '../../services/location_service.dart';
 import '../../models/user_model.dart';
+import '../../providers/auth_provider.dart';
 import './edit_profile_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -20,6 +23,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   UserModel? _user;
   Map<String, dynamic>? _weather;
   bool _isLoading = true;
+  bool _isUpdatingLocation = false;
   
   bool _mandiAlerts = true;
   bool _diseaseAlerts = true;
@@ -30,6 +34,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void initState() {
     super.initState();
     _fetchData();
+    _autoUpdateLocation(); // Auto-update location on screen load
+  }
+
+  /// Silently fetches GPS location in the background and saves to profile
+  Future<void> _autoUpdateLocation() async {
+    final loc = await LocationService.getCurrentLocation();
+    if (loc != null && mounted) {
+      final auth = Provider.of<AuthProvider>(context, listen: false);
+      await auth.updateProfile(loc);
+      // Re-fetch profile to show updated location
+      _fetchData();
+    }
   }
 
   Future<void> _fetchData() async {
@@ -37,7 +53,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     try {
       final profileData = await _apiService.getProfile();
       if (profileData['success'] == true) {
-        _user = UserModel.fromJson(profileData['user']);
+        // Backend sends data under 'data' OR 'user'
+        final raw = profileData['data'] ?? profileData['user'];
+        _user = UserModel.fromJson(raw);
         
         // Fetch weather if location is available
         if (_user?.location?.district != null) {
@@ -166,23 +184,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     // Location
                     const Text('Location', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87)),
                     const SizedBox(height: 12),
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
-                      child: Row(
-                        children: [
-                          const Icon(Icons.location_on_outlined, color: AppTheme.accent),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Text(
-                              _user?.location?.district != null 
-                                  ? '${_user!.location!.district}, ${_user!.location!.state}'
-                                  : 'Location not set', 
-                              style: const TextStyle(fontSize: 16)
-                            )
-                          ),
-                          Icon(Icons.chevron_right, color: Colors.grey.shade400),
-                        ],
+                    GestureDetector(
+                      onTap: () async {
+                        setState(() => _isUpdatingLocation = true);
+                        final auth = Provider.of<AuthProvider>(context, listen: false);
+                        final loc = await LocationService.getCurrentLocation();
+                        if (loc != null && mounted) {
+                          await auth.updateProfile(loc);
+                          await _fetchData();
+                        }
+                        if (mounted) setState(() => _isUpdatingLocation = false);
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
+                        child: Row(
+                          children: [
+                            Icon(Icons.my_location_rounded, color: _isUpdatingLocation ? Colors.grey : AppTheme.accent),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: _isUpdatingLocation
+                                  ? Row(
+                                      children: [
+                                        const SizedBox(width: 14, height: 14, child: CircularProgressIndicator(strokeWidth: 2, color: AppTheme.primaryGreen)),
+                                        const SizedBox(width: 10),
+                                        Text('Detecting location...', style: TextStyle(fontSize: 15, color: Colors.grey.shade600)),
+                                      ],
+                                    )
+                                  : Text(
+                                      _user?.location?.district != null
+                                          ? '${_user!.location!.district}, ${_user!.location!.state ?? ''}'
+                                          : 'Tap to detect location',
+                                      style: const TextStyle(fontSize: 16),
+                                    ),
+                            ),
+                            Icon(Icons.refresh_rounded, color: Colors.grey.shade400, size: 20),
+                          ],
+                        ),
                       ),
                     ),
                     
