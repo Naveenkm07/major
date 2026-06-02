@@ -40,3 +40,4 @@
 {"level":"error","message":"Firebase initialization failed: Failed to parse private key: Error: Too few bytes to read ASN.1 value.","service":"krushikadhara-api","timestamp":"2026-06-03 00:22:20"}
 {"level":"error","message":"Firebase initialization failed: Failed to parse private key: Error: Too few bytes to read ASN.1 value.","service":"krushikadhara-api","timestamp":"2026-06-03 00:23:08"}
 {"level":"error","message":"Market API fetch failed: Request failed with status code 403","service":"krushikadhara-api","timestamp":"2026-06-03 00:30:01"}
+{"level":"error","message":"Firebase initialization failed: Failed to parse private key: Error: Too few bytes to read ASN.1 value.","service":"krushikadhara-api","timestamp":"2026-06-03 01:04:10"}

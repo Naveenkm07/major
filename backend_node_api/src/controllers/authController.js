@@ -149,7 +149,7 @@ exports.getMe = asyncHandler(async (req, res) => {
 // ═══════════════════════════════════════════════════════
 exports.updateProfile = asyncHandler(async (req, res) => {
     const fieldsToUpdate = {};
-    const allowed = ['name', 'village', 'district', 'state', 'farmSize', 'cropTypes', 'soilType', 'irrigationType', 'preferredLanguage'];
+    const allowed = ['name', 'village', 'district', 'state', 'farmSize', 'cropTypes', 'soilType', 'irrigationType', 'preferredLanguage', 'farmDetails'];
 
     for (const field of allowed) {
         if (req.body[field] !== undefined) {

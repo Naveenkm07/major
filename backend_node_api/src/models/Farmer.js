@@ -62,6 +62,15 @@ const farmerSchema = new mongoose.Schema(
             enum: ['Drip', 'Sprinkler', 'Rainfed', 'Canal', 'Tube Well', 'Other', null],
             default: null,
         },
+        farmDetails: {
+            landArea: Number,
+            soilType: String,
+            irrigationType: String,
+            crops: [{
+                name: String,
+                sowingDate: Date
+            }]
+        },
         preferredLanguage: {
             type: String,
             enum: ['en', 'hi', 'kn', 'te', 'ta', 'mr', 'gu', 'pa', 'bn', 'or'],
