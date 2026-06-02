@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:image_picker/image_picker.dart';
 import '../../config/theme.dart';
 import '../../services/api_service.dart';
@@ -58,6 +59,13 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
   }
 
   Widget _buildBottomSheet() {
+    final pest = _result?['data']?['pest']?.toString().replaceAll('_', ' ').toUpperCase() ?? 'UNKNOWN DISEASE';
+    final confidence = _result?['data']?['confidence'] as double? ?? 0.0;
+    final description = _result?['data']?['description']?.toString() ?? 'No description available.';
+    final treatmentList = _result?['data']?['treatment'] as List<dynamic>? ?? [];
+    final treatment = treatmentList.isNotEmpty ? '• ${treatmentList.join('\n• ')}' : 'No treatment info.';
+    final isHighSeverity = confidence > 0.7;
+
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
@@ -81,27 +89,35 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('Diagnosis result', style: TextStyle(color: Colors.grey, fontSize: 13)),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                decoration: BoxDecoration(color: AppTheme.pestRed, borderRadius: BorderRadius.circular(12)),
-                child: const Row(
-                  children: [
-                    Icon(Icons.warning_amber_rounded, color: Colors.white, size: 14),
-                    SizedBox(width: 4),
-                    Text('High Severity', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
-                  ],
+              Text('Diagnosis result (${(confidence * 100).toStringAsFixed(1)}% match)', style: const TextStyle(color: Colors.grey, fontSize: 13)),
+              if (isHighSeverity)
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(color: AppTheme.pestRed, borderRadius: BorderRadius.circular(12)),
+                  child: const Row(
+                    children: [
+                      Icon(Icons.warning_amber_rounded, color: Colors.white, size: 14),
+                      SizedBox(width: 4),
+                      Text('High Severity', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+                    ],
+                  ),
                 ),
-              ),
             ],
           ),
           const SizedBox(height: 8),
-          const Text('Bacterial Blight', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppTheme.textPrimary)),
+          Text(pest, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: AppTheme.textPrimary)),
+          
+          const SizedBox(height: 12),
+          Text(
+            description,
+            style: TextStyle(color: Colors.grey.shade700, fontSize: 14, height: 1.4),
+          ),
           
           const SizedBox(height: 20),
           
           // Treatment Box
           Container(
+            width: double.infinity,
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: AppTheme.primaryGreen.withOpacity(0.05),
@@ -110,10 +126,10 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Recommended Treatment', style: TextStyle(color: Colors.grey, fontSize: 12)),
+                const Text('Recommended Treatment', style: TextStyle(color: AppTheme.primaryGreen, fontSize: 12, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 8),
                 Text(
-                  'Streptocycline 0.5 g/L — spray on affected leaves twice weekly.',
+                  treatment,
                   style: TextStyle(color: Colors.grey.shade800, fontSize: 14, height: 1.5),
                 ),
               ],
@@ -164,7 +180,9 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
           // Background Image (Live Camera Feed simulation)
           if (_imageFile != null)
             Positioned.fill(
-              child: Image.file(_imageFile!, fit: BoxFit.cover),
+              child: kIsWeb 
+                  ? Image.network(_imageFile!.path, fit: BoxFit.cover)
+                  : Image.file(_imageFile!, fit: BoxFit.cover),
             )
           else
             Positioned.fill(

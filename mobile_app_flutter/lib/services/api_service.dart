@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -158,13 +159,25 @@ class ApiService {
     final ext = imageFile.path.split('.').last.toLowerCase();
     final mimeType = ext == 'png' ? 'image/png' : 'image/jpeg';
 
-    request.files.add(
-      await http.MultipartFile.fromPath(
-        'image',
-        imageFile.path,
-        contentType: MediaType.parse(mimeType),
-      ),
-    );
+    if (kIsWeb) {
+      final bytes = await imageFile.readAsBytes();
+      request.files.add(
+        http.MultipartFile.fromBytes(
+          'image',
+          bytes,
+          filename: 'upload.$ext',
+          contentType: MediaType.parse(mimeType),
+        ),
+      );
+    } else {
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'image',
+          imageFile.path,
+          contentType: MediaType.parse(mimeType),
+        ),
+      );
+    }
 
     final streamedResponse = await request.send().timeout(const Duration(seconds: 30));
     final responseBody = await streamedResponse.stream.bytesToString();
