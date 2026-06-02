@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../utils/constants.dart';
 
 /// Unified API service for both Node.js backend and Python AI microservice.
@@ -215,7 +216,7 @@ class ApiService {
     String language = 'en',
     Map<String, dynamic>? context,
   }) async {
-    const String grokApiKey = 'YOUR_GROK_API_KEY_HERE';
+    final String grokApiKey = dotenv.env['GROK_API_KEY'] ?? '';
     final uri = Uri.parse('https://api.x.ai/v1/chat/completions');
 
     final systemPrompt = '''

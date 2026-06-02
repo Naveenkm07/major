@@ -40,12 +40,16 @@ import 'screens/profile/help_support_screen.dart';
 import 'screens/notifications/notifications_screen.dart';
 import 'screens/admin/admin_notification_screen.dart';
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
+  // Load .env variables securely
+  await dotenv.load(fileName: ".env");
+
   // Initialize Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
