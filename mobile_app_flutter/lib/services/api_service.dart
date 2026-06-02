@@ -228,11 +228,21 @@ class ApiService {
     final String grokApiKey = dotenv.env['XAI_API_KEY'] ?? '';
     final uri = Uri.parse('https://api.x.ai/v1/chat/completions');
 
-    final systemPrompt = '''
+    String systemPrompt = '''
 You are KrushikaDhara, a helpful farming AI assistant in India.
 Keep your answers concise, practical, and formatted in 2-3 short sentences.
 Respond entirely in $language language.
 ''';
+
+    if (context != null && context.isNotEmpty) {
+      systemPrompt += '\n\nUser Context:\n';
+      context.forEach((key, value) {
+        if (value != null && value.toString().isNotEmpty) {
+          systemPrompt += '- $key: $value\n';
+        }
+      });
+      systemPrompt += 'Please provide customized advice based on this user context when relevant.\n';
+    }
 
     try {
       final res = await http.post(
