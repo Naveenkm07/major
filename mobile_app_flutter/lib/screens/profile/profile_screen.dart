@@ -9,6 +9,7 @@ import '../../services/location_service.dart';
 import '../../models/user_model.dart';
 import '../../providers/auth_provider.dart';
 import './edit_profile_screen.dart';
+import './edit_farm_details_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -167,7 +168,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             if (_user != null) {
                               final result = await Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (_) => EditProfileScreen(user: _user!)),
+                                MaterialPageRoute(builder: (_) => EditFarmDetailsScreen(user: _user!)),
                               );
                               if (result == true) _fetchData();
                             }
