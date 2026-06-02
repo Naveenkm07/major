@@ -224,8 +224,8 @@ class ApiService {
     String language = 'en',
     Map<String, dynamic>? context,
   }) async {
-    // Load API key from .env file securely
-    final String grokApiKey = dotenv.env['GROK_API_KEY'] ?? '';
+    // Load API key from .env file securely (matching official XAI_API_KEY naming)
+    final String grokApiKey = dotenv.env['XAI_API_KEY'] ?? '';
     final uri = Uri.parse('https://api.x.ai/v1/chat/completions');
 
     final systemPrompt = '''
