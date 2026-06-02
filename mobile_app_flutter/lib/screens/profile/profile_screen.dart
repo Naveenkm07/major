@@ -111,18 +111,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             Text(AppLocale.t(context, 'profile'), style: const TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.bold)),
                           ],
                         ),
-                        GestureDetector(
-                          onTap: () async {
-                            if (_user != null) {
+                        if (_user != null)
+                          GestureDetector(
+                            onTap: () async {
                               final result = await Navigator.push(
                                 context,
                                 MaterialPageRoute(builder: (_) => EditProfileScreen(user: _user!)),
                               );
                               if (result == true) _fetchData();
-                            }
-                          },
-                          child: Text(AppLocale.t(context, 'edit'), style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
-                        ),
+                            },
+                            child: Text(AppLocale.t(context, 'edit'), style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                          ),
                       ],
                     ),
                     const SizedBox(height: 32),
@@ -134,10 +133,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: const Icon(Icons.person_outline, size: 50, color: AppTheme.primaryGreen),
                     ),
                     const SizedBox(height: 16),
-                    Text(_user?.name ?? AppLocale.t(context, 'Farmer'), style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
+                    Text(_user?.name ?? 'Guest User', style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
                     const SizedBox(height: 8),
-                    Text(_user?.phone ?? 'No Phone Number', style: const TextStyle(color: Colors.white70, fontSize: 16)),
+                    Text(_user?.phone ?? 'Please log in', style: const TextStyle(color: Colors.white70, fontSize: 16)),
                     
+                    if (_user == null) ...[
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () => Navigator.pushReplacementNamed(context, '/login'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          foregroundColor: AppTheme.primaryGreen,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                        ),
+                        child: const Text('Login / Sign Up', style: TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                    ],
+
                     if (_weather != null) ...[
                       const SizedBox(height: 24),
                       _buildWeatherWidget(context),
