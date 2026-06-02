@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider;
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../config/theme.dart';
 import '../../core/locale.dart';
 import '../../services/api_service.dart';
@@ -9,12 +8,9 @@ import '../../services/weather_service.dart';
 import '../../services/location_service.dart';
 import '../../models/user_model.dart';
 import '../../providers/auth_provider.dart';
-import '../auth/login_screen.dart';
 import './edit_profile_screen.dart';
 import './my_crops_screen.dart';
 import './smart_notifications_screen.dart';
-import './disease_scan_history_screen.dart';
-import './bookmarks_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -54,12 +50,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
           try {
             _weather = await _weatherService.getWeather(_user!.location!.district!);
           } catch (e) {
-            print('Weather fetch error: $e');
+            debugPrint('Weather fetch error: $e');
           }
         }
       }
     } catch (e) {
-      print('Profile fetch error: $e');
+      debugPrint('Profile fetch error: $e');
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -163,7 +159,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     
                     const SizedBox(height: 24),
 
-                    // My Crops & Farm Details Header
+                    // My Crops
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -191,25 +187,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ],
                     ),
                     const SizedBox(height: 12),
-                    
-                    // Farm Details Overview
-                    if (_user?.farmDetails?.landArea != null || _user?.farmDetails?.soilType != null || _user?.farmDetails?.irrigationType != null)
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        margin: const EdgeInsets.only(bottom: 12),
-                        decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
-                        child: Column(
-                          children: [
-                            if (_user?.farmDetails?.landArea != null)
-                              _buildFarmDetailRow('Farm Size', '${_user!.farmDetails!.landArea} Acres', Icons.landscape_outlined),
-                            if (_user?.farmDetails?.soilType != null)
-                              _buildFarmDetailRow('Soil Type', _user!.farmDetails!.soilType!, Icons.layers_outlined),
-                            if (_user?.farmDetails?.irrigationType != null)
-                              _buildFarmDetailRow('Irrigation', _user!.farmDetails!.irrigationType!, Icons.water_drop_outlined),
-                          ],
-                        ),
-                      ),
-
                     Container(
                       padding: const EdgeInsets.all(16),
                       width: double.infinity,
@@ -268,51 +245,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ),
                     
-                    const SizedBox(height: 24),
-
-                    // My Activity
-                    const Text('My Activity', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87)),
-                    const SizedBox(height: 12),
-                    Container(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(16)),
-                      child: Column(
-                        children: [
-                          ListTile(
-                            leading: Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(color: AppTheme.accent.withOpacity(0.1), shape: BoxShape.circle),
-                              child: const Icon(Icons.history, color: AppTheme.accentDark),
-                            ),
-                            title: const Text('My Disease Scans', style: TextStyle(fontWeight: FontWeight.w600)),
-                            trailing: const Icon(Icons.chevron_right, color: Colors.grey),
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (_) => const DiseaseScanHistoryScreen()),
-                              );
-                            },
-                          ),
-                          const Divider(height: 1, color: Color(0xFFEEEEEE), indent: 56),
-                          ListTile(
-                            leading: Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(color: AppTheme.primaryGreen.withOpacity(0.1), shape: BoxShape.circle),
-                              child: const Icon(Icons.bookmarks_outlined, color: AppTheme.primaryGreen),
-                            ),
-                            title: const Text('Saved Bookmarks', style: TextStyle(fontWeight: FontWeight.w600)),
-                            trailing: const Icon(Icons.chevron_right, color: Colors.grey),
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (_) => const BookmarksScreen()),
-                              );
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-
                     const SizedBox(height: 24),
                     
                     // Notifications
@@ -509,21 +441,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Text(label, style: const TextStyle(color: Colors.black87, fontWeight: FontWeight.w500)),
           const SizedBox(width: 6),
           Text(emoji),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildFarmDetailRow(String label, String value, IconData icon) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Row(
-        children: [
-          Icon(icon, color: AppTheme.primaryGreen, size: 20),
-          const SizedBox(width: 12),
-          Text(label, style: TextStyle(color: Colors.grey.shade600, fontSize: 14)),
-          const Spacer(),
-          Text(value, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
         ],
       ),
     );

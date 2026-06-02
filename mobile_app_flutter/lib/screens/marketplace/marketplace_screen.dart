@@ -8,7 +8,7 @@ import '../../config/theme.dart';
 import '../../core/locale.dart';
 import '../../widgets/language_toggle.dart';
 import '../../models/equipment_model.dart';
-import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider;
+import 'package:firebase_auth/firebase_auth.dart' as firebase;
 
 class MarketplaceScreen extends StatefulWidget {
   const MarketplaceScreen({super.key});
@@ -154,7 +154,7 @@ class _AddEquipmentFormState extends State<_AddEquipmentForm> {
   @override
   void initState() {
     super.initState();
-    final user = FirebaseAuth.instance.currentUser;
+    final user = firebase.FirebaseAuth.instance.currentUser;
     if (user != null && user.phoneNumber != null) {
       _phone = user.phoneNumber!;
     }
@@ -166,7 +166,7 @@ class _AddEquipmentFormState extends State<_AddEquipmentForm> {
 
     setState(() => _isLoading = true);
 
-    final user = FirebaseAuth.instance.currentUser;
+    final user = firebase.FirebaseAuth.instance.currentUser;
     final data = {
       'name': _name,
       'type': _type,
