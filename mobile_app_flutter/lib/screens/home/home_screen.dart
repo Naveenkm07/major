@@ -12,6 +12,7 @@ import '../../widgets/language_toggle.dart';
 import '../../providers/weather_provider.dart';
 import '../../providers/market_provider.dart';
 import '../../providers/calendar_provider.dart';
+import '../../providers/notification_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider;
 
 class HomeScreen extends StatefulWidget {
@@ -137,13 +138,36 @@ class _DashboardPage extends StatelessWidget {
                       children: [
                         const LanguageToggle(isDarkBackground: true),
                         const SizedBox(width: 12),
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.2),
-                            shape: BoxShape.circle,
+                        GestureDetector(
+                          onTap: () => Navigator.pushNamed(context, '/notifications'),
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(color: Colors.white.withOpacity(0.2), shape: BoxShape.circle),
+                            child: Stack(
+                              children: [
+                                const Icon(Icons.notifications_none_rounded, color: Colors.white),
+                                Consumer<NotificationProvider>(
+                                  builder: (context, notif, child) {
+                                    if (notif.unreadCount > 0) {
+                                      return Positioned(
+                                        right: 0,
+                                        top: 0,
+                                        child: Container(
+                                          padding: const EdgeInsets.all(2),
+                                          decoration: const BoxDecoration(
+                                            color: Colors.red,
+                                            shape: BoxShape.circle,
+                                          ),
+                                          constraints: const BoxConstraints(minWidth: 8, minHeight: 8),
+                                        ),
+                                      );
+                                    }
+                                    return const SizedBox.shrink();
+                                  },
+                                ),
+                              ],
+                            ),
                           ),
-                          child: const Icon(Icons.notifications_none_rounded, color: Colors.white),
                         ),
                         const SizedBox(width: 12),
                         GestureDetector(

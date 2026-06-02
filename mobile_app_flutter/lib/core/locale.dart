@@ -275,6 +275,11 @@ class AppLocale extends ChangeNotifier {
       'check_deadline': 'Check Deadlines',
       'premium_calc': 'Premium Calculator',
       'file_claim': 'File Claim',
+      
+      // ─── Notifications ────────────────────────
+      'notifications': 'Notifications',
+      'mark_all_read': 'Mark all as read',
+      'no_notifications': 'No new notifications',
     },
 
     'kn': {
@@ -503,6 +508,11 @@ class AppLocale extends ChangeNotifier {
       'check_deadline': 'ಅಂತಿಮ ದಿನಾಂಕ ಪರಿಶೀಲಿಸಿ',
       'premium_calc': 'ಪ್ರೀಮಿಯಂ ಕ್ಯಾಲ್ಕುಲೇಟರ್',
       'file_claim': 'ಕ್ಲೈಮ್ ಸಲ್ಲಿಸಿ',
+      
+      // ─── Notifications ────────────────────────
+      'notifications': 'ಅಧಿಸೂಚನೆಗಳು',
+      'mark_all_read': 'ಎಲ್ಲವನ್ನೂ ಓದಲಾಗಿದೆ ಎಂದು ಗುರುತಿಸಿ',
+      'no_notifications': 'ಯಾವುದೇ ಹೊಸ ಅಧಿಸೂಚನೆಗಳಿಲ್ಲ',
     },
   };
 }
