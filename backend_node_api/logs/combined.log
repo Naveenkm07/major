@@ -197,3 +197,17 @@
 {"level":"info","message":"🕐 All cron jobs scheduled successfully","service":"krushikadhara-api","timestamp":"2026-06-02 23:53:22"}
 {"level":"info","message":"==================================================","service":"krushikadhara-api","timestamp":"2026-06-02 23:53:22"}
 {"level":"info","message":"✅ MongoDB Connected: localhost","service":"krushikadhara-api","timestamp":"2026-06-02 23:53:22"}
+{"level":"info","message":"[CRON] Starting weather data update...","service":"krushikadhara-api","timestamp":"2026-06-03 00:00:00"}
+{"level":"error","message":"[CRON] Weather fetch failed for Bangalore: Request failed with status code 401","service":"krushikadhara-api","timestamp":"2026-06-03 00:00:01"}
+{"level":"error","message":"[CRON] Weather fetch failed for Mysore: Request failed with status code 401","service":"krushikadhara-api","timestamp":"2026-06-03 00:00:01"}
+{"level":"error","message":"[CRON] Weather fetch failed for Hubli: Request failed with status code 401","service":"krushikadhara-api","timestamp":"2026-06-03 00:00:01"}
+{"level":"error","message":"[CRON] Weather fetch failed for Belgaum: Request failed with status code 401","service":"krushikadhara-api","timestamp":"2026-06-03 00:00:01"}
+{"level":"error","message":"[CRON] Weather fetch failed for Mangalore: Request failed with status code 401","service":"krushikadhara-api","timestamp":"2026-06-03 00:00:01"}
+{"level":"error","message":"[CRON] Weather fetch failed for Davangere: Request failed with status code 401","service":"krushikadhara-api","timestamp":"2026-06-03 00:00:01"}
+{"level":"error","message":"[CRON] Weather fetch failed for Bellary: Request failed with status code 401","service":"krushikadhara-api","timestamp":"2026-06-03 00:00:01"}
+{"level":"error","message":"[CRON] Weather fetch failed for Shimoga: Request failed with status code 401","service":"krushikadhara-api","timestamp":"2026-06-03 00:00:01"}
+{"level":"error","message":"[CRON] Weather fetch failed for Mandya: Request failed with status code 401","service":"krushikadhara-api","timestamp":"2026-06-03 00:00:01"}
+{"level":"error","message":"[CRON] Weather fetch failed for Hassan: Request failed with status code 401","service":"krushikadhara-api","timestamp":"2026-06-03 00:00:01"}
+{"level":"error","message":"[CRON] Weather fetch failed for Tumkur: Request failed with status code 401","service":"krushikadhara-api","timestamp":"2026-06-03 00:00:01"}
+{"level":"error","message":"[CRON] Weather fetch failed for Raichur: Request failed with status code 401","service":"krushikadhara-api","timestamp":"2026-06-03 00:00:01"}
+{"level":"info","message":"[CRON] Weather update complete: 0/12 locations, 0 alerts sent","service":"krushikadhara-api","timestamp":"2026-06-03 00:00:01"}
