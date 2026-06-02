@@ -433,20 +433,61 @@ class _DashboardPage extends StatelessWidget {
   }
 
   Widget _buildMandiPricesScroll(BuildContext context) {
+    final auth = Provider.of<AuthProvider>(context);
+    final market = Provider.of<MarketProvider>(context);
+    
+    // Get user's crops (names only)
+    final userCrops = auth.user?.farmDetails?.crops?.map((c) => c.name.toLowerCase()).toList() ?? [];
+
+    // Filter market prices to show user's crops first
+    final List<dynamic> displayPrices = [];
+    
+    if (userCrops.isNotEmpty && market.prices.isNotEmpty) {
+      for (var cropName in userCrops) {
+        final match = market.prices.firstWhere(
+          (p) => p.commodity.toLowerCase().contains(cropName),
+          orElse: () => null,
+        );
+        if (match != null) displayPrices.add(match);
+      }
+    }
+
+    // Fallback to demo/trending data if no matches found
+    if (displayPrices.isEmpty) {
+      return SizedBox(
+        height: 110,
+        child: ListView(
+          scrollDirection: Axis.horizontal,
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          children: const [
+            _MandiCard(commodity: 'Tomato', price: '₹28', trend: '▲ 4%', isUp: true),
+            SizedBox(width: 12),
+            _MandiCard(commodity: 'Ragi', price: '₹42', trend: '▲ 2%', isUp: true),
+            SizedBox(width: 12),
+            _MandiCard(commodity: 'Onion', price: '₹19', trend: '▼ 1%', isUp: false),
+          ],
+        ),
+      );
+    }
+
     return SizedBox(
       height: 110,
-      child: ListView(
+      child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        children: const [
-          _MandiCard(commodity: 'Tomato', price: '₹28', trend: '▲ 4%', isUp: true),
-          SizedBox(width: 12),
-          _MandiCard(commodity: 'Ragi', price: '₹42', trend: '▲ 2%', isUp: true),
-          SizedBox(width: 12),
-          _MandiCard(commodity: 'Onion', price: '₹19', trend: '▼ 1%', isUp: false),
-          SizedBox(width: 12),
-          _MandiCard(commodity: 'Potato', price: '₹22', trend: '▲ 1%', isUp: true),
-        ],
+        itemCount: displayPrices.length,
+        itemBuilder: (context, index) {
+          final price = displayPrices[index];
+          return Padding(
+            padding: const EdgeInsets.only(right: 12.0),
+            child: _MandiCard(
+              commodity: price.commodity,
+              price: '₹${price.modalPrice.toStringAsFixed(0)}',
+              trend: price.trend == 'rising' ? '▲ Up' : '▼ Down',
+              isUp: price.trend == 'rising',
+            ),
+          );
+        },
       ),
     );
   }
