@@ -11,6 +11,7 @@ import '../../core/locale.dart';
 import '../../providers/weather_provider.dart';
 import '../../providers/market_provider.dart';
 import '../../providers/calendar_provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -98,7 +99,7 @@ class _DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthProvider>(context);
-    final userName = auth.user?.name ?? 'Ravi Kumar';
+    final userName = FirebaseAuth.instance.currentUser?.displayName ?? auth.user?.name ?? 'Farmer';
     final location = auth.user?.location?.district ?? 'Mandya';
 
     return CustomScrollView(
