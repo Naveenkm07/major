@@ -1,78 +1,15 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
-
-class UserLocation {
-  final String? village, district, state;
-  UserLocation({this.village, this.district, this.state});
-  factory UserLocation.fromJson(Map<String, dynamic> json) => UserLocation(
-        village: json['village'],
-        district: json['district'],
-        state: json['state'],
-      );
-}
-
-class FarmDetails {
-  final double? landArea;
-  final String? soilType;
-  final String? irrigationType;
-  final List<String>? crops;
-  FarmDetails({this.landArea, this.soilType, this.irrigationType, this.crops});
-  factory FarmDetails.fromJson(Map<String, dynamic> json) {
-    // Attempt to read crops from json['crops'], fallback to 'cropTypes'
-    var rawCrops = json['crops'] ?? json['cropTypes'];
-    List<String>? cropList;
-    if (rawCrops != null && rawCrops is List) {
-      if (rawCrops.isNotEmpty && rawCrops.first is Map) {
-        cropList = rawCrops.map((e) => e['name'].toString()).toList();
-      } else {
-        cropList = rawCrops.map((e) => e.toString()).toList();
-      }
-    }
-    
-    return FarmDetails(
-      landArea: json['farmSize']?.toDouble() ?? json['landArea']?.toDouble(),
-      soilType: json['soilType'],
-      irrigationType: json['irrigationType'],
-      crops: cropList,
-    );
-  }
-}
-
-class AppUser {
-  final String id, name;
-  final String? email, phone, preferredLanguage;
-  final UserLocation? location;
-  final FarmDetails? farmDetails;
-
-  AppUser({required this.id, required this.name, this.email, this.phone, this.preferredLanguage, this.location, this.farmDetails});
-
-  factory AppUser.fromJson(Map<String, dynamic> json) {
-    return AppUser(
-      id: json['_id'] ?? '',
-      name: json['name'] ?? '',
-      email: json['email'],
-      phone: json['phoneNumber'] ?? json['phone'],
-      location: UserLocation(
-        village: json['village'] ?? json['location']?['village'],
-        district: json['district'] ?? json['location']?['district'],
-        state: json['state'] ?? json['location']?['state'],
-      ),
-      farmDetails: (json['farmDetails'] != null || json['farmSize'] != null || json['landArea'] != null)
-          ? FarmDetails.fromJson(json['farmDetails'] ?? json)
-          : null,
-      preferredLanguage: json['preferredLanguage'],
-    );
-  }
-}
+import '../models/user_model.dart';
 
 class AuthProvider extends ChangeNotifier {
   final _api = ApiService();
-  AppUser? _user;
+  UserModel? _user;
   bool _isLoading = false;
   String? _error;
   bool _isAuthenticated = false;
 
-  AppUser? get user => _user;
+  UserModel? get user => _user;
   bool get isLoading => _isLoading;
   String? get error => _error;
   bool get isAuthenticated => _isAuthenticated;
@@ -84,7 +21,7 @@ class AuthProvider extends ChangeNotifier {
     try {
       final data = await _api.login(email, password);
       if (data['success'] == true) {
-        _user = AppUser.fromJson(data['user']);
+        _user = UserModel.fromJson(data['user']);
         _isAuthenticated = true;
         _isLoading = false;
         notifyListeners();
@@ -106,7 +43,7 @@ class AuthProvider extends ChangeNotifier {
     try {
       final data = await _api.register(userData);
       if (data['success'] == true) {
-        _user = AppUser.fromJson(data['user']);
+        _user = UserModel.fromJson(data['user']);
         _isAuthenticated = true;
         _isLoading = false;
         notifyListeners();
@@ -128,7 +65,7 @@ class AuthProvider extends ChangeNotifier {
     try {
       final data = await _api.firebaseSync(phoneNumber);
       if (data['success'] == true) {
-        _user = AppUser.fromJson(data['user']);
+        _user = UserModel.fromJson(data['user']);
         _isAuthenticated = true;
         _isLoading = false;
         notifyListeners();
@@ -147,7 +84,7 @@ class AuthProvider extends ChangeNotifier {
     try {
       final data = await _api.getProfile();
       if (data['success'] == true) {
-        _user = AppUser.fromJson(data['user'] ?? data['data']);
+        _user = UserModel.fromJson(data['user'] ?? data['data']);
         _isAuthenticated = true;
       }
     } catch (_) {}
@@ -158,7 +95,7 @@ class AuthProvider extends ChangeNotifier {
     try {
       final res = await _api.put('/auth/update-profile', data);
       if (res['success'] == true) {
-        _user = AppUser.fromJson(res['data']);
+        _user = UserModel.fromJson(res['data']);
         notifyListeners();
         return true;
       }
@@ -173,5 +110,73 @@ class AuthProvider extends ChangeNotifier {
     _user = null;
     _isAuthenticated = false;
     notifyListeners();
+  }
+
+  Future<void> toggleSchemeBookmark(String schemeId) async {
+    if (_user == null) return;
+    
+    // Optimistic UI update
+    final savedSchemes = List<String>.from(_user!.savedSchemes);
+    if (savedSchemes.contains(schemeId)) {
+      savedSchemes.remove(schemeId);
+    } else {
+      savedSchemes.add(schemeId);
+    }
+    
+    // Update local user state
+    _user = UserModel(
+      id: _user!.id,
+      name: _user!.name,
+      email: _user!.email,
+      phone: _user!.phone,
+      role: _user!.role,
+      avatar: _user!.avatar,
+      location: _user!.location,
+      farmDetails: _user!.farmDetails,
+      stats: _user!.stats,
+      savedSchemes: savedSchemes,
+      savedEquipment: _user!.savedEquipment,
+    );
+    notifyListeners();
+
+    try {
+      await _api.toggleSchemeBookmark(schemeId);
+    } catch (e) {
+      debugPrint('Error toggling scheme bookmark: $e');
+    }
+  }
+
+  Future<void> toggleEquipmentBookmark(String equipmentId) async {
+    if (_user == null) return;
+    
+    // Optimistic UI update
+    final savedEquipment = List<String>.from(_user!.savedEquipment);
+    if (savedEquipment.contains(equipmentId)) {
+      savedEquipment.remove(equipmentId);
+    } else {
+      savedEquipment.add(equipmentId);
+    }
+    
+    // Update local user state
+    _user = UserModel(
+      id: _user!.id,
+      name: _user!.name,
+      email: _user!.email,
+      phone: _user!.phone,
+      role: _user!.role,
+      avatar: _user!.avatar,
+      location: _user!.location,
+      farmDetails: _user!.farmDetails,
+      stats: _user!.stats,
+      savedSchemes: _user!.savedSchemes,
+      savedEquipment: savedEquipment,
+    );
+    notifyListeners();
+
+    try {
+      await _api.toggleEquipmentBookmark(equipmentId);
+    } catch (e) {
+      debugPrint('Error toggling equipment bookmark: $e');
+    }
   }
 }

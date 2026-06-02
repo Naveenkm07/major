@@ -85,6 +85,18 @@ const farmerSchema = new mongoose.Schema(
         lastLoginAt: {
             type: Date,
         },
+        savedSchemes: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Scheme', // assuming Scheme model exists or will be referenced by ID
+            }
+        ],
+        savedEquipment: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Equipment', // assuming Equipment model exists
+            }
+        ],
     },
     {
         timestamps: true, // auto createdAt, updatedAt

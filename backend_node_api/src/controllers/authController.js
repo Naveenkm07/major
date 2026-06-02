@@ -117,7 +117,9 @@ exports.firebaseSync = asyncHandler(async (req, res, next) => {
 // @access  Private
 // ═══════════════════════════════════════════════════════
 exports.getMe = asyncHandler(async (req, res) => {
-    const farmer = await Farmer.findById(req.user.id);
+    const farmer = await Farmer.findById(req.user.id)
+        .populate('savedSchemes')
+        .populate('savedEquipment');
     
     // Fetch dynamic stats for the farmer
     const PestScan = require('../models/PestScan');
@@ -171,6 +173,52 @@ exports.updateProfile = asyncHandler(async (req, res) => {
 exports.updateFcmToken = asyncHandler(async (req, res) => {
     await Farmer.findByIdAndUpdate(req.user.id, { fcmToken: req.body.fcmToken });
     res.status(200).json({ success: true, message: 'FCM token updated' });
+});
+
+// ═══════════════════════════════════════════════════════
+// @desc    Toggle Scheme Bookmark
+// @route   POST /api/v1/auth/bookmarks/schemes/:id
+// @access  Private
+// ═══════════════════════════════════════════════════════
+exports.toggleSchemeBookmark = asyncHandler(async (req, res) => {
+    const schemeId = req.params.id;
+    const farmer = await Farmer.findById(req.user.id);
+    
+    const index = farmer.savedSchemes.indexOf(schemeId);
+    if (index === -1) {
+        farmer.savedSchemes.push(schemeId);
+    } else {
+        farmer.savedSchemes.splice(index, 1);
+    }
+    await farmer.save();
+    
+    res.status(200).json({
+        success: true,
+        data: farmer.savedSchemes
+    });
+});
+
+// ═══════════════════════════════════════════════════════
+// @desc    Toggle Equipment Bookmark
+// @route   POST /api/v1/auth/bookmarks/equipment/:id
+// @access  Private
+// ═══════════════════════════════════════════════════════
+exports.toggleEquipmentBookmark = asyncHandler(async (req, res) => {
+    const equipmentId = req.params.id;
+    const farmer = await Farmer.findById(req.user.id);
+    
+    const index = farmer.savedEquipment.indexOf(equipmentId);
+    if (index === -1) {
+        farmer.savedEquipment.push(equipmentId);
+    } else {
+        farmer.savedEquipment.splice(index, 1);
+    }
+    await farmer.save();
+    
+    res.status(200).json({
+        success: true,
+        data: farmer.savedEquipment
+    });
 });
 
 // ─── Helper: Create JWT token and send response ─────

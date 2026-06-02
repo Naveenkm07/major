@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:collection/collection.dart';
 import '../../config/theme.dart';
 import '../crop_disease/disease_detection_screen.dart';
 import '../market/market_prices_screen.dart';
@@ -444,9 +445,8 @@ class _DashboardPage extends StatelessWidget {
     
     if (userCrops.isNotEmpty && market.prices.isNotEmpty) {
       for (var cropName in userCrops) {
-        final match = market.prices.firstWhere(
+        final match = market.prices.firstWhereOrNull(
           (p) => p.commodity.toLowerCase().contains(cropName),
-          orElse: () => null,
         );
         if (match != null) displayPrices.add(match);
       }

@@ -37,3 +37,5 @@
 {"level":"error","message":"[CRON] Weather fetch failed for Hassan: Request failed with status code 401","service":"krushikadhara-api","timestamp":"2026-06-03 00:00:01"}
 {"level":"error","message":"[CRON] Weather fetch failed for Tumkur: Request failed with status code 401","service":"krushikadhara-api","timestamp":"2026-06-03 00:00:01"}
 {"level":"error","message":"[CRON] Weather fetch failed for Raichur: Request failed with status code 401","service":"krushikadhara-api","timestamp":"2026-06-03 00:00:01"}
+{"level":"error","message":"Firebase initialization failed: Failed to parse private key: Error: Too few bytes to read ASN.1 value.","service":"krushikadhara-api","timestamp":"2026-06-03 00:22:20"}
+{"level":"error","message":"Firebase initialization failed: Failed to parse private key: Error: Too few bytes to read ASN.1 value.","service":"krushikadhara-api","timestamp":"2026-06-03 00:23:08"}
