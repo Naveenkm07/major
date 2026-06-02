@@ -251,9 +251,20 @@ Respond entirely in $language language.
         };
       } else {
         // Fallback or error logging
-        print('Grok API Error: \${res.body}');
+        print('Grok API Error Code ${res.statusCode}: ${res.body}');
+        
+        // Give a more helpful message to the user if the key is missing or invalid
+        String userError = 'Sorry, the AI service encountered an error. Code: ${res.statusCode}';
+        if (res.statusCode == 401) {
+          userError = 'AI Error: Invalid API Key. Please check your Grok API key in the .env file.';
+        } else if (res.statusCode == 429) {
+          userError = 'AI Error: Rate limit exceeded or out of credits.';
+        } else if (res.statusCode == 404) {
+          userError = 'AI Error: Model not found. Grok API might have updated their model names.';
+        }
+        
         return {
-          'answer': 'Sorry, the AI service encountered an error. Code: \${res.statusCode}',
+          'answer': userError,
           'suggestions': [],
         };
       }
