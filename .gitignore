@@ -9,9 +9,23 @@ debug_output.txt
 __pycache__/
 *.pyc
 
+# Temp/debug files
+debug_ppt.py
+read_ppt.py
+ppt_content.txt
+debug_output.txt
+*.md.resolved
+
+# Python
+__pycache__/
+*.pyc
+
 # Generator scripts (keep locally, not in repo)
 generate_paper.py
 generate_ppt.py
 
 # Template file
 Team No---.pptx
+node_modules/
+venv/
+.env
