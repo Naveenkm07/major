@@ -117,6 +117,38 @@ class _CommunityScreenState extends State<CommunityScreen> {
                       comments: '12',
                       hasTractorIcon: true,
                     ),
+                    const SizedBox(height: 16),
+                    _buildPostCard(
+                      initials: 'MK',
+                      avatarColor: Colors.teal,
+                      name: 'Manjunath K.',
+                      time: 'Mysuru • 8h ago',
+                      content: 'Has anyone seen the new Mandi prices for onions today? Wondering if I should hold off on selling this week.',
+                      likes: '15',
+                      comments: '4',
+                    ),
+                    const SizedBox(height: 16),
+                    _buildPostCard(
+                      initials: 'RG',
+                      avatarColor: Colors.brown,
+                      name: 'Ramesh Gowda',
+                      time: 'Chitradurga • 1d ago',
+                      content: 'My sugarcane yield increased by 20% after switching to the new drip irrigation method. Highly recommend it to everyone facing water scarcity.',
+                      likes: '210',
+                      comments: '45',
+                    ),
+                    const SizedBox(height: 16),
+                    _buildPostCard(
+                      initials: 'AS',
+                      avatarColor: Colors.indigo,
+                      name: 'Anil Sharma',
+                      time: 'Tumkur • 1d ago',
+                      content: 'Looking to rent a rotavator for 2 days. Please let me know if anyone nearby has one available.',
+                      likes: '8',
+                      comments: '3',
+                      hasTractorIcon: true,
+                    ),
+                    const SizedBox(height: 90), // extra padding at bottom
                   ],
                 ),
               ),
@@ -125,7 +157,7 @@ class _CommunityScreenState extends State<CommunityScreen> {
           
           // ─── Floating Button ─────────────────
           Positioned(
-            bottom: 24,
+            bottom: 100, // moved up further to avoid overlapping with scaffold FAB
             right: 24,
             child: ElevatedButton.icon(
               onPressed: () {},
