@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import '../../config/theme.dart';
+import '../../services/location_service.dart';
+import '../../providers/auth_provider.dart';
 
 class OtpScreen extends StatefulWidget {
   const OtpScreen({super.key});
@@ -40,7 +43,15 @@ class _OtpScreenState extends State<OtpScreen> {
         if (user != null && (user.displayName == null || user.displayName!.isEmpty)) {
           Navigator.pushNamedAndRemoveUntil(context, '/setup-profile', (route) => false, arguments: isEnglish);
         } else {
-          Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+          // Fetch location immediately upon login for returning users
+          final loc = await LocationService.getCurrentLocation();
+          if (loc != null && mounted) {
+            final auth = Provider.of<AuthProvider>(context, listen: false);
+            await auth.updateProfile(loc);
+          }
+          if (mounted) {
+            Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+          }
         }
       }
     } on FirebaseAuthException catch (e) {

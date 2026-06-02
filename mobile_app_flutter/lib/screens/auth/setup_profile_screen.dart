@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import '../../config/theme.dart';
+import '../../services/location_service.dart';
+import '../../providers/auth_provider.dart';
 
 class SetupProfileScreen extends StatefulWidget {
   const SetupProfileScreen({super.key});
@@ -20,6 +23,14 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
     setState(() => _isLoading = true);
     try {
       await FirebaseAuth.instance.currentUser?.updateDisplayName(_nameCtrl.text.trim());
+      
+      // Fetch location immediately upon registration
+      final loc = await LocationService.getCurrentLocation();
+      if (loc != null && mounted) {
+        final auth = Provider.of<AuthProvider>(context, listen: false);
+        await auth.updateProfile(loc);
+      }
+
       if (mounted) {
         Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
       }
