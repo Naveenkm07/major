@@ -1,26 +1,37 @@
 /// Voice assistant service wrapping speech_to_text and flutter_tts.
 /// Supports Kannada (kn-IN), Hindi (hi-IN), and English (en-IN).
 import 'package:flutter/material.dart';
+import 'package:speech_to_text/speech_to_text.dart';
+import 'package:flutter_tts/flutter_tts.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class VoiceAssistantService extends ChangeNotifier {
-  // ─── STT State ────────────────────────────────────
+  final SpeechToText _speechToText = SpeechToText();
+  final FlutterTts _flutterTts = FlutterTts();
+
   bool _isListening = false;
   bool get isListening => _isListening;
 
   String _recognizedText = '';
   String get recognizedText => _recognizedText;
 
-  double _confidence = 0.0;
-  double get confidence => _confidence;
-
-  // ─── TTS State ────────────────────────────────────
   bool _isSpeaking = false;
   bool get isSpeaking => _isSpeaking;
 
-  String _currentLocale = 'kn-IN'; // Default Kannada
+  String _currentLocale = 'en-IN';
   String get currentLocale => _currentLocale;
 
-  // ─── Set language for STT + TTS ────────────────────
+  VoiceAssistantService() {
+    _initTts();
+  }
+
+  void _initTts() {
+    _flutterTts.setCompletionHandler(() {
+      _isSpeaking = false;
+      notifyListeners();
+    });
+  }
+
   void setLanguage(String langCode) {
     switch (langCode) {
       case 'kn':
@@ -35,46 +46,39 @@ class VoiceAssistantService extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Start listening for speech.
-  /// Returns the recognized text when done.
   Future<String?> startListening() async {
     try {
-      // Import speech_to_text dynamically
-      final stt = await _getSpeechToText();
-      if (stt == null) {
-        _recognizedText = 'Speech recognition not available on this device.';
+      var status = await Permission.microphone.request();
+      if (status != PermissionStatus.granted) {
+        _recognizedText = 'Microphone permission denied';
+        notifyListeners();
+        return null;
+      }
+
+      bool available = await _speechToText.initialize();
+      if (!available) {
+        _recognizedText = 'Speech recognition not available.';
         notifyListeners();
         return null;
       }
 
       _isListening = true;
       _recognizedText = '';
-      _confidence = 0.0;
       notifyListeners();
 
-      // Simulated STT for development
-      // In production, replace with actual speech_to_text plugin call:
-      //
-      // bool available = await stt.initialize(
-      //   onStatus: (status) => _handleStatus(status),
-      //   onError: (error) => _handleError(error),
-      // );
-      //
-      // if (available) {
-      //   await stt.listen(
-      //     onResult: (result) {
-      //       _recognizedText = result.recognizedWords;
-      //       _confidence = result.confidence;
-      //       notifyListeners();
-      //     },
-      //     localeId: _currentLocale,
-      //     listenFor: const Duration(seconds: 30),
-      //     pauseFor: const Duration(seconds: 3),
-      //   );
-      // }
+      await _speechToText.listen(
+        onResult: (result) {
+          _recognizedText = result.recognizedWords;
+          notifyListeners();
+        },
+        localeId: _currentLocale,
+      );
 
-      // Development placeholder - simulates a delay
-      await Future.delayed(const Duration(seconds: 2));
+      // Wait until listening stops automatically (or manually)
+      while (_isListening && _speechToText.isListening) {
+        await Future.delayed(const Duration(milliseconds: 500));
+      }
+
       _isListening = false;
       notifyListeners();
 
@@ -87,14 +91,12 @@ class VoiceAssistantService extends ChangeNotifier {
     }
   }
 
-  /// Stop listening
   Future<void> stopListening() async {
+    await _speechToText.stop();
     _isListening = false;
     notifyListeners();
-    // In production: await stt.stop();
   }
 
-  /// Speak the response using TTS
   Future<void> speak(String text) async {
     if (text.isEmpty) return;
 
@@ -102,40 +104,20 @@ class VoiceAssistantService extends ChangeNotifier {
       _isSpeaking = true;
       notifyListeners();
 
-      // In production, use flutter_tts:
-      //
-      // final tts = FlutterTts();
-      // await tts.setLanguage(_currentLocale);
-      // await tts.setSpeechRate(0.45); // Slower for farmers
-      // await tts.setVolume(1.0);
-      // await tts.setPitch(1.0);
-      // await tts.speak(text);
-      //
-      // tts.setCompletionHandler(() {
-      //   _isSpeaking = false;
-      //   notifyListeners();
-      // });
-
-      // Development placeholder
-      await Future.delayed(Duration(milliseconds: text.length * 50));
-      _isSpeaking = false;
-      notifyListeners();
+      await _flutterTts.setLanguage(_currentLocale);
+      await _flutterTts.setSpeechRate(0.5);
+      await _flutterTts.setVolume(1.0);
+      await _flutterTts.setPitch(1.0);
+      await _flutterTts.speak(text);
     } catch (e) {
       _isSpeaking = false;
       notifyListeners();
     }
   }
 
-  /// Stop speaking
   Future<void> stopSpeaking() async {
+    await _flutterTts.stop();
     _isSpeaking = false;
     notifyListeners();
-    // In production: await tts.stop();
-  }
-
-  /// Check if STT is available (placeholder)
-  Future<dynamic> _getSpeechToText() async {
-    // In production: return SpeechToText();
-    return Object(); // Placeholder
   }
 }

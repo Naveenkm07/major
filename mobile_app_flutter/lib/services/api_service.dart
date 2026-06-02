@@ -205,29 +205,59 @@ class ApiService {
   }
 
   // ═══════════════════════════════════════════════════
-  // AI Service: Chatbot (Python FastAPI)
+  // AI Service: Chatbot (Grok API Integration)
   // ═══════════════════════════════════════════════════
 
-  /// Sends a question to POST /api/v1/chat on the AI service.
-  /// Returns JSON with answer, intent, suggestions.
+  /// Sends a question to Grok AI.
+  /// IMPORTANT: Replace 'YOUR_GROK_API_KEY' with your actual free API key from console.x.ai
   Future<Map<String, dynamic>> sendChatMessage(
     String question, {
     String language = 'en',
     Map<String, dynamic>? context,
   }) async {
-    final token = await _getToken();
-    final res = await http.post(
-      Uri.parse('${AppConstants.aiServiceUrl}/chat'),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
-      body: jsonEncode({
-        'question': question,
-        'language': language,
-        if (context != null) 'context': context,
-      }),
-    ).timeout(const Duration(seconds: 15));
-    return jsonDecode(res.body);
+    const String grokApiKey = 'YOUR_GROK_API_KEY_HERE';
+    final uri = Uri.parse('https://api.x.ai/v1/chat/completions');
+
+    final systemPrompt = '''
+You are KrushikaDhara, a helpful farming AI assistant in India.
+Keep your answers concise, practical, and formatted in 2-3 short sentences.
+Respond entirely in $language language.
+''';
+
+    try {
+      final res = await http.post(
+        uri,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $grokApiKey',
+        },
+        body: jsonEncode({
+          'model': 'grok-beta',
+          'messages': [
+            {'role': 'system', 'content': systemPrompt},
+            {'role': 'user', 'content': question}
+          ],
+          'temperature': 0.3,
+        }),
+      ).timeout(const Duration(seconds: 20));
+
+      if (res.statusCode == 200) {
+        final json = jsonDecode(res.body);
+        return {
+          'answer': json['choices'][0]['message']['content'],
+          'suggestions': [],
+        };
+      } else {
+        // Fallback or error logging
+        print('Grok API Error: \${res.body}');
+        return {
+          'answer': 'Sorry, the AI service encountered an error. Code: \${res.statusCode}',
+          'suggestions': [],
+        };
+      }
+    } catch (e) {
+      print('Grok API Exception: $e');
+      throw Exception('Failed to connect to AI');
+    }
   }
 }
