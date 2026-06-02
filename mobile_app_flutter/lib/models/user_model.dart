@@ -96,22 +96,48 @@ class LocationModel {
   }
 }
 
+class CropEntryModel {
+  final String name;
+  final DateTime? sowingDate;
+
+  CropEntryModel({required this.name, this.sowingDate});
+
+  factory CropEntryModel.fromJson(dynamic json) {
+    if (json is String) {
+      return CropEntryModel(name: json);
+    }
+    return CropEntryModel(
+      name: json['name'] ?? '',
+      sowingDate: json['sowingDate'] != null ? DateTime.parse(json['sowingDate']) : null,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+    'name': name,
+    'sowingDate': sowingDate?.toIso8601String(),
+  };
+}
+
 class FarmDetailsModel {
   final double? landArea;
   final String? soilType;
   final String? irrigationType;
-  final List<String>? crops;
+  final List<CropEntryModel>? crops;
 
   FarmDetailsModel({this.landArea, this.soilType, this.irrigationType, this.crops});
 
   factory FarmDetailsModel.fromJson(Map<String, dynamic> json) {
+    var rawCrops = json['cropTypes'] ?? json['crops'];
+    List<CropEntryModel>? cropList;
+    if (rawCrops != null && rawCrops is List) {
+      cropList = rawCrops.map((e) => CropEntryModel.fromJson(e)).toList();
+    }
+
     return FarmDetailsModel(
       landArea: json['farmSize']?.toDouble() ?? json['landArea']?.toDouble(),
       soilType: json['soilType'],
       irrigationType: json['irrigationType'],
-      crops: json['cropTypes'] != null 
-          ? List<String>.from(json['cropTypes']) 
-          : (json['crops'] != null ? List<String>.from(json['crops']) : null),
+      crops: cropList,
     );
   }
 }
