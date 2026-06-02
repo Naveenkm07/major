@@ -11,7 +11,7 @@ import '../../core/locale.dart';
 import '../../providers/weather_provider.dart';
 import '../../providers/market_provider.dart';
 import '../../providers/calendar_provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
