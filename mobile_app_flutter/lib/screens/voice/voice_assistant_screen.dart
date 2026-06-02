@@ -97,7 +97,6 @@ class _VoiceAssistantScreenState extends State<VoiceAssistantScreen>
             },
             itemBuilder: (_) => [
               const PopupMenuItem(value: 'kn', child: Text('ಕನ್ನಡ')),
-              const PopupMenuItem(value: 'hi', child: Text('हिंदी')),
               const PopupMenuItem(value: 'en', child: Text('English')),
             ],
           ),
