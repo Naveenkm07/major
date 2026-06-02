@@ -33,6 +33,7 @@ import 'screens/voice/voice_assistant_screen.dart';
 import 'screens/profile/profile_screen.dart';
 import 'screens/marketplace/marketplace_screen.dart';
 import 'screens/insurance/insurance_screen.dart';
+import 'screens/profile/help_support_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -92,6 +93,7 @@ class KrushikaDharaApp extends StatelessWidget {
           '/profile': (_) => const ProfileScreen(),
           '/equipment-rental': (_) => const MarketplaceScreen(),
           '/insurance': (_) => const InsuranceScreen(),
+          '/help-support': (_) => const HelpSupportScreen(),
         },
       ),
     );
