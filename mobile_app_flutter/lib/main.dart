@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'config/theme.dart';
 import 'core/locale.dart';
@@ -94,6 +95,30 @@ class KrushikaDharaApp extends StatelessWidget {
         title: 'KrushikaDhara',
         debugShowCheckedModeBanner: false,
         theme: AppTheme.lightTheme,
+        builder: (context, child) {
+          if (kIsWeb) {
+            return Container(
+              color: const Color(0xFFF0F2F5), // Light background for desktop
+              child: Center(
+                child: Container(
+                  constraints: const BoxConstraints(maxWidth: 450), // Mobile width constraint
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 30,
+                        spreadRadius: 5,
+                      )
+                    ],
+                  ),
+                  child: child!,
+                ),
+              ),
+            );
+          }
+          return child!;
+        },
         initialRoute: '/',
         routes: {
           '/': (_) => const SplashScreen(),

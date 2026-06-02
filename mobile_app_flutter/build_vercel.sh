@@ -12,5 +12,8 @@ flutter config --enable-web
 echo "Getting dependencies..."
 flutter pub get
 
+echo "Generating .env file from Vercel Environment Variables..."
+echo "GROK_API_KEY=$GROK_API_KEY" > .env
+
 echo "Building Flutter Web..."
 flutter build web --release
