@@ -7,6 +7,7 @@ class UserModel {
   final String? avatar;
   final LocationModel? location;
   final FarmDetailsModel? farmDetails;
+  final UserStatsModel? stats;
 
   UserModel({
     required this.id,
@@ -17,6 +18,7 @@ class UserModel {
     this.avatar,
     this.location,
     this.farmDetails,
+    this.stats,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -37,11 +39,8 @@ class UserModel {
     FarmDetailsModel? farmDetails;
     if (json['farmDetails'] != null) {
       farmDetails = FarmDetailsModel.fromJson(json['farmDetails']);
-    } else if (json['cropTypes'] != null || json['farmSize'] != null) {
-      farmDetails = FarmDetailsModel(
-        landArea: json['farmSize']?.toDouble(),
-        crops: json['cropTypes'] != null ? List<String>.from(json['cropTypes']) : null,
-      );
+    } else if (json['cropTypes'] != null || json['farmSize'] != null || json['soilType'] != null || json['irrigationType'] != null) {
+      farmDetails = FarmDetailsModel.fromJson(json);
     }
 
     return UserModel(
@@ -53,6 +52,30 @@ class UserModel {
       avatar: json['avatar'],
       location: location,
       farmDetails: farmDetails,
+      stats: json['stats'] != null ? UserStatsModel.fromJson(json['stats']) : null,
+    );
+  }
+}
+
+class UserStatsModel {
+  final int diseaseScans;
+  final int communityPosts;
+  final int marketAlerts;
+  final int schemesApplied;
+
+  UserStatsModel({
+    required this.diseaseScans,
+    required this.communityPosts,
+    required this.marketAlerts,
+    required this.schemesApplied,
+  });
+
+  factory UserStatsModel.fromJson(Map<String, dynamic> json) {
+    return UserStatsModel(
+      diseaseScans: json['diseaseScans'] ?? 0,
+      communityPosts: json['communityPosts'] ?? 0,
+      marketAlerts: json['marketAlerts'] ?? 0,
+      schemesApplied: json['schemesApplied'] ?? 0,
     );
   }
 }
@@ -83,10 +106,12 @@ class FarmDetailsModel {
 
   factory FarmDetailsModel.fromJson(Map<String, dynamic> json) {
     return FarmDetailsModel(
-      landArea: json['landArea']?.toDouble(),
+      landArea: json['farmSize']?.toDouble() ?? json['landArea']?.toDouble(),
       soilType: json['soilType'],
       irrigationType: json['irrigationType'],
-      crops: json['crops'] != null ? List<String>.from(json['crops']) : null,
+      crops: json['cropTypes'] != null 
+          ? List<String>.from(json['cropTypes']) 
+          : (json['crops'] != null ? List<String>.from(json['crops']) : null),
     );
   }
 }

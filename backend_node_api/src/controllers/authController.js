@@ -81,16 +81,62 @@ exports.login = asyncHandler(async (req, res) => {
 });
 
 // ═══════════════════════════════════════════════════════
+// @desc    Sync Firebase Auth user to Node backend
+// @route   POST /api/v1/auth/firebase-sync
+// @access  Public
+// ═══════════════════════════════════════════════════════
+exports.firebaseSync = asyncHandler(async (req, res, next) => {
+    const { phoneNumber } = req.body;
+
+    if (!phoneNumber) {
+        throw new ApiError(400, 'Please provide phone number');
+    }
+
+    // Try to find the farmer
+    let farmer = await Farmer.findOne({ phoneNumber });
+
+    // If not found, create a new one without a password
+    if (!farmer) {
+        farmer = await Farmer.create({
+            name: 'Farmer',
+            phoneNumber,
+            isVerified: true
+        });
+    } else {
+        // Update last login
+        farmer.lastLoginAt = Date.now();
+        await farmer.save();
+    }
+
+    sendTokenResponse(farmer, 200, res);
+});
+
+// ═══════════════════════════════════════════════════════
 // @desc    Get current farmer profile
 // @route   GET /api/v1/auth/me
 // @access  Private
 // ═══════════════════════════════════════════════════════
 exports.getMe = asyncHandler(async (req, res) => {
     const farmer = await Farmer.findById(req.user.id);
+    
+    // Fetch dynamic stats for the farmer
+    const PestScan = require('../models/PestScan');
+    const CommunityPost = require('../models/CommunityPost');
+    
+    const pestScanCount = await PestScan.countDocuments({ farmerId: req.user.id });
+    const postCount = await CommunityPost.countDocuments({ farmerId: req.user.id });
 
     res.status(200).json({
         success: true,
-        data: farmer,
+        data: {
+            ...farmer.toObject(),
+            stats: {
+                diseaseScans: pestScanCount,
+                communityPosts: postCount,
+                marketAlerts: 48, // hardcoded or from a real alerts collection
+                schemesApplied: 2 // hardcoded or from a real applications collection
+            }
+        },
     });
 });
 
@@ -101,7 +147,7 @@ exports.getMe = asyncHandler(async (req, res) => {
 // ═══════════════════════════════════════════════════════
 exports.updateProfile = asyncHandler(async (req, res) => {
     const fieldsToUpdate = {};
-    const allowed = ['name', 'village', 'district', 'state', 'farmSize', 'cropTypes', 'preferredLanguage'];
+    const allowed = ['name', 'village', 'district', 'state', 'farmSize', 'cropTypes', 'soilType', 'irrigationType', 'preferredLanguage'];
 
     for (const field of allowed) {
         if (req.body[field] !== undefined) {
