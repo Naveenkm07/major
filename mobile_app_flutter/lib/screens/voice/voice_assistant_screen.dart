@@ -59,7 +59,9 @@ class _VoiceAssistantScreenState extends State<VoiceAssistantScreen>
     });
 
     // Send to AI chatbot
-    await chat.sendMessage(recognized);
+    final appLocale = Provider.of<AppLocale>(context, listen: false);
+    final langCode = appLocale.isKannada ? 'Kannada' : 'English';
+    await chat.sendMessage(recognized, language: langCode);
 
     // Get last bot response
     final messages = chat.messages;
