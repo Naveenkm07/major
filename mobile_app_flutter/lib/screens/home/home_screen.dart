@@ -130,7 +130,7 @@ class _DashboardPage extends StatelessWidget {
                       children: [
                         Text(AppLocale.t(context, 'namaskara'), style: const TextStyle(color: Colors.white70, fontSize: 16)),
                         const SizedBox(height: 4),
-                        Text(userName, style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
+                        Text(AppLocale.t(context, userName), style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
                       ],
                     ),
                     Row(
@@ -251,7 +251,7 @@ class _DashboardPage extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('$location • ${AppLocale.t(context, 'refresh')}', style: const TextStyle(color: Colors.grey, fontSize: 13)),
+                  Text('${AppLocale.t(context, location)} • ${AppLocale.t(context, 'refresh')}', style: const TextStyle(color: Colors.grey, fontSize: 13)),
                   const SizedBox(height: 8),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
