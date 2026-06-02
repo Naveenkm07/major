@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../../config/theme.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -12,11 +13,52 @@ class _LoginScreenState extends State<LoginScreen> {
   final _phoneCtrl = TextEditingController();
   bool _isEnglish = true; // For the UI toggle
   bool _agreedToTerms = false; // Checkbox state
+  bool _isLoading = false;
 
-  void _getOtp() {
-    if (!_agreedToTerms) return;
-    // For demo purposes, immediately navigate to home to show off the UI flow
-    Navigator.pushReplacementNamed(context, '/home');
+  Future<void> _getOtp() async {
+    if (!_agreedToTerms || _phoneCtrl.text.isEmpty) return;
+
+    setState(() => _isLoading = true);
+
+    String phoneNumber = '+91${_phoneCtrl.text.trim()}';
+
+    try {
+      await FirebaseAuth.instance.verifyPhoneNumber(
+        phoneNumber: phoneNumber,
+        verificationCompleted: (PhoneAuthCredential credential) async {
+          await FirebaseAuth.instance.signInWithCredential(credential);
+          if (mounted) {
+            Navigator.pushReplacementNamed(context, '/home');
+          }
+        },
+        verificationFailed: (FirebaseAuthException e) {
+          if (mounted) {
+            setState(() => _isLoading = false);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(e.message ?? 'Verification failed')),
+            );
+          }
+        },
+        codeSent: (String verificationId, int? resendToken) {
+          if (mounted) {
+            setState(() => _isLoading = false);
+            Navigator.pushNamed(
+              context,
+              '/otp',
+              arguments: verificationId,
+            );
+          }
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {},
+      );
+    } catch (e) {
+      if (mounted) {
+        setState(() => _isLoading = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.toString())),
+        );
+      }
+    }
   }
 
   @override
@@ -194,19 +236,21 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(height: 16),
                       
                       // Get OTP Button
-                      ElevatedButton(
-                        onPressed: _agreedToTerms ? _getOtp : null,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: _agreedToTerms ? AppTheme.primaryGreen : Colors.grey.shade400,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(vertical: 20),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                          elevation: 0,
-                          disabledBackgroundColor: Colors.grey.shade300,
-                          disabledForegroundColor: Colors.grey.shade500,
-                        ),
-                        child: const Text('Get OTP', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                      ),
+                      _isLoading
+                          ? const Center(child: CircularProgressIndicator(color: AppTheme.primaryGreen))
+                          : ElevatedButton(
+                              onPressed: _agreedToTerms ? _getOtp : null,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: _agreedToTerms ? AppTheme.primaryGreen : Colors.grey.shade400,
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(vertical: 20),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                                elevation: 0,
+                                disabledBackgroundColor: Colors.grey.shade300,
+                                disabledForegroundColor: Colors.grey.shade500,
+                              ),
+                              child: const Text('Get OTP', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                            ),
                     ],
                   ),
                 ),

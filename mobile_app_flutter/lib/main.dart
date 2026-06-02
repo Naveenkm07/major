@@ -20,6 +20,7 @@ import 'providers/calendar_provider.dart';
 import 'screens/splash_screen.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/auth/register_screen.dart';
+import 'screens/auth/otp_screen.dart';
 import 'screens/home/home_screen.dart';
 import 'screens/crop_disease/disease_detection_screen.dart';
 import 'screens/market/market_prices_screen.dart';
@@ -35,8 +36,16 @@ import 'screens/marketplace/marketplace_screen.dart';
 import 'screens/insurance/insurance_screen.dart';
 import 'screens/profile/help_support_screen.dart';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Initialize Firebase
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   
   // Initialize offline storage
   await HiveStorageService.init();
@@ -81,6 +90,7 @@ class KrushikaDharaApp extends StatelessWidget {
           '/': (_) => const SplashScreen(),
           '/login': (_) => const LoginScreen(),
           '/register': (_) => const RegisterScreen(),
+          '/otp': (_) => const OtpScreen(),
           '/home': (_) => const HomeScreen(),
           '/disease-detection': (_) => const DiseaseDetectionScreen(),
           '/market-prices': (_) => const MarketPricesScreen(),

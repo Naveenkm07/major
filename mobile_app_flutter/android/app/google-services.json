@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "579437156136",
+    "project_id": "krushikadhara07",
+    "storage_bucket": "krushikadhara07.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:579437156136:android:cf8ba6634169e2becea21d",
+        "android_client_info": {
+          "package_name": "com.example.krushikadhara"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSJWwvQcPAO0aZUDpjq6EprYYlVdqEu0U"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
