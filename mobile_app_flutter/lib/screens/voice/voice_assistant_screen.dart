@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../config/theme.dart';
 import '../../providers/chat_provider.dart';
+import '../../providers/auth_provider.dart';
 import '../../services/voice_assistant_service.dart';
 import '../../core/locale.dart';
 
@@ -92,7 +93,19 @@ class _VoiceAssistantScreenState extends State<VoiceAssistantScreen>
 
     final appLocale = Provider.of<AppLocale>(context, listen: false);
     final langCode = appLocale.isKannada ? 'Kannada' : 'English';
-    await chat.sendMessage(text, language: langCode);
+    
+    // Build context from Farm Details
+    final auth = Provider.of<AuthProvider>(context, listen: false);
+    final farmDetails = auth.user?.farmDetails;
+    final chatContext = <String, dynamic>{};
+    if (farmDetails != null) {
+      if (farmDetails.landArea != null) chatContext['Farm Size'] = farmDetails.landArea;
+      if (farmDetails.soilType != null) chatContext['Soil Type'] = farmDetails.soilType;
+      if (farmDetails.irrigationType != null) chatContext['Irrigation Method'] = farmDetails.irrigationType;
+      if (farmDetails.crops != null && farmDetails.crops!.isNotEmpty) chatContext['Crops'] = farmDetails.crops!.join(', ');
+    }
+
+    await chat.sendMessage(text, language: langCode, context: chatContext);
 
     final messages = chat.messages;
     final botResponse = messages.isNotEmpty && !messages.last.isUser

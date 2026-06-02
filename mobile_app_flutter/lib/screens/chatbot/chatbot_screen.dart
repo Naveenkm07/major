@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/chat_provider.dart';
+import '../../providers/auth_provider.dart';
 import '../../config/theme.dart';
 
 class ChatbotScreen extends StatefulWidget {
@@ -14,11 +15,25 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
   final _scrollController = ScrollController();
   bool _isListening = false;
 
+  void _sendMessage(String text) {
+    final auth = Provider.of<AuthProvider>(context, listen: false);
+    final farmDetails = auth.user?.farmDetails;
+    final chatContext = <String, dynamic>{};
+    if (farmDetails != null) {
+      if (farmDetails.landArea != null) chatContext['Farm Size'] = farmDetails.landArea;
+      if (farmDetails.soilType != null) chatContext['Soil Type'] = farmDetails.soilType;
+      if (farmDetails.irrigationType != null) chatContext['Irrigation Method'] = farmDetails.irrigationType;
+      if (farmDetails.crops != null && farmDetails.crops!.isNotEmpty) chatContext['Crops'] = farmDetails.crops!.join(', ');
+    }
+    
+    Provider.of<ChatProvider>(context, listen: false).sendMessage(text, context: chatContext);
+  }
+
   void _toggleListening() {
     setState(() => _isListening = !_isListening);
     if (!_isListening) {
       // Simulate sending a voice message when they stop "listening"
-      Provider.of<ChatProvider>(context, listen: false).sendMessage("ನನ್ನ ಟೊಮ್ಯಾಟೋ ಎಲೆಗಳಲ್ಲಿ ಹಳದಿ ಚುಕ್ಕೆಗಳಿವೆ.");
+      _sendMessage("ನನ್ನ ಟೊಮ್ಯಾಟೋ ಎಲೆಗಳಲ್ಲಿ ಹಳದಿ ಚುಕ್ಕೆಗಳಿವೆ.");
       Future.delayed(const Duration(milliseconds: 150), _scrollToBottom);
     }
   }
@@ -148,7 +163,7 @@ class _ChatbotScreenState extends State<ChatbotScreen> {
                     child: ActionChip(
                       label: Text(s, style: const TextStyle(fontSize: 14)),
                       backgroundColor: Colors.grey.shade200,
-                      onPressed: () => Provider.of<ChatProvider>(context, listen: false).sendMessage(s),
+                      onPressed: () => _sendMessage(s),
                     ),
                   )).toList(),
                 ),

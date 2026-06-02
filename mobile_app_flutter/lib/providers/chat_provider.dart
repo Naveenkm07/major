@@ -22,7 +22,7 @@ class ChatProvider extends ChangeNotifier {
   List<String> get suggestions => _suggestions;
   bool get isLoading => _isLoading;
 
-  Future<void> sendMessage(String question, {String language = 'en'}) async {
+  Future<void> sendMessage(String question, {String language = 'en', Map<String, dynamic>? context}) async {
     // Add user message
     _messages.add(ChatMessage(content: question, isUser: true));
     _isLoading = true;
@@ -36,7 +36,7 @@ class ChatProvider extends ChangeNotifier {
         _messages.add(ChatMessage(content: 'ಇದು Early Blight ಆಗಿರಬಹುದು. Mancozeb 2g/L ಸಿಂಪಡಿಸಿ. Camera ಬಳಸಿ Scan ಮಾಡಿ?', isUser: false));
         _suggestions = ['ಹೌದು, ತೋರಿಸಿ 🌿'];
       } else {
-        final data = await _api.sendChatMessage(question, language: language);
+        final data = await _api.sendChatMessage(question, language: language, context: context);
         final answer = data['answer'] ?? 'Sorry, I could not understand your question.';
 
         _messages.add(ChatMessage(content: answer, isUser: false));
