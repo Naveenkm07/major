@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:supabase_flutter/supabase_flutter.dart' hide AuthProvider, GoogleSignIn;
-import 'package:google_sign_in/google_sign_in.dart' as g_sign;
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import '../services/api_service.dart';
 import '../models/user_model.dart';
 
@@ -101,14 +101,19 @@ class AuthProvider extends ChangeNotifier {
     try {
       if (kIsWeb) {
         await Supabase.instance.client.auth.signInWithOAuth(
-          provider: OAuthProvider.google,
+          OAuthProvider.google,
         );
         // For web, the browser will redirect to Google's sign-in page.
         // We just return true as the flow continues on the new page.
         return true;
       } else {
-        final googleSignIn = g_sign.GoogleSignIn();
-        final googleUser = await googleSignIn.signIn();
+        const webClientId = '579437156136-o5f2pcerepk40c3q2lcst8tn9fm0e260.apps.googleusercontent.com';
+        
+        final googleSignIn = GoogleSignIn.instance;
+        await googleSignIn.initialize(
+          serverClientId: webClientId,
+        );
+        final googleUser = await googleSignIn.authenticate();
         
         if (googleUser == null) {
           _isLoading = false;
@@ -117,10 +122,9 @@ class AuthProvider extends ChangeNotifier {
         }
 
         final googleAuth = await googleUser.authentication;
-        final accessToken = googleAuth.accessToken;
         final idToken = googleAuth.idToken;
 
-        if (accessToken == null || idToken == null) {
+        if (idToken == null) {
           _error = 'Google Auth Failed: Missing tokens';
           _isLoading = false;
           notifyListeners();
@@ -130,7 +134,6 @@ class AuthProvider extends ChangeNotifier {
         final AuthResponse response = await Supabase.instance.client.auth.signInWithIdToken(
           provider: OAuthProvider.google,
           idToken: idToken,
-          accessToken: accessToken,
         );
 
         if (response.user != null) {
