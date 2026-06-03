@@ -41,7 +41,7 @@ class ApiService {
 
   Future<Map<String, dynamic>> get(String path, {Map<String, String>? query}) async {
     final uri = Uri.parse('${AppConstants.backendBaseUrl}$path').replace(queryParameters: query);
-    final res = await http.get(uri, headers: await _authHeaders()).timeout(const Duration(seconds: 30));
+    final res = await http.get(uri, headers: await _authHeaders()).timeout(const Duration(seconds: 60));
     return jsonDecode(res.body);
   }
 
@@ -50,7 +50,7 @@ class ApiService {
       Uri.parse('${AppConstants.backendBaseUrl}$path'),
       headers: await _authHeaders(),
       body: jsonEncode(body),
-    ).timeout(const Duration(seconds: 30));
+    ).timeout(const Duration(seconds: 60));
     return jsonDecode(res.body);
   }
 
@@ -59,7 +59,7 @@ class ApiService {
       Uri.parse('${AppConstants.backendBaseUrl}$path'),
       headers: await _authHeaders(),
       body: jsonEncode(body),
-    ).timeout(const Duration(seconds: 30));
+    ).timeout(const Duration(seconds: 60));
     return jsonDecode(res.body);
   }
 
