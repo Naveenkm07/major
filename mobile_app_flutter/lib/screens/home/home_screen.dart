@@ -8,6 +8,7 @@ import '../community/community_screen.dart';
 import '../chatbot/chatbot_screen.dart';
 import '../profile/profile_screen.dart';
 import '../../services/location_service.dart';
+import '../../services/api_service.dart';
 import '../../providers/auth_provider.dart';
 import '../../core/locale.dart';
 import '../../widgets/language_toggle.dart';
@@ -52,11 +53,20 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  final _pages = const [
-    _DashboardPage(),
-    DiseaseDetectionScreen(),
-    MarketPricesScreen(),
-    ProfileScreen(),
+  List<Widget> get _pages => [
+    _DashboardPage(
+      completedTips: _completedTips,
+      onToggleTip: (tip) => setState(() {
+        if (_completedTips.contains(tip)) {
+          _completedTips.remove(tip);
+        } else {
+          _completedTips.add(tip);
+        }
+      }),
+    ),
+    const DiseaseDetectionScreen(),
+    const MarketPricesScreen(),
+    const ProfileScreen(),
   ];
 
   @override
@@ -100,7 +110,13 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class _DashboardPage extends StatelessWidget {
-  const _DashboardPage();
+  final Set<String> completedTips;
+  final Function(String) onToggleTip;
+
+  const _DashboardPage({
+    required this.completedTips,
+    required this.onToggleTip,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -411,16 +427,8 @@ class _DashboardPage extends StatelessWidget {
             iconColor: Colors.blue,
             title: AppLocale.t(context, 'irrigation_tip'),
             time: AppLocale.t(context, 'irrigation_desc'),
-            isCompleted: _completedTips.contains('irrigation'),
-            onTap: () {
-              setState(() {
-                if (_completedTips.contains('irrigation')) {
-                  _completedTips.remove('irrigation');
-                } else {
-                  _completedTips.add('irrigation');
-                }
-              });
-            },
+            isCompleted: completedTips.contains('irrigation'),
+            onTap: () => onToggleTip('irrigation'),
           ),
           const SizedBox(height: 12),
           _TaskCard(
@@ -428,16 +436,8 @@ class _DashboardPage extends StatelessWidget {
             iconColor: AppTheme.primaryGreen,
             title: AppLocale.t(context, 'weather_tip'),
             time: AppLocale.t(context, 'weather_desc'),
-            isCompleted: _completedTips.contains('weather'),
-            onTap: () {
-              setState(() {
-                if (_completedTips.contains('weather')) {
-                  _completedTips.remove('weather');
-                } else {
-                  _completedTips.add('weather');
-                }
-              });
-            },
+            isCompleted: completedTips.contains('weather'),
+            onTap: () => onToggleTip('weather'),
           ),
           const SizedBox(height: 12),
           _TaskCard(

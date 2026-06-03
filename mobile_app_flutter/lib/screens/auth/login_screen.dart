@@ -2,7 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/gestures.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../../config/theme.dart';
+import '../../providers/auth_provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,8 +18,38 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _phoneCtrl = TextEditingController();
   bool _isEnglish = true;
-  bool _agreedToTerms = false;
   bool _isLoading = false;
+  late TapGestureRecognizer _termsRecognizer;
+
+  @override
+  void initState() {
+    super.initState();
+    _termsRecognizer = TapGestureRecognizer()
+      ..onTap = () {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(_isEnglish ? 'Terms & Privacy' : 'ನಿಯಮಗಳು ಮತ್ತು ಗೌಪ್ಯತೆ', style: const TextStyle(fontWeight: FontWeight.bold)),
+            content: Text(_isEnglish 
+              ? 'By using this app, you agree to follow our guidelines and policies regarding farm data and market usage.' 
+              : 'ಈ ಅಪ್ಲಿಕೇಶನ್ ಬಳಸುವ ಮೂಲಕ, ಕೃಷಿ ಡೇಟಾ ಮತ್ತು ಮಾರುಕಟ್ಟೆ ಬಳಕೆಗೆ ಸಂಬಂಧಿಸಿದ ನಮ್ಮ ಮಾರ್ಗಸೂಚಿಗಳು ಮತ್ತು ನೀತಿಗಳನ್ನು ಅನುಸರಿಸಲು ನೀವು ಒಪ್ಪುತ್ತೀರಿ.'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('OK', style: TextStyle(color: AppTheme.primaryGreen)),
+              ),
+            ],
+          ),
+        );
+      };
+  }
+
+  @override
+  void dispose() {
+    _termsRecognizer.dispose();
+    _phoneCtrl.dispose();
+    super.dispose();
+  }
 
   // ── Bilingual text map ─────────────────────────────────
   String get _welcomeText => _isEnglish ? 'Welcome, Farmer!' : 'ಸ್ವಾಗತ, ರೈತರೇ!';
@@ -25,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
   String get _otpButtonText => _isEnglish ? 'Get OTP' : 'OTP ಪಡೆಯಿರಿ';
 
   Future<void> _getOtp() async {
-    if (!_agreedToTerms || _phoneCtrl.text.isEmpty) return;
+    if (_phoneCtrl.text.isEmpty) return;
     setState(() => _isLoading = true);
     String phoneNumber = '+91${_phoneCtrl.text.trim()}';
 
@@ -228,42 +262,29 @@ class _LoginScreenState extends State<LoginScreen> {
                           const Expanded(child: SizedBox(height: 24)),
                           const SizedBox(height: 24),
 
-                          // ── Terms Checkbox ──────────────
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Checkbox(
-                                value: _agreedToTerms,
-                                onChanged: (val) =>
-                                    setState(() => _agreedToTerms = val ?? false),
-                                activeColor: AppTheme.primaryGreen,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(4)),
-                              ),
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(top: 12),
-                                  child: RichText(
-                                    text: TextSpan(
-                                      style: _isEnglish
-                                          ? const TextStyle(color: Colors.grey, fontSize: 12, height: 1.5, fontFamily: 'Roboto')
-                                          : GoogleFonts.notoSansKannada(color: Colors.grey, fontSize: 12, height: 1.5),
-                                      children: [
-                                        TextSpan(text: _isEnglish ? 'By continuing you agree to our ' : 'ಮುಂದುವರಿಯುವ ಮೂಲಕ ನೀವು ನಮ್ಮ '),
-                                        TextSpan(
-                                          text: _isEnglish ? 'Terms & Privacy' : 'ನಿಯಮಗಳು ಮತ್ತು ಗೌಪ್ಯತೆಗೆ',
-                                          style: const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
-                                        ),
-                                        if (!_isEnglish)
-                                          const TextSpan(text: ' ಒಪ್ಪುತ್ತೀರಿ'),
-                                      ],
-                                    ),
+                          // ── Terms & Privacy Text ──────────────
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                            child: RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(
+                                style: _isEnglish
+                                    ? const TextStyle(color: Colors.grey, fontSize: 13, height: 1.5, fontFamily: 'Roboto')
+                                    : GoogleFonts.notoSansKannada(color: Colors.grey, fontSize: 13, height: 1.5),
+                                children: [
+                                  TextSpan(text: _isEnglish ? 'By continuing you agree to our ' : 'ಮುಂದುವರಿಯುವ ಮೂಲಕ ನೀವು ನಮ್ಮ '),
+                                  TextSpan(
+                                    text: _isEnglish ? 'Terms & Privacy' : 'ನಿಯಮಗಳು ಮತ್ತು ಗೌಪ್ಯತೆಗೆ',
+                                    style: const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
+                                    recognizer: _termsRecognizer,
                                   ),
-                                ),
+                                  if (!_isEnglish)
+                                    const TextSpan(text: ' ಒಪ್ಪುತ್ತೀರಿ'),
+                                ],
                               ),
-                            ],
+                            ),
                           ),
-                          const SizedBox(height: 16),
+                          const SizedBox(height: 24),
 
                           // ── Get OTP Button ──────────────
                           _isLoading
@@ -271,7 +292,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   child: CircularProgressIndicator(
                                       color: AppTheme.primaryGreen))
                               : ElevatedButton(
-                                  onPressed: _agreedToTerms ? _getOtp : null,
+                                  onPressed: _getOtp,
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: AppTheme.primaryGreen,
                                     foregroundColor: Colors.white,
@@ -280,8 +301,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                     shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(16)),
                                     elevation: 0,
-                                    disabledBackgroundColor: Colors.grey.shade300,
-                                    disabledForegroundColor: Colors.grey.shade500,
                                   ),
                                   child: Text(
                                     _otpButtonText,
@@ -296,6 +315,68 @@ class _LoginScreenState extends State<LoginScreen> {
                                           ),
                                   ),
                                 ),
+                          
+                          const SizedBox(height: 24),
+                          
+                          // ── OR Divider ──────────────────
+                          Row(
+                            children: [
+                              Expanded(child: Divider(color: Colors.grey.shade300, thickness: 1)),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 16),
+                                child: Text(
+                                  _isEnglish ? 'OR' : 'ಅಥವಾ',
+                                  style: TextStyle(color: Colors.grey.shade500, fontWeight: FontWeight.w600),
+                                ),
+                              ),
+                              Expanded(child: Divider(color: Colors.grey.shade300, thickness: 1)),
+                            ],
+                          ),
+                          const SizedBox(height: 24),
+
+                          // ── Google Sign In Button ───────
+                          ElevatedButton(
+                            onPressed: _isLoading ? null : () async {
+                              final auth = Provider.of<AuthProvider>(context, listen: false);
+                              final success = await auth.supabaseGoogleSignIn();
+                              if (success && mounted) {
+                                Navigator.pushReplacementNamed(context, '/home');
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              foregroundColor: Colors.black87,
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                                side: BorderSide(color: Colors.grey.shade300),
+                              ),
+                              elevation: 2,
+                              shadowColor: Colors.black.withOpacity(0.05),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SvgPicture.network(
+                                  'https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg',
+                                  height: 24,
+                                  width: 24,
+                                  placeholderBuilder: (context) => const SizedBox(
+                                    height: 24,
+                                    width: 24,
+                                    child: CircularProgressIndicator(strokeWidth: 2),
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Text(
+                                  _isEnglish ? 'Continue with Google' : 'Google ಮೂಲಕ ಮುಂದುವರಿಯಿರಿ',
+                                  style: _isEnglish 
+                                      ? const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)
+                                      : GoogleFonts.notoSansKannada(fontSize: 16, fontWeight: FontWeight.w600),
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ),

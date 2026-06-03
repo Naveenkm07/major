@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import '../services/api_service.dart';
 import '../models/user_model.dart';
 
@@ -89,6 +91,58 @@ class AuthProvider extends ChangeNotifier {
       }
     } catch (_) {}
     notifyListeners();
+  }
+
+  Future<bool> supabaseGoogleSignIn() async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+    try {
+      final googleSignIn = GoogleSignIn(scopes: ['email', 'profile']);
+      final googleUser = await googleSignIn.signIn();
+      
+      if (googleUser == null) {
+        _isLoading = false;
+        notifyListeners();
+        return false;
+      }
+
+      final googleAuth = await googleUser.authentication;
+      final accessToken = googleAuth.accessToken;
+      final idToken = googleAuth.idToken;
+
+      if (accessToken == null || idToken == null) {
+        _error = 'Google Auth Failed: Missing tokens';
+        _isLoading = false;
+        notifyListeners();
+        return false;
+      }
+
+      final AuthResponse response = await Supabase.instance.client.auth.signInWithIdToken(
+        provider: OAuthProvider.google,
+        idToken: idToken,
+        accessToken: accessToken,
+      );
+
+      if (response.user != null) {
+        _user = UserModel(
+          id: response.user!.id,
+          name: googleUser.displayName ?? 'Google Farmer',
+          email: googleUser.email,
+          phone: '',
+          role: 'farmer',
+        );
+        _isAuthenticated = true;
+        _isLoading = false;
+        notifyListeners();
+        return true;
+      }
+    } catch (e) {
+      _error = 'Google Sign-In Error: $e';
+    }
+    _isLoading = false;
+    notifyListeners();
+    return false;
   }
 
   Future<bool> updateProfile(Map<String, dynamic> data) async {

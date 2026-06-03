@@ -9,6 +9,7 @@ import '../../services/location_service.dart';
 import '../../models/user_model.dart';
 import '../../providers/auth_provider.dart';
 import './edit_profile_screen.dart';
+import './edit_farm_details_screen.dart';
 import './my_crops_screen.dart';
 import './smart_notifications_screen.dart';
 
@@ -111,6 +112,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         if (_user != null)
                           GestureDetector(
+                            behavior: HitTestBehavior.opaque,
                             onTap: () async {
                               final result = await Navigator.push(
                                 context,
@@ -118,7 +120,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               );
                               if (result == true) _fetchData();
                             },
-                            child: Text(AppLocale.t(context, 'edit'), style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                              child: Text(AppLocale.t(context, 'edit'), style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w600)),
+                            ),
                           ),
                       ],
                     ),
@@ -175,6 +180,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         Text(AppLocale.t(context, 'my_crops'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87)),
                         GestureDetector(
+                          behavior: HitTestBehavior.opaque,
                           onTap: () async {
                             if (_user != null) {
                               final result = await Navigator.push(
@@ -186,12 +192,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               if (result == true) _fetchData();
                             }
                           },
-                          child: Row(
-                            children: [
-                              Text(AppLocale.t(context, 'edit'), style: const TextStyle(color: AppTheme.primaryGreen, fontWeight: FontWeight.bold)),
-                              const SizedBox(width: 4),
-                              const Icon(Icons.edit, size: 16, color: AppTheme.primaryGreen),
-                            ],
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                            child: Row(
+                              children: [
+                                Text(AppLocale.t(context, 'edit'), style: const TextStyle(color: AppTheme.primaryGreen, fontWeight: FontWeight.bold)),
+                                const SizedBox(width: 4),
+                                const Icon(Icons.edit, size: 16, color: AppTheme.primaryGreen),
+                              ],
+                            ),
                           ),
                         ),
                       ],
@@ -218,6 +227,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         Text('Farm Details', style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87)),
                         GestureDetector(
+                          behavior: HitTestBehavior.opaque,
                           onTap: () async {
                             if (_user != null) {
                               final result = await Navigator.push(
@@ -229,12 +239,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               if (result == true) _fetchData();
                             }
                           },
-                          child: Row(
-                            children: [
-                              Text(AppLocale.t(context, 'edit'), style: const TextStyle(color: AppTheme.primaryGreen, fontWeight: FontWeight.bold)),
-                              const SizedBox(width: 4),
-                              const Icon(Icons.edit, size: 16, color: AppTheme.primaryGreen),
-                            ],
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                            child: Row(
+                              children: [
+                                Text(AppLocale.t(context, 'edit'), style: const TextStyle(color: AppTheme.primaryGreen, fontWeight: FontWeight.bold)),
+                                const SizedBox(width: 4),
+                                const Icon(Icons.edit, size: 16, color: AppTheme.primaryGreen),
+                              ],
+                            ),
                           ),
                         ),
                       ],
@@ -308,16 +321,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         Text(AppLocale.t(context, 'notifications'), style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87)),
                         GestureDetector(
+                          behavior: HitTestBehavior.opaque,
                           onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(builder: (_) => const SmartNotificationsScreen()),
                           ),
-                          child: Row(
-                            children: [
-                              Text(AppLocale.t(context, 'edit'), style: const TextStyle(color: AppTheme.primaryGreen, fontWeight: FontWeight.bold)),
-                              const SizedBox(width: 4),
-                              const Icon(Icons.settings_outlined, size: 16, color: AppTheme.primaryGreen),
-                            ],
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                            child: Row(
+                              children: [
+                                Text(AppLocale.t(context, 'edit'), style: const TextStyle(color: AppTheme.primaryGreen, fontWeight: FontWeight.bold)),
+                                const SizedBox(width: 4),
+                                const Icon(Icons.settings_outlined, size: 16, color: AppTheme.primaryGreen),
+                              ],
+                            ),
                           ),
                         ),
                       ],
