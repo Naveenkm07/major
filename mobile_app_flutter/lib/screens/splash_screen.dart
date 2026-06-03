@@ -29,13 +29,23 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     if (!mounted) return;
     
     final user = Supabase.instance.client.auth.currentUser;
-    if (user != null && user.phone != null) {
-      // User is logged into Supabase. Sync with Node.js backend!
+    if (user != null) {
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
-      await authProvider.phoneSync(user.phone!);
+      
+      // Check if phone or Google user
+      if (user.phone != null && user.phone!.isNotEmpty) {
+        await authProvider.phoneSync(user.phone!);
+      } else if (user.email != null && user.email!.isNotEmpty) {
+        final name = user.userMetadata?['full_name'] ?? user.userMetadata?['name'] ?? 'Google Farmer';
+        final avatar = user.userMetadata?['avatar_url'];
+        await authProvider.googleSync(user.email!, name, avatar);
+      } else {
+        Navigator.pushReplacementNamed(context, '/login');
+        return;
+      }
       
       final dbUser = authProvider.user;
-      if (dbUser == null || dbUser.name.isEmpty || dbUser.name.toLowerCase() == 'farmer') {
+      if (dbUser == null || dbUser.name.isEmpty || dbUser.name.toLowerCase() == 'farmer' || dbUser.name.toLowerCase() == 'google farmer') {
         Navigator.pushReplacementNamed(context, '/setup-profile', arguments: true);
       } else {
         Navigator.pushReplacementNamed(context, '/home');

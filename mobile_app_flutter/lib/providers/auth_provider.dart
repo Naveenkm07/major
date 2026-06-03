@@ -83,6 +83,28 @@ class AuthProvider extends ChangeNotifier {
     return false;
   }
 
+  Future<bool> googleSync(String email, String name, [String? avatar]) async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+    try {
+      final data = await _api.googleSync(email, name, avatar);
+      if (data['success'] == true) {
+        _user = UserModel.fromJson(data['user']);
+        _isAuthenticated = true;
+        _isLoading = false;
+        notifyListeners();
+        return true;
+      }
+      _error = data['error'] ?? data['message'] ?? 'Google Sync failed';
+    } catch (e) {
+      _error = 'Connection error: $e';
+    }
+    _isLoading = false;
+    notifyListeners();
+    return false;
+  }
+
   Future<void> checkAuth() async {
     try {
       final data = await _api.getProfile();
@@ -107,7 +129,7 @@ class AuthProvider extends ChangeNotifier {
         // We just return true as the flow continues on the new page.
         return true;
       } else {
-        const webClientId = '579437156136-o5f2pcerepk40c3q2lcst8tn9fm0e260.apps.googleusercontent.com';
+        const webClientId = '128779961552-h25gbkvkpufei1imv3a07gg36pifkduo.apps.googleusercontent.com';
         
         final googleSignIn = GoogleSignIn.instance;
         await googleSignIn.initialize(

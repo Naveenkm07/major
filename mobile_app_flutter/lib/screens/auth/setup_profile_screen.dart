@@ -28,12 +28,14 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
       
       // Fetch location immediately upon registration
       final loc = await LocationService.getCurrentLocation();
-      if (loc != null && mounted) {
-        final auth = Provider.of<AuthProvider>(context, listen: false);
-        await auth.updateProfile(loc);
+      final Map<String, dynamic> updateData = {'name': _nameCtrl.text.trim()};
+      if (loc != null) {
+        updateData.addAll(loc);
       }
-
+      
       if (mounted) {
+        final auth = Provider.of<AuthProvider>(context, listen: false);
+        await auth.updateProfile(updateData);
         Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
       }
     } catch (e) {

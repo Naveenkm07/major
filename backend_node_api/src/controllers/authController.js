@@ -117,7 +117,7 @@ exports.phoneSync = asyncHandler(async (req, res, next) => {
 // @access  Public
 // ═══════════════════════════════════════════════════════
 exports.googleSync = asyncHandler(async (req, res, next) => {
-    const { email, name } = req.body;
+    const { email, name, avatar } = req.body;
 
     if (!email) {
         throw new ApiError(400, 'Please provide email');
@@ -131,11 +131,14 @@ exports.googleSync = asyncHandler(async (req, res, next) => {
         farmer = await Farmer.create({
             name: name || 'Google Farmer',
             email,
+            avatar: avatar || 'default-avatar.png',
             isVerified: true
         });
     } else {
         // Update last login
         farmer.lastLoginAt = Date.now();
+        if (avatar) farmer.avatar = avatar;
+        if (name && farmer.name === 'Google Farmer') farmer.name = name;
         await farmer.save();
     }
 
