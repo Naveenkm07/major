@@ -83,12 +83,16 @@ class ApiService {
     return res;
   }
 
-  Future<Map<String, dynamic>> googleSync(String email, String name) async {
-    final res = await post('/auth/google-sync', {'email': email, 'name': name});
-    if (res['success'] == true && res['token'] != null) {
-      await saveToken(res['token']);
+  Future<Map<String, dynamic>> googleSync(String email, String name, [String? avatar]) async {
+    final data = await post('/auth/google-sync', {
+      'email': email,
+      'name': name,
+      if (avatar != null) 'avatar': avatar
+    });
+    if (data['success'] == true && data['token'] != null) {
+      await saveToken(data['token']);
     }
-    return res;
+    return data;
   }
 
   Future<Map<String, dynamic>> register(Map<String, dynamic> userData) async {

@@ -132,13 +132,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Container(
                       width: 100,
                       height: 100,
-                      decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-                      child: const Icon(Icons.person_outline, size: 50, color: AppTheme.primaryGreen),
+                      decoration: BoxDecoration(
+                        color: Colors.white, 
+                        shape: BoxShape.circle,
+                        image: (_user != null && _user!.avatar != null && _user!.avatar!.startsWith('http'))
+                            ? DecorationImage(image: NetworkImage(_user!.avatar!), fit: BoxFit.cover)
+                            : null,
+                      ),
+                      child: (_user == null || _user!.avatar == null || !_user!.avatar!.startsWith('http')) 
+                          ? const Icon(Icons.person_outline, size: 50, color: AppTheme.primaryGreen)
+                          : null,
                     ),
                     const SizedBox(height: 16),
                     Text(_user?.name ?? 'Guest User', style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
                     const SizedBox(height: 8),
-                    Text(_user?.phone ?? 'Please log in', style: const TextStyle(color: Colors.white70, fontSize: 16)),
+                    Text((_user?.phone?.isNotEmpty == true) ? _user!.phone : (_user?.email ?? 'Please log in'), style: const TextStyle(color: Colors.white70, fontSize: 16)),
                     
                     if (_user == null) ...[
                       const SizedBox(height: 16),
