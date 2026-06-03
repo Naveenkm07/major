@@ -100,6 +100,7 @@ class AuthProvider extends ChangeNotifier {
     try {
       final googleSignIn = GoogleSignIn(
         serverClientId: '579437156136-o5f2pcerepk40c3q2lcst8tn9fm0e260.apps.googleusercontent.com',
+        clientId: '579437156136-g3296gierb3hfeqbehc4nmkab23lvu5j.apps.googleusercontent.com',
         scopes: ['email', 'profile'],
       );
       final googleUser = await googleSignIn.signIn();
