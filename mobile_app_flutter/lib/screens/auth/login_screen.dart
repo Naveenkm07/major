@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/gestures.dart';
@@ -19,6 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _phoneCtrl = TextEditingController();
   bool _isEnglish = true;
   bool _isLoading = false;
+  bool _acceptedTerms = false;
   late TapGestureRecognizer _termsRecognizer;
 
   @override
@@ -265,23 +266,42 @@ class _LoginScreenState extends State<LoginScreen> {
                           // ── Terms & Privacy Text ──────────────
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: RichText(
-                              textAlign: TextAlign.center,
-                              text: TextSpan(
-                                style: _isEnglish
-                                    ? const TextStyle(color: Colors.grey, fontSize: 13, height: 1.5, fontFamily: 'Roboto')
-                                    : GoogleFonts.notoSansKannada(color: Colors.grey, fontSize: 13, height: 1.5),
-                                children: [
-                                  TextSpan(text: _isEnglish ? 'By continuing you agree to our ' : 'ಮುಂದುವರಿಯುವ ಮೂಲಕ ನೀವು ನಮ್ಮ '),
-                                  TextSpan(
-                                    text: _isEnglish ? 'Terms & Privacy' : 'ನಿಯಮಗಳು ಮತ್ತು ಗೌಪ್ಯತೆಗೆ',
-                                    style: const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
-                                    recognizer: _termsRecognizer,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Checkbox(
+                                  value: _acceptedTerms,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _acceptedTerms = value ?? false;
+                                    });
+                                  },
+                                  activeColor: AppTheme.primaryGreen,
+                                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                ),
+                                const SizedBox(width: 8),
+                                Flexible(
+                                  child: RichText(
+                                    textAlign: TextAlign.left,
+                                    text: TextSpan(
+                                      style: _isEnglish
+                                          ? const TextStyle(color: Colors.grey, fontSize: 13, height: 1.5, fontFamily: 'Roboto')
+                                          : GoogleFonts.notoSansKannada(color: Colors.grey, fontSize: 13, height: 1.5),
+                                      children: [
+                                        TextSpan(text: _isEnglish ? 'By continuing you agree to our ' : 'ಮುಂದುವರಿಯುವ ಮೂಲಕ ನೀವು ನಮ್ಮ '),
+                                        TextSpan(
+                                          text: _isEnglish ? 'Terms & Privacy' : 'ನಿಯಮಗಳು ಮತ್ತು ಗೌಪ್ಯತೆಗೆ',
+                                          style: const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
+                                          recognizer: _termsRecognizer,
+                                        ),
+                                        if (!_isEnglish)
+                                          const TextSpan(text: ' ಒಪ್ಪುತ್ತೀರಿ'),
+                                      ],
+                                    ),
                                   ),
-                                  if (!_isEnglish)
-                                    const TextSpan(text: ' ಒಪ್ಪುತ್ತೀರಿ'),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ),
                           const SizedBox(height: 24),
@@ -292,7 +312,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                   child: CircularProgressIndicator(
                                       color: AppTheme.primaryGreen))
                               : ElevatedButton(
-                                  onPressed: _getOtp,
+                                  onPressed: () {
+                                    if (!_acceptedTerms) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(content: Text(_isEnglish ? 'Please accept the Terms & Privacy first' : 'ದಯವಿಟ್ಟು ಮೊದಲು ನಿಯಮಗಳು ಮತ್ತು ಗೌಪ್ಯತೆಯನ್ನು ಒಪ್ಪಿಕೊಳ್ಳಿ')),
+                                      );
+                                      return;
+                                    }
+                                    _getOtp();
+                                  },
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: AppTheme.primaryGreen,
                                     foregroundColor: Colors.white,
@@ -337,10 +365,20 @@ class _LoginScreenState extends State<LoginScreen> {
                           // ── Google Sign In Button ───────
                           ElevatedButton(
                             onPressed: _isLoading ? null : () async {
+                              if (!_acceptedTerms) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text(_isEnglish ? 'Please accept the Terms & Privacy first' : 'ದಯವಿಟ್ಟು ಮೊದಲು ನಿಯಮಗಳು ಮತ್ತು ಗೌಪ್ಯತೆಯನ್ನು ಒಪ್ಪಿಕೊಳ್ಳಿ')),
+                                );
+                                return;
+                              }
                               final auth = Provider.of<AuthProvider>(context, listen: false);
                               final success = await auth.supabaseGoogleSignIn();
                               if (success && mounted) {
                                 Navigator.pushReplacementNamed(context, '/home');
+                              } else if (!success && mounted && auth.error != null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text(auth.error!)),
+                                );
                               }
                             },
                             style: ElevatedButton.styleFrom(

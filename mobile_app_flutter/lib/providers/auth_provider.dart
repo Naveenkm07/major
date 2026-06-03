@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' hide AuthProvider, GoogleSignIn;
+import 'package:google_sign_in/google_sign_in.dart' as g_sign;
 import '../services/api_service.dart';
 import '../models/user_model.dart';
 
@@ -99,11 +99,7 @@ class AuthProvider extends ChangeNotifier {
     _error = null;
     notifyListeners();
     try {
-      final googleSignIn = GoogleSignIn(
-        serverClientId: '579437156136-o5f2pcerepk40c3q2lcst8tn9fm0e260.apps.googleusercontent.com',
-        clientId: kIsWeb ? '579437156136-o5f2pcerepk40c3q2lcst8tn9fm0e260.apps.googleusercontent.com' : null,
-        scopes: ['email', 'profile'],
-      );
+      final googleSignIn = g_sign.GoogleSignIn();
       final googleUser = await googleSignIn.signIn();
       
       if (googleUser == null) {
