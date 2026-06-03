@@ -61,12 +61,12 @@ class AuthProvider extends ChangeNotifier {
     return false;
   }
 
-  Future<bool> firebaseSync(String phoneNumber) async {
+  Future<bool> phoneSync(String phoneNumber) async {
     _isLoading = true;
     _error = null;
     notifyListeners();
     try {
-      final data = await _api.firebaseSync(phoneNumber);
+      final data = await _api.phoneSync(phoneNumber);
       if (data['success'] == true) {
         _user = UserModel.fromJson(data['user']);
         _isAuthenticated = true;
@@ -137,17 +137,16 @@ class AuthProvider extends ChangeNotifier {
         );
 
         if (response.user != null) {
-          _user = UserModel(
-            id: response.user!.id,
-            name: googleUser.displayName ?? 'Google Farmer',
-            email: googleUser.email,
-            phone: '',
-            role: 'farmer',
-          );
-          _isAuthenticated = true;
-          _isLoading = false;
-          notifyListeners();
-          return true;
+          final data = await _api.googleSync(googleUser.email, googleUser.displayName ?? 'Google Farmer');
+          if (data['success'] == true) {
+            _user = UserModel.fromJson(data['user']);
+            _isAuthenticated = true;
+            _isLoading = false;
+            notifyListeners();
+            return true;
+          } else {
+             _error = data['error'] ?? data['message'] ?? 'Google Sync Failed';
+          }
         }
       }
     } catch (e) {

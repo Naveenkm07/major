@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider;
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -18,35 +18,25 @@ class _OtpScreenState extends State<OtpScreen> {
   final _otpCtrl = TextEditingController();
   bool _isLoading = false;
 
-  Future<void> _verifyOtp(dynamic authData, bool isEnglish) async {
+  Future<void> _verifyOtp(String phoneNumber, bool isEnglish) async {
     if (_otpCtrl.text.length < 6) return;
 
     setState(() => _isLoading = true);
     
     try {
-      if (kIsWeb) {
-        final ConfirmationResult result = authData as ConfirmationResult;
-        await result.confirm(_otpCtrl.text.trim());
-      } else {
-        final String verificationId = authData as String;
-        PhoneAuthCredential credential = PhoneAuthProvider.credential(
-          verificationId: verificationId,
-          smsCode: _otpCtrl.text.trim(),
-        );
-        // Sign the user in
-        await FirebaseAuth.instance.signInWithCredential(credential);
-      }
+      final AuthResponse res = await Supabase.instance.client.auth.verifyOTP(
+        type: OtpType.sms,
+        token: _otpCtrl.text.trim(),
+        phone: phoneNumber,
+      );
       
       // Navigate to Home on success
       if (mounted) {
-        final user = FirebaseAuth.instance.currentUser;
-        if (user != null) {
+        if (res.user != null) {
           final authProvider = Provider.of<AuthProvider>(context, listen: false);
           
           // Sync with Node.js backend
-          if (user.phoneNumber != null) {
-            await authProvider.firebaseSync(user.phoneNumber!);
-          }
+          await authProvider.phoneSync(phoneNumber);
 
           final dbUser = authProvider.user;
           // If name is empty or default 'Farmer', ask them to set up their profile
@@ -57,10 +47,10 @@ class _OtpScreenState extends State<OtpScreen> {
           }
         }
       }
-    } on FirebaseAuthException catch (e) {
+    } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.message ?? 'Invalid OTP code')),
+          SnackBar(content: Text(e.toString())),
         );
       }
     } finally {
@@ -72,11 +62,11 @@ class _OtpScreenState extends State<OtpScreen> {
   Widget build(BuildContext context) {
     // Get arguments map from LoginScreen
     final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    final authData = args?['authData'];
+    final phoneNumber = args?['phoneNumber'];
     final bool isEnglish = args?['isEnglish'] ?? true;
     
-    if (authData == null) {
-      return const Scaffold(body: Center(child: Text("Error: No verification ID provided.")));
+    if (phoneNumber == null) {
+      return const Scaffold(body: Center(child: Text("Error: No phone number provided.")));
     }
 
     // Translations
@@ -152,7 +142,7 @@ class _OtpScreenState extends State<OtpScreen> {
               _isLoading
                   ? const Center(child: CircularProgressIndicator(color: AppTheme.primaryGreen))
                   : ElevatedButton(
-                      onPressed: () => _verifyOtp(authData, isEnglish),
+                      onPressed: () => _verifyOtp(phoneNumber, isEnglish),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppTheme.primaryGreen,
                         padding: const EdgeInsets.symmetric(vertical: 20),

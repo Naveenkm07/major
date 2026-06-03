@@ -81,11 +81,11 @@ exports.login = asyncHandler(async (req, res) => {
 });
 
 // ═══════════════════════════════════════════════════════
-// @desc    Sync Firebase Auth user to Node backend
-// @route   POST /api/v1/auth/firebase-sync
+// @desc    Sync Phone Auth user to Node backend
+// @route   POST /api/v1/auth/phone-sync
 // @access  Public
 // ═══════════════════════════════════════════════════════
-exports.firebaseSync = asyncHandler(async (req, res, next) => {
+exports.phoneSync = asyncHandler(async (req, res, next) => {
     const { phoneNumber } = req.body;
 
     if (!phoneNumber) {
@@ -100,6 +100,37 @@ exports.firebaseSync = asyncHandler(async (req, res, next) => {
         farmer = await Farmer.create({
             name: 'Farmer',
             phoneNumber,
+            isVerified: true
+        });
+    } else {
+        // Update last login
+        farmer.lastLoginAt = Date.now();
+        await farmer.save();
+    }
+
+    sendTokenResponse(farmer, 200, res);
+});
+
+// ═══════════════════════════════════════════════════════
+// @desc    Sync Google Auth user to Node backend
+// @route   POST /api/v1/auth/google-sync
+// @access  Public
+// ═══════════════════════════════════════════════════════
+exports.googleSync = asyncHandler(async (req, res, next) => {
+    const { email, name } = req.body;
+
+    if (!email) {
+        throw new ApiError(400, 'Please provide email');
+    }
+
+    // Try to find the farmer
+    let farmer = await Farmer.findOne({ email });
+
+    // If not found, create a new one without a password
+    if (!farmer) {
+        farmer = await Farmer.create({
+            name: name || 'Google Farmer',
+            email,
             isVerified: true
         });
     } else {

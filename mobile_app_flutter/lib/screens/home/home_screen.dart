@@ -16,7 +16,7 @@ import '../../providers/weather_provider.dart';
 import '../../providers/market_provider.dart';
 import '../../providers/calendar_provider.dart';
 import '../../providers/notification_provider.dart';
-import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider;
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -121,7 +121,7 @@ class _DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthProvider>(context);
-    final userName = FirebaseAuth.instance.currentUser?.displayName ?? auth.user?.name ?? 'Farmer';
+    final userName = Supabase.instance.client.auth.currentUser?.userMetadata?['full_name'] ?? auth.user?.name ?? 'Farmer';
     final location = auth.user?.location?.district ?? 'Mandya';
 
     return CustomScrollView(
