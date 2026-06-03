@@ -98,7 +98,10 @@ class AuthProvider extends ChangeNotifier {
     _error = null;
     notifyListeners();
     try {
-      final googleSignIn = GoogleSignIn(scopes: ['email', 'profile']);
+      final googleSignIn = GoogleSignIn(
+        serverClientId: '579437156136-o5f2pcerepk40c3q2lcst8tn9fm0e260.apps.googleusercontent.com',
+        scopes: ['email', 'profile'],
+      );
       final googleUser = await googleSignIn.signIn();
       
       if (googleUser == null) {
