@@ -57,9 +57,9 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // Initialize Supabase
-  final supabaseUrl = dotenv.env['SUPABASE_URL'] ?? '';
-  final supabaseAnonKey = dotenv.env['SUPABASE_ANON_KEY'] ?? '';
+  // Initialize Supabase (Hardcoded for Vercel deployment)
+  final supabaseUrl = 'https://kiqgnfilifuqskmgkyaa.supabase.co';
+  final supabaseAnonKey = 'sb_publishable_Hmmhp4FJYoARgEx_pmFHsA_jf0PYqbW';
   if (supabaseUrl.isNotEmpty && supabaseAnonKey.isNotEmpty) {
     await Supabase.initialize(
       url: supabaseUrl,
