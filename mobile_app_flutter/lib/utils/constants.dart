@@ -6,13 +6,13 @@ class AppConstants {
   static const String tagline = 'Smart Farming Companion';
 
   // ─── API Base URLs ──────────────────────────────
-  // 🌐 Online (Render.com) — works from anywhere, no USB needed
-  static const String backendBaseUrl = 'https://krushikadhara-backend.onrender.com/api/v1';
-  static const String aiServiceUrl = 'https://krushikadhara-backend.onrender.com/api/v1'; // TODO: Update when AI service is deployed separately
-
   // 🔌 Local development (uncomment these & comment above when testing locally)
-  // static const String backendBaseUrl = 'http://10.50.7.144:5000/api/v1';
-  // static const String aiServiceUrl = 'http://10.50.7.144:8000/api/v1';
+  static const String backendBaseUrl = 'http://localhost:5000/api/v1';
+  static const String aiServiceUrl = 'http://localhost:8000/api/v1';
+
+  // 🌐 Online (Render.com) — works from anywhere, no USB needed
+  // static const String backendBaseUrl = 'https://krushikadhara-backend.onrender.com/api/v1';
+  // static const String aiServiceUrl = 'https://krushikadhara-backend.onrender.com/api/v1'; // TODO: Update when AI service is deployed separately
 
   // ─── Storage Keys ──────────────────────────────
   static const String tokenKey = 'auth_token';
