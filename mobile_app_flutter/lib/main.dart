@@ -49,8 +49,12 @@ import 'firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
-  // Load .env variables securely
-  await dotenv.load(fileName: ".env");
+  // Load .env variables securely (Optional on Vercel)
+  try {
+    await dotenv.load(fileName: ".env");
+  } catch (e) {
+    debugPrint('No .env file found, relying on hardcoded keys');
+  }
 
   // Initialize Firebase
   await Firebase.initializeApp(
