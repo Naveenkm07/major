@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider;
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../../config/theme.dart';
@@ -22,7 +22,9 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
 
     setState(() => _isLoading = true);
     try {
-      await FirebaseAuth.instance.currentUser?.updateDisplayName(_nameCtrl.text.trim());
+      await Supabase.instance.client.auth.updateUser(
+        UserAttributes(data: {'full_name': _nameCtrl.text.trim()}),
+      );
       
       // Fetch location immediately upon registration
       final loc = await LocationService.getCurrentLocation();

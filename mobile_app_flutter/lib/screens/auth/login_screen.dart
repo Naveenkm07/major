@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider;
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/gestures.dart';
@@ -65,42 +65,15 @@ class _LoginScreenState extends State<LoginScreen> {
     String phoneNumber = '+91${_phoneCtrl.text.trim()}';
 
     try {
-      if (kIsWeb) {
-        ConfirmationResult confirmationResult =
-            await FirebaseAuth.instance.signInWithPhoneNumber(phoneNumber);
-        if (mounted) {
-          setState(() => _isLoading = false);
-          Navigator.pushNamed(context, '/otp', arguments: {
-            'authData': confirmationResult,
-            'isEnglish': _isEnglish,
-          });
-        }
-      } else {
-        await FirebaseAuth.instance.verifyPhoneNumber(
-          phoneNumber: phoneNumber,
-          verificationCompleted: (PhoneAuthCredential credential) async {
-            await FirebaseAuth.instance.signInWithCredential(credential);
-            if (mounted) Navigator.pushReplacementNamed(context, '/home');
-          },
-          verificationFailed: (FirebaseAuthException e) {
-            if (mounted) {
-              setState(() => _isLoading = false);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(e.message ?? 'Verification failed')),
-              );
-            }
-          },
-          codeSent: (String verificationId, int? resendToken) {
-            if (mounted) {
-              setState(() => _isLoading = false);
-              Navigator.pushNamed(context, '/otp', arguments: {
-                'authData': verificationId,
-                'isEnglish': _isEnglish,
-              });
-            }
-          },
-          codeAutoRetrievalTimeout: (String verificationId) {},
-        );
+      await Supabase.instance.client.auth.signInWithOtp(
+        phone: phoneNumber,
+      );
+      if (mounted) {
+        setState(() => _isLoading = false);
+        Navigator.pushNamed(context, '/otp', arguments: {
+          'phoneNumber': phoneNumber,
+          'isEnglish': _isEnglish,
+        });
       }
     } catch (e) {
       if (mounted) {

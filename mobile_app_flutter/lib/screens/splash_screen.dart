@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider;
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:provider/provider.dart';
 import '../config/theme.dart';
 import '../providers/auth_provider.dart';
@@ -28,11 +28,11 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     await Future.delayed(const Duration(seconds: 1));
     if (!mounted) return;
     
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null && user.phoneNumber != null) {
-      // User is logged into Firebase. Sync with Node.js backend!
+    final user = Supabase.instance.client.auth.currentUser;
+    if (user != null && user.phone != null) {
+      // User is logged into Supabase. Sync with Node.js backend!
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
-      await authProvider.firebaseSync(user.phoneNumber!);
+      await authProvider.phoneSync(user.phone!);
       
       final dbUser = authProvider.user;
       if (dbUser == null || dbUser.name.isEmpty || dbUser.name.toLowerCase() == 'farmer') {

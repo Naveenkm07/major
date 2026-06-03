@@ -75,8 +75,16 @@ class ApiService {
     return data;
   }
 
-  Future<Map<String, dynamic>> firebaseSync(String phoneNumber) async {
-    final res = await post('/auth/firebase-sync', {'phoneNumber': phoneNumber});
+  Future<Map<String, dynamic>> phoneSync(String phoneNumber) async {
+    final res = await post('/auth/phone-sync', {'phoneNumber': phoneNumber});
+    if (res['success'] == true && res['token'] != null) {
+      await saveToken(res['token']);
+    }
+    return res;
+  }
+
+  Future<Map<String, dynamic>> googleSync(String email, String name) async {
+    final res = await post('/auth/google-sync', {'email': email, 'name': name});
     if (res['success'] == true && res['token'] != null) {
       await saveToken(res['token']);
     }

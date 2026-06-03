@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart' hide AuthProvider;
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:provider/provider.dart';
 import '../../config/theme.dart';
 import '../../core/locale.dart';
@@ -406,7 +406,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             leading: const Icon(Icons.logout, color: Colors.red),
                             title: Text(AppLocale.t(context, 'logout'), style: const TextStyle(fontSize: 16, color: Colors.red)),
                             onTap: () async {
-                              await FirebaseAuth.instance.signOut();
+                              await Provider.of<AuthProvider>(context, listen: false).logout();
+                              await Supabase.instance.client.auth.signOut();
                               if (mounted) {
                                 Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
                               }

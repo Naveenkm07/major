@@ -8,7 +8,7 @@ import '../../config/theme.dart';
 import '../../core/locale.dart';
 import '../../widgets/language_toggle.dart';
 import '../../models/equipment_model.dart';
-import 'package:firebase_auth/firebase_auth.dart' as firebase;
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class MarketplaceScreen extends StatefulWidget {
   const MarketplaceScreen({super.key});
@@ -154,9 +154,9 @@ class _AddEquipmentFormState extends State<_AddEquipmentForm> {
   @override
   void initState() {
     super.initState();
-    final user = firebase.FirebaseAuth.instance.currentUser;
-    if (user != null && user.phoneNumber != null) {
-      _phone = user.phoneNumber!;
+    final user = Supabase.instance.client.auth.currentUser;
+    if (user != null && user.phone != null) {
+      _phone = user.phone!;
     }
   }
 
@@ -166,15 +166,15 @@ class _AddEquipmentFormState extends State<_AddEquipmentForm> {
 
     setState(() => _isLoading = true);
 
-    final user = firebase.FirebaseAuth.instance.currentUser;
+    final user = Supabase.instance.client.auth.currentUser;
     final data = {
       'name': _name,
       'type': _type,
       'pricePerHour': double.tryParse(_price) ?? 0,
       'contactPhone': _phone,
       'description': _desc,
-      'owner': user?.uid ?? 'unknown_uid',
-      'ownerName': user?.displayName ?? 'Farmer',
+      'owner': user?.id ?? 'unknown_uid',
+      'ownerName': user?.userMetadata?['full_name'] ?? 'Farmer',
       'availability': true,
       if (_base64Image != null) 'images': [_base64Image],
     };
