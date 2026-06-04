@@ -17,41 +17,26 @@ class AuthProvider extends ChangeNotifier {
   }
 
   void _initSupabaseListener() {
-    // Only listen for auth changes if we are on web, as mobile handles it directly without page reload.
-    if (kIsWeb) {
-      Supabase.instance.client.auth.onAuthStateChange.listen((data) async {
-        final AuthChangeEvent event = data.event;
-        final Session? session = data.session;
-        
-        if (event == AuthChangeEvent.signedIn && session != null) {
-          // If we are not already authenticated with our own Node backend, sync now.
-          if (!_isAuthenticated) {
-            _isLoading = true;
-            notifyListeners();
-            
-            final user = session.user;
-            final email = user.email ?? '';
-            final name = user.userMetadata?['full_name'] ?? 'Google Farmer';
-            final avatar = user.userMetadata?['avatar_url'];
-            
-            try {
-              final res = await _api.googleSync(email, name, avatar);
-              if (res['success'] == true) {
-                _user = UserModel.fromJson(res['user']);
-                _isAuthenticated = true;
-              } else {
-                _error = res['error'] ?? res['message'] ?? 'Sync failed';
-              }
-            } catch (e) {
-              _error = 'Sync error: $e';
-            }
-            
-            _isLoading = false;
-            notifyListeners();
-          }
+    Supabase.instance.client.auth.onAuthStateChange.listen((data) async {
+      final AuthChangeEvent event = data.event;
+      final Session? session = data.session;
+      
+      if ((event == AuthChangeEvent.signedIn || event == AuthChangeEvent.initialSession) && session != null) {
+        if (!_isAuthenticated) {
+          _isLoading = true;
+          notifyListeners();
+          
+          await checkAuth();
+          
+          _isLoading = false;
+          notifyListeners();
         }
-      });
-    }
+      } else if (event == AuthChangeEvent.signedOut) {
+        _isAuthenticated = false;
+        _user = null;
+        notifyListeners();
+      }
+    });
   }
 
   UserModel? get user => _user;
@@ -148,6 +133,40 @@ class AuthProvider extends ChangeNotifier {
   }
 
   Future<void> checkAuth() async {
+    // 1. Check Supabase session first
+    final session = Supabase.instance.client.auth.currentSession;
+    if (session != null) {
+      final user = session.user;
+      final email = user.email ?? '';
+      final name = user.userMetadata?['full_name'] ?? 'Google Farmer';
+      final avatar = user.userMetadata?['avatar_url'];
+      
+      // Upsert profile into public.profiles
+      try {
+        await Supabase.instance.client.from('profiles').upsert({
+          'id': user.id,
+          'email': email,
+          'full_name': name,
+          'avatar_url': avatar,
+          'updated_at': DateTime.now().toIso8601String(),
+        });
+      } catch (e) {
+        debugPrint('Supabase profile upsert error: $e');
+      }
+      
+      // Ensure we are synced to the Node backend as well
+      if (!_isAuthenticated) {
+        try {
+          final res = await _api.googleSync(email, name, avatar);
+          if (res['success'] == true) {
+            _user = UserModel.fromJson(res['user']);
+            _isAuthenticated = true;
+          }
+        } catch (_) {}
+      }
+    }
+
+    // 2. Fetch from Node backend as fallback or to get complete profile data
     try {
       final data = await _api.getProfile();
       if (data['success'] == true) {
