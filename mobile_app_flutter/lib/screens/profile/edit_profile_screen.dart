@@ -1,9 +1,14 @@
+import 'dart:io';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../config/theme.dart';
 import '../../core/locale.dart';
 import '../../services/api_service.dart';
 import '../../models/user_model.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class EditProfileScreen extends StatefulWidget {
   final UserModel user;
@@ -24,6 +29,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   String? _irrigationType;
   List<String> _selectedCrops = [];
   bool _isLoading = false;
+  
+  File? _newAvatarFile;
+  String? _avatarUrl;
+  bool _isUploadingAvatar = false;
 
   final List<String> _allCrops = ['Tomato', 'Ragi', 'Onion', 'Coconut', 'Paddy', 'Maize', 'Sugarcane', 'Cotton'];
   final List<String> _soilTypes = ['Red Soil', 'Black Soil', 'Alluvial Soil', 'Laterite Soil'];
@@ -32,6 +41,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   void initState() {
     super.initState();
+    _avatarUrl = widget.user.avatar;
     _nameCtrl = TextEditingController(text: widget.user.name);
     _emailCtrl = TextEditingController(text: widget.user.email);
     _landAreaCtrl = TextEditingController(text: widget.user.farmDetails?.landArea?.toString() ?? '');
@@ -40,10 +50,52 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _selectedCrops = widget.user.farmDetails?.crops?.map((c) => c.name).toList() ?? [];
   }
 
+  Future<void> _pickImage() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery, imageQuality: 70);
+    if (image != null) {
+      setState(() {
+        _newAvatarFile = File(image.path);
+      });
+    }
+  }
+
+  Future<String?> _uploadToCloudinary(File file) async {
+    // ⚠️ Replace with your actual Cloudinary Cloud Name and Upload Preset
+    const String cloudName = 'YOUR_CLOUD_NAME_HERE'; 
+    const String uploadPreset = 'YOUR_UPLOAD_PRESET_HERE';
+    
+    if (cloudName.contains('YOUR_CLOUD')) {
+      // Return a dummy if they didn't replace it to prevent crashing
+      return 'https://ui-avatars.com/api/?name=${_nameCtrl.text.trim().replaceAll(' ', '+')}';
+    }
+
+    final url = Uri.parse('https://api.cloudinary.com/v1_1/$cloudName/image/upload');
+    final request = http.MultipartRequest('POST', url)
+      ..fields['upload_preset'] = uploadPreset
+      ..files.add(await http.MultipartFile.fromPath('file', file.path));
+
+    final response = await request.send();
+    if (response.statusCode == 200) {
+      final responseData = await response.stream.bytesToString();
+      final json = jsonDecode(responseData);
+      return json['secure_url'];
+    }
+    return null;
+  }
+
   Future<void> _saveProfile() async {
     if (!_formKey.currentState!.validate()) return;
 
     setState(() => _isLoading = true);
+
+    String? finalAvatarUrl = _avatarUrl;
+    if (_newAvatarFile != null) {
+      final uploadedUrl = await _uploadToCloudinary(_newAvatarFile!);
+      if (uploadedUrl != null) {
+        finalAvatarUrl = uploadedUrl;
+      }
+    }
 
     final updateData = {
       'name': _nameCtrl.text.trim(),
@@ -52,6 +104,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       'soilType': _soilType,
       'irrigationType': _irrigationType,
       'cropTypes': _selectedCrops,
+      if (finalAvatarUrl != null) 'avatar': finalAvatarUrl,
     };
 
     try {
@@ -90,6 +143,40 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              Center(
+                child: Stack(
+                  children: [
+                    InkWell(
+                      onTap: _pickImage,
+                      borderRadius: BorderRadius.circular(50),
+                      child: CircleAvatar(
+                        radius: 50,
+                        backgroundColor: AppTheme.primaryGreen.withOpacity(0.1),
+                        backgroundImage: _newAvatarFile != null 
+                            ? FileImage(_newAvatarFile!) as ImageProvider
+                            : (_avatarUrl != null ? CachedNetworkImageProvider(_avatarUrl!) : null),
+                        child: (_newAvatarFile == null && _avatarUrl == null)
+                            ? const Icon(Icons.person, size: 50, color: AppTheme.primaryGreen)
+                            : null,
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          color: AppTheme.primaryGreen,
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white, width: 2),
+                        ),
+                        child: const Icon(Icons.camera_alt, size: 16, color: Colors.white),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 32),
               _buildSectionTitle(AppLocale.t(context, 'basic_info')),
               const SizedBox(height: 16),
               _buildTextField(AppLocale.t(context, 'full_name'), _nameCtrl, Icons.person_outline),
