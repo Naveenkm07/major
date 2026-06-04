@@ -62,8 +62,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   Future<String?> _uploadToCloudinary(File file) async {
     // ⚠️ Replace with your actual Cloudinary Cloud Name and Upload Preset
-    const String cloudName = 'YOUR_CLOUD_NAME_HERE'; 
-    const String uploadPreset = 'YOUR_UPLOAD_PRESET_HERE';
+    const String cloudName = 'dqeud7ply'; 
+    const String uploadPreset = 'krushika';
     
     if (cloudName.contains('YOUR_CLOUD')) {
       // Return a dummy if they didn't replace it to prevent crashing
