@@ -128,8 +128,9 @@ class _DashboardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final auth = Provider.of<AuthProvider>(context);
     final userName = Supabase.instance.client.auth.currentUser?.userMetadata?['full_name'] ?? auth.user?.name ?? 'Farmer';
-    final location = auth.user?.location?.district ?? 'Mandya';
-
+    final location = (auth.user?.location?.village != null && auth.user!.location!.village!.isNotEmpty)
+        ? auth.user!.location!.village!
+        : (auth.user?.location?.district ?? 'Mandya');
     return CustomScrollView(
       slivers: [
         SliverToBoxAdapter(
