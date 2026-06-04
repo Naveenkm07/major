@@ -98,8 +98,10 @@ class _MyCropsScreenState extends State<MyCropsScreen> {
 
       // 3. Try Node.js backend too (best-effort, don't block on failure)
       try {
+        final cropTypes = _crops.map((c) => c.name).toList();
         await _apiService.put('/auth/update-profile', {
-          'farmDetails': {'crops': cropData}
+          'farmDetails': {'crops': cropData},
+          'cropTypes': cropTypes,
         });
       } catch (_) {
         debugPrint('Node backend crops save failed (non-critical)');
