@@ -609,6 +609,24 @@ class AppLocale extends ChangeNotifier {
       'error_phone': 'ಫೋನ್ ಡಯಲರ್ ತೆರೆಯಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.',
       'error_whatsapp': 'ವಾಟ್ಸಾಪ್ (WhatsApp) ತೆರೆಯಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ. ಅದನ್ನು ಇನ್‌ಸ್ಟಾಲ್ ಮಾಡಲಾಗಿದೆಯೇ?',
       'error_email': 'ಇಮೇಲ್ ತೆರೆಯಲು ಸಾಧ್ಯವಾಗಲಿಲ್ಲ.',
+
+      // ─── Profile Options ─────────────────────
+      'Tomato': 'ಟೊಮೆಟೊ',
+      'Ragi': 'ರಾಗಿ',
+      'Onion': 'ಈರುಳ್ಳಿ',
+      'Coconut': 'ತೆಂಗಿನಕಾಯಿ',
+      'Paddy': 'ಭತ್ತ',
+      'Maize': 'ಮೆಕ್ಕೆಜೋಳ',
+      'Sugarcane': 'ಕಬ್ಬು',
+      'Cotton': 'ಹತ್ತಿ',
+      'Red Soil': 'ಕೆಂಪು ಮಣ್ಣು',
+      'Black Soil': 'ಕಪ್ಪು ಮಣ್ಣು',
+      'Alluvial Soil': 'ಮೆಕ್ಕಲು ಮಣ್ಣು',
+      'Laterite Soil': 'ಜಂಬಿಟ್ಟಿಗೆ ಮಣ್ಣು',
+      'Drip': 'ಹನಿ ನೀರಾವರಿ',
+      'Sprinkler': 'ತುಂತುರು ನೀರಾವರಿ',
+      'Borewell': 'ಕೊಳವೆ ಬಾವಿ',
+      'Rain-fed': 'ಮಳೆಯಾಶ್ರಿತ',
     },
   };
 }

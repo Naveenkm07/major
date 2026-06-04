@@ -156,7 +156,7 @@ class _MyCropsScreenState extends State<MyCropsScreen> {
                       return Padding(
                         padding: const EdgeInsets.only(right: 8.0),
                         child: ActionChip(
-                          label: Text(crop),
+                          label: Text(AppLocale.t(context, crop)),
                           onPressed: isAdded ? null : () => _addCrop(crop),
                           backgroundColor: isAdded ? Colors.grey.shade100 : Colors.white,
                           side: BorderSide(color: isAdded ? Colors.grey.shade300 : AppTheme.primaryGreen),
@@ -208,7 +208,7 @@ class _MyCropsScreenState extends State<MyCropsScreen> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(crop.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 17)),
+                                  Text(AppLocale.t(context, crop.name), style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 17)),
                                   const SizedBox(height: 4),
                                   GestureDetector(
                                     onTap: () => _selectDate(index),

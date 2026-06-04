@@ -114,7 +114,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 children: _allCrops.map((crop) {
                   final isSelected = _selectedCrops.contains(crop);
                   return FilterChip(
-                    label: Text(crop),
+                    label: Text(AppLocale.t(context, crop)),
                     selected: isSelected,
                     onSelected: (selected) {
                       setState(() {
@@ -191,7 +191,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         filled: true,
         fillColor: Colors.white,
       ),
-      items: items.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+      items: items.map((e) => DropdownMenuItem(value: e, child: Text(AppLocale.t(context, e)))).toList(),
       onChanged: onChanged,
     );
   }
