@@ -154,16 +154,24 @@ class AuthProvider extends ChangeNotifier {
         debugPrint('Supabase profile upsert error: $e');
       }
       
+      // Immediately populate local user state using Supabase data so the UI doesn't say "Guest"
+      _user ??= UserModel(
+        id: user.id,
+        name: name,
+        email: email,
+        phone: user.phone ?? '',
+        role: 'farmer',
+        avatar: avatar,
+      );
+      _isAuthenticated = true;
+      
       // Ensure we are synced to the Node backend as well
-      if (!_isAuthenticated) {
-        try {
-          final res = await _api.googleSync(email, name, avatar);
-          if (res['success'] == true) {
-            _user = UserModel.fromJson(res['user']);
-            _isAuthenticated = true;
-          }
-        } catch (_) {}
-      }
+      try {
+        final res = await _api.googleSync(email, name, avatar);
+        if (res['success'] == true) {
+          _user = UserModel.fromJson(res['user']);
+        }
+      } catch (_) {}
     }
 
     // 2. Fetch from Node backend as fallback or to get complete profile data
@@ -174,6 +182,7 @@ class AuthProvider extends ChangeNotifier {
         _isAuthenticated = true;
       }
     } catch (_) {}
+    
     notifyListeners();
   }
 
