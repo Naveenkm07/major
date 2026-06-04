@@ -185,17 +185,30 @@ exports.updateProfile = asyncHandler(async (req, res) => {
     const fieldsToUpdate = {};
     const allowed = ['name', 'village', 'district', 'state', 'farmSize', 'cropTypes', 'soilType', 'irrigationType', 'preferredLanguage', 'farmDetails', 'avatar'];
 
+    const farmer = await Farmer.findById(req.user.id);
+    if (!farmer) return res.status(404).json({ success: false, message: 'Farmer not found' });
+
     for (const field of allowed) {
         if (req.body[field] !== undefined) {
-            fieldsToUpdate[field] = req.body[field];
+            farmer[field] = req.body[field];
         }
     }
 
-    const farmer = await Farmer.findByIdAndUpdate(req.user.id, fieldsToUpdate, {
-        new: true,
-        runValidators: true,
-    });
+    // Sync top-level fields to farmDetails to prevent bugs with Admin Panel and Flutter UI
+    farmer.farmDetails = farmer.farmDetails || {};
+    if (req.body.farmSize !== undefined) farmer.farmDetails.landArea = req.body.farmSize;
+    if (req.body.soilType !== undefined) farmer.farmDetails.soilType = req.body.soilType;
+    if (req.body.irrigationType !== undefined) farmer.farmDetails.irrigationType = req.body.irrigationType;
+    if (req.body.cropTypes !== undefined) {
+        // Keep existing crops if they have sowing dates, otherwise create new ones
+        const existingCrops = farmer.farmDetails.crops || [];
+        farmer.farmDetails.crops = req.body.cropTypes.map(cropName => {
+            const existing = existingCrops.find(c => c.name === cropName);
+            return existing ? existing : { name: cropName, sowingDate: new Date() };
+        });
+    }
 
+    await farmer.save();
     res.status(200).json({ success: true, data: farmer });
 });
 
