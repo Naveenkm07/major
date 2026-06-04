@@ -205,7 +205,13 @@ class _DashboardPage extends StatelessWidget {
                               color: Colors.white.withOpacity(0.2),
                               shape: BoxShape.circle,
                             ),
-                            child: const Icon(Icons.person_rounded, color: Colors.white),
+                            child: (auth.user?.avatar != null && auth.user!.avatar!.startsWith('http'))
+                                ? CircleAvatar(
+                                    radius: 12,
+                                    backgroundImage: NetworkImage(auth.user!.avatar!),
+                                    backgroundColor: Colors.transparent,
+                                  )
+                                : const Icon(Icons.person_rounded, color: Colors.white),
                           ),
                         ),
                       ],
