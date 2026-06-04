@@ -12,6 +12,48 @@ class AuthProvider extends ChangeNotifier {
   String? _error;
   bool _isAuthenticated = false;
 
+  AuthProvider() {
+    _initSupabaseListener();
+  }
+
+  void _initSupabaseListener() {
+    // Only listen for auth changes if we are on web, as mobile handles it directly without page reload.
+    if (kIsWeb) {
+      Supabase.instance.client.auth.onAuthStateChange.listen((data) async {
+        final AuthChangeEvent event = data.event;
+        final Session? session = data.session;
+        
+        if (event == AuthChangeEvent.signedIn && session != null) {
+          // If we are not already authenticated with our own Node backend, sync now.
+          if (!_isAuthenticated) {
+            _isLoading = true;
+            notifyListeners();
+            
+            final user = session.user;
+            final email = user.email ?? '';
+            final name = user.userMetadata?['full_name'] ?? 'Google Farmer';
+            final avatar = user.userMetadata?['avatar_url'];
+            
+            try {
+              final res = await _api.googleSync(email, name, avatar);
+              if (res['success'] == true) {
+                _user = UserModel.fromJson(res['user']);
+                _isAuthenticated = true;
+              } else {
+                _error = res['error'] ?? res['message'] ?? 'Sync failed';
+              }
+            } catch (e) {
+              _error = 'Sync error: $e';
+            }
+            
+            _isLoading = false;
+            notifyListeners();
+          }
+        }
+      });
+    }
+  }
+
   UserModel? get user => _user;
   bool get isLoading => _isLoading;
   String? get error => _error;
