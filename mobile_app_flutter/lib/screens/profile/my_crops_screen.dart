@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:provider/provider.dart';
 import '../../config/theme.dart';
 import '../../core/locale.dart';
 import '../../models/user_model.dart';
 import '../../services/api_service.dart';
+import '../../providers/auth_provider.dart';
 
 class MyCropsScreen extends StatefulWidget {
   final List<CropEntryModel> currentCrops;
@@ -67,20 +70,47 @@ class _MyCropsScreenState extends State<MyCropsScreen> {
   Future<void> _saveCrops() async {
     setState(() => _isSaving = true);
     try {
-      // Prepare data for backend
-      // We map to the structure expected by /auth/update-profile
+      // Prepare crop data
       final cropData = _crops.map((c) => {
         'name': c.name,
         'sowingDate': c.sowingDate?.toIso8601String(),
       }).toList();
 
-      await _apiService.put('/auth/update-profile', {
-        'farmDetails': {'crops': cropData}
-      });
+      // 1. Save to Supabase profiles table
+      final supaUser = Supabase.instance.client.auth.currentUser;
+      if (supaUser != null) {
+        try {
+          await Supabase.instance.client.from('profiles').upsert({
+            'id': supaUser.id,
+            'crops': cropData,
+            'updated_at': DateTime.now().toIso8601String(),
+          });
+        } catch (e) {
+          debugPrint('Supabase crops save error: $e');
+        }
+      }
+
+      // 2. Update local AuthProvider so Profile screen updates immediately
+      if (mounted) {
+        final auth = Provider.of<AuthProvider>(context, listen: false);
+        auth.updateLocalCrops(_crops);
+      }
+
+      // 3. Try Node.js backend too (best-effort, don't block on failure)
+      try {
+        await _apiService.put('/auth/update-profile', {
+          'farmDetails': {'crops': cropData}
+        });
+      } catch (_) {
+        debugPrint('Node backend crops save failed (non-critical)');
+      }
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(AppLocale.t(context, 'profile_updated'))),
+          SnackBar(
+            content: Text(AppLocale.t(context, 'profile_updated')),
+            backgroundColor: AppTheme.primaryGreen,
+          ),
         );
         Navigator.pop(context, true);
       }

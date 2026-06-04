@@ -165,11 +165,66 @@ class AuthProvider extends ChangeNotifier {
       );
       _isAuthenticated = true;
       
+      // Fetch full profile from Supabase (including crops)
+      try {
+        final profileData = await Supabase.instance.client
+            .from('profiles')
+            .select()
+            .eq('id', user.id)
+            .maybeSingle();
+        if (profileData != null && profileData['crops'] != null) {
+          final List<dynamic> rawCrops = profileData['crops'];
+          final crops = rawCrops.map((c) => CropEntryModel.fromJson(c)).toList();
+          _user = UserModel(
+            id: _user!.id,
+            name: _user!.name,
+            email: _user!.email,
+            phone: _user!.phone,
+            role: _user!.role,
+            avatar: _user!.avatar,
+            location: _user!.location,
+            farmDetails: FarmDetailsModel(
+              landArea: _user!.farmDetails?.landArea,
+              soilType: _user!.farmDetails?.soilType,
+              irrigationType: _user!.farmDetails?.irrigationType,
+              crops: crops,
+            ),
+            stats: _user!.stats,
+            savedSchemes: _user!.savedSchemes,
+            savedEquipment: _user!.savedEquipment,
+          );
+        }
+      } catch (e) {
+        debugPrint('Supabase profile fetch error: $e');
+      }
+
       // Ensure we are synced to the Node backend as well
       try {
         final res = await _api.googleSync(email, name, avatar);
         if (res['success'] == true) {
+          // Preserve crops from Supabase if Node backend doesn't have them
+          final existingCrops = _user?.farmDetails?.crops;
           _user = UserModel.fromJson(res['user']);
+          if ((_user!.farmDetails?.crops == null || _user!.farmDetails!.crops!.isEmpty) && existingCrops != null && existingCrops.isNotEmpty) {
+            _user = UserModel(
+              id: _user!.id,
+              name: _user!.name,
+              email: _user!.email,
+              phone: _user!.phone,
+              role: _user!.role,
+              avatar: _user!.avatar,
+              location: _user!.location,
+              farmDetails: FarmDetailsModel(
+                landArea: _user!.farmDetails?.landArea,
+                soilType: _user!.farmDetails?.soilType,
+                irrigationType: _user!.farmDetails?.irrigationType,
+                crops: existingCrops,
+              ),
+              stats: _user!.stats,
+              savedSchemes: _user!.savedSchemes,
+              savedEquipment: _user!.savedEquipment,
+            );
+          }
         }
       } catch (_) {}
     }
@@ -336,5 +391,31 @@ class AuthProvider extends ChangeNotifier {
     } catch (e) {
       debugPrint('Error toggling equipment bookmark: $e');
     }
+  }
+
+  /// Updates the local user's crop list instantly (no network call).
+  /// Used by MyCropsScreen to reflect changes immediately in the Profile UI.
+  void updateLocalCrops(List<CropEntryModel> crops) {
+    if (_user == null) return;
+    
+    _user = UserModel(
+      id: _user!.id,
+      name: _user!.name,
+      email: _user!.email,
+      phone: _user!.phone,
+      role: _user!.role,
+      avatar: _user!.avatar,
+      location: _user!.location,
+      farmDetails: FarmDetailsModel(
+        landArea: _user!.farmDetails?.landArea,
+        soilType: _user!.farmDetails?.soilType,
+        irrigationType: _user!.farmDetails?.irrigationType,
+        crops: crops,
+      ),
+      stats: _user!.stats,
+      savedSchemes: _user!.savedSchemes,
+      savedEquipment: _user!.savedEquipment,
+    );
+    notifyListeners();
   }
 }
