@@ -309,9 +309,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       ],
                                     )
                                   : Text(
-                                      _user?.location?.district != null
-                                          ? '${AppLocale.t(context, _user!.location!.district!)}, ${AppLocale.t(context, _user!.location!.state ?? '')}'
-                                          : AppLocale.t(context, 'detect_location'),
+                                      _user?.location?.village != null && _user!.location!.village!.isNotEmpty
+                                          ? '${_user!.location!.village}, ${_user!.location!.district ?? ''}'
+                                          : (_user?.location?.district != null
+                                              ? '${AppLocale.t(context, _user!.location!.district!)}, ${AppLocale.t(context, _user!.location!.state ?? '')}'
+                                              : AppLocale.t(context, 'detect_location')),
                                       style: const TextStyle(fontSize: 16),
                                     ),
                             ),
