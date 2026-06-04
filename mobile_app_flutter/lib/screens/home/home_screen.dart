@@ -40,14 +40,20 @@ class _HomeScreenState extends State<HomeScreen> {
     await Future.delayed(const Duration(seconds: 1));
     if (!mounted) return;
 
+    final auth = Provider.of<AuthProvider>(context, listen: false);
+    final fallbackDistrict = auth.user?.location?.district ?? 'Mandya';
+    final fallbackVillage = auth.user?.location?.village ?? 'Mandya';
+    
+    // Always fetch weather/prices for the fallback first so it doesn't look broken
+    Provider.of<WeatherProvider>(context, listen: false).fetchWeather(fallbackVillage);
+    Provider.of<MarketProvider>(context, listen: false).fetchPrices(state: fallbackDistrict);
+
     final loc = await LocationService.getCurrentLocation();
     if (loc != null && mounted) {
-      final auth = Provider.of<AuthProvider>(context, listen: false);
       await auth.updateProfile(loc); 
       
       if (mounted) {
-        Provider.of<WeatherProvider>(context, listen: false).fetchWeather(loc['village'] ?? 'Bengaluru');
-        // Pre-fetch market prices for home screen
+        Provider.of<WeatherProvider>(context, listen: false).fetchWeather(loc['village'] ?? loc['district'] ?? 'Bengaluru');
         Provider.of<MarketProvider>(context, listen: false).fetchPrices(state: loc['district'] ?? 'Mandya');
       }
     }
@@ -302,8 +308,12 @@ class _DashboardPage extends StatelessWidget {
                       if (loc != null && context.mounted) {
                         final auth = Provider.of<AuthProvider>(context, listen: false);
                         await auth.updateProfile(loc); 
-                        Provider.of<WeatherProvider>(context, listen: false).fetchWeather(loc['village'] ?? 'Bengaluru');
+                        Provider.of<WeatherProvider>(context, listen: false).fetchWeather(loc['village'] ?? loc['district'] ?? 'Bengaluru');
                         Provider.of<MarketProvider>(context, listen: false).fetchPrices(state: loc['district'] ?? 'Mandya');
+                      } else if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Please enable GPS and try again')),
+                        );
                       }
                     },
                     child: Row(
