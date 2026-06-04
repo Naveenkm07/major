@@ -110,10 +110,10 @@ export default function Dashboard() {
               <table>
                 <thead>
                   <tr>
-                    <th>Farmer Name</th>
+                    <th>Profile</th>
                     <th>Contact</th>
                     <th>Location</th>
-                    <th>Farm Size</th>
+                    <th>Farm Details</th>
                     <th>Crops</th>
                     <th style={{ textAlign: 'right' }}>Actions</th>
                   </tr>
@@ -125,8 +125,17 @@ export default function Dashboard() {
                     filteredFarmers.map(farmer => (
                       <tr key={farmer._id}>
                         <td>
-                          <div style={{ fontWeight: '500' }}>{farmer.name || 'N/A'}</div>
-                          <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{farmer._id}</div>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                            <img 
+                              src={farmer.avatar && farmer.avatar.startsWith('http') ? farmer.avatar : 'https://ui-avatars.com/api/?name=' + (farmer.name || 'F')} 
+                              alt="Avatar" 
+                              style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }} 
+                            />
+                            <div>
+                              <div style={{ fontWeight: '500' }}>{farmer.name || 'N/A'}</div>
+                              <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>{farmer._id}</div>
+                            </div>
+                          </div>
                         </td>
                         <td>
                           <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Phone size={14}/> {farmer.phoneNumber || 'N/A'}</div>
@@ -138,7 +147,11 @@ export default function Dashboard() {
                             {farmer.district ? `${farmer.district}, ${farmer.state}` : 'N/A'}
                           </div>
                         </td>
-                        <td>{farmer.farmSize ? `${farmer.farmSize} Acres` : 'N/A'}</td>
+                        <td>
+                          <div>{farmer.farmSize ? `${farmer.farmSize} Acres` : 'Size: N/A'}</div>
+                          <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Soil: {farmer.soilType || 'N/A'}</div>
+                          <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Irrig: {farmer.irrigationType || 'N/A'}</div>
+                        </td>
                         <td>
                           <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
                             {(farmer.cropTypes && farmer.cropTypes.length > 0) ? farmer.cropTypes.map((c, i) => (
