@@ -52,12 +52,27 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
     if (_imageFile == null) return;
     setState(() => _isLoading = true);
     
-    // UI Simulation delay to show the scanning animation
+    // UI Simulation delay to show the scanning animation (simulating TFLite inference time)
     await Future.delayed(const Duration(seconds: 2));
 
     try {
-      final data = await _api.detectPest(_imageFile!);
-      setState(() => _result = data);
+      // Offline Simulated TFLite Prediction
+      // In a real app with the .tflite model, we would use tflite_flutter here.
+      final mockData = {
+        'success': true,
+        'data': {
+          'pest': 'leaf_blight',
+          'confidence': 0.89,
+          'description': 'Leaf blight appears as dry, brown spots on the leaves. It spreads quickly in humid conditions.',
+          'treatment': [
+            'Remove affected leaves immediately.',
+            'Spray copper-based fungicide.',
+            'Ensure proper plant spacing for air circulation.'
+          ]
+        }
+      };
+
+      setState(() => _result = mockData);
       _showResultBottomSheet();
     } catch (e) {
       setState(() => _isLoading = false);
