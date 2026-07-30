@@ -76,26 +76,51 @@ const FarmersManagement = () => {
           <table>
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Phone</th>
-                <th>Language</th>
+                <th>Profile</th>
+                <th>Contact</th>
                 <th>Location</th>
-                <th>Joined</th>
+                <th>Farm Details</th>
+                <th>Crops</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {filteredFarmers.map(farmer => (
                 <tr key={farmer._id}>
-                  <td>{farmer.name || 'N/A'}</td>
-                  <td>{farmer.phone}</td>
-                  <td><span className="badge badge-active">{farmer.languagePreference || 'en'}</span></td>
                   <td>
-                    {farmer.location?.coordinates?.length === 2 
-                      ? `${farmer.location.coordinates[1].toFixed(4)}, ${farmer.location.coordinates[0].toFixed(4)}`
-                      : 'N/A'}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <img 
+                        src={(farmer.avatar && farmer.avatar.startsWith('http')) ? farmer.avatar : 'https://ui-avatars.com/api/?name=' + (farmer.name || 'F') + '&background=10b981&color=fff'} 
+                        alt="Avatar" 
+                        style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover' }} 
+                      />
+                      <div>
+                        <div style={{ fontWeight: '500' }}>{farmer.name || 'N/A'}</div>
+                        <div style={{ fontSize: '0.85rem', color: '#64748b' }}>{farmer.languagePreference || 'en'}</div>
+                      </div>
+                    </div>
                   </td>
-                  <td>{new Date(farmer.createdAt).toLocaleDateString()}</td>
+                  <td>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>{farmer.phone || farmer.phoneNumber || 'N/A'}</div>
+                    {farmer.email && <div style={{ fontSize: '0.85rem', color: '#64748b' }}>{farmer.email}</div>}
+                  </td>
+                  <td>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      {farmer.district ? `${farmer.district}, ${farmer.state}` : (farmer.location?.coordinates?.length === 2 ? `${farmer.location.coordinates[1].toFixed(4)}, ${farmer.location.coordinates[0].toFixed(4)}` : 'N/A')}
+                    </div>
+                  </td>
+                  <td>
+                    <div>{farmer.farmSize ? `${farmer.farmSize} Acres` : 'Size: N/A'}</div>
+                    <div style={{ fontSize: '0.85rem', color: '#64748b' }}>Soil: {farmer.soilType || 'N/A'}</div>
+                    <div style={{ fontSize: '0.85rem', color: '#64748b' }}>Irrig: {farmer.irrigationType || 'N/A'}</div>
+                  </td>
+                  <td>
+                    <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap' }}>
+                      {(farmer.cropTypes && farmer.cropTypes.length > 0) ? farmer.cropTypes.map((c, i) => (
+                        <span key={i} className="badge badge-active">{c}</span>
+                      )) : <span className="badge badge-inactive">None</span>}
+                    </div>
+                  </td>
                   <td>
                     <button 
                       className="btn btn-danger" 
