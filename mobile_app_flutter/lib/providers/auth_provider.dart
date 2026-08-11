@@ -333,10 +333,14 @@ class AuthProvider extends ChangeNotifier {
         _user = UserModel.fromJson(res['data']);
         notifyListeners();
         return true;
+      } else {
+        _error = res['message'] ?? 'Failed to update profile on server';
       }
     } catch (e) {
       debugPrint('Update profile error: $e');
+      _error = 'Connection error: $e';
     }
+    notifyListeners();
     return false;
   }
 

@@ -71,6 +71,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                 ),
                 const SizedBox(height: 24),
                 const Text('KrushikaDhara', style: TextStyle(fontSize: 32, fontWeight: FontWeight.w700, color: Colors.white)),
+                const SizedBox(height: 4),
+                const Text('ಕೃಷಿಕಧಾರಾ', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600, color: Colors.white)),
                 const SizedBox(height: 6),
                 Text('Smart Farming Companion', style: TextStyle(fontSize: 16, color: Colors.white.withOpacity(0.8))),
                 const SizedBox(height: 40),

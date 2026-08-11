@@ -283,14 +283,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     const SizedBox(height: 12),
                     GestureDetector(
                       onTap: () async {
+                        if (_isUpdatingLocation) return;
                         setState(() => _isUpdatingLocation = true);
-                        final auth = Provider.of<AuthProvider>(context, listen: false);
-                        final loc = await LocationService.getCurrentLocation();
-                        if (loc != null && mounted) {
-                          await auth.updateProfile(loc);
-                          await _fetchData();
+                        try {
+                          final auth = Provider.of<AuthProvider>(context, listen: false);
+                          final loc = await LocationService.getCurrentLocation().timeout(const Duration(seconds: 15));
+                          
+                          if (loc != null && mounted) {
+                            final success = await auth.updateProfile(loc);
+                            if (success && mounted) {
+                              await _fetchData();
+                            } else if (mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocale.t(context, 'error') ?? 'Failed to update profile')));
+                            }
+                          } else if (mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(AppLocale.t(context, 'location_error') ?? 'Location detection failed. Please enable GPS and allow location access in your browser/device settings.')));
+                          }
+                        } catch (e) {
+                          if (mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Timeout or error detecting location.')));
+                          }
+                        } finally {
+                          if (mounted) setState(() => _isUpdatingLocation = false);
                         }
-                        if (mounted) setState(() => _isUpdatingLocation = false);
                       },
                       child: Container(
                         padding: const EdgeInsets.all(16),
