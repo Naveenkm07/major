@@ -1,5 +1,14 @@
 import tensorflow as tf
 import os
+import sys
+
+print("=========================================================================")
+print("WARNING: DEVELOPMENT / TEST ONLY")
+print("This script generates a MOCK (tf.zeros) TFLite model.")
+print("It DOES NOT perform genuine disease detection and is ONLY for testing")
+print("the Flutter inference pipeline compilation and loading mechanisms.")
+print("DO NOT USE THE GENERATED MODEL IN PRODUCTION.")
+print("=========================================================================\n")
 
 class DummyYolo(tf.Module):
     @tf.function(input_signature=[tf.TensorSpec(shape=[1, 640, 640, 3], dtype=tf.float32)])
