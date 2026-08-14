@@ -1,9 +1,12 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:camera/camera.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 import '../../config/theme.dart';
-import '../../services/api_service.dart';
+import '../../core/locale.dart';
+import '../../data/disease_data.dart';
+import '../../services/tflite_service.dart';
 
 class DiseaseDetectionScreen extends StatefulWidget {
   const DiseaseDetectionScreen({super.key});
@@ -12,91 +15,151 @@ class DiseaseDetectionScreen extends StatefulWidget {
   State<DiseaseDetectionScreen> createState() => _DiseaseDetectionScreenState();
 }
 
-class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
-  final _api = ApiService();
-  final _picker = ImagePicker();
-
-  File? _imageFile;
-  bool _isLoading = false;
-  Map<String, dynamic>? _result;
+class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> with WidgetsBindingObserver {
+  CameraController? _cameraController;
+  final TFLiteService _tfliteService = TFLiteService();
+  final ImagePicker _picker = ImagePicker();
+  
+  bool _isDetecting = false;
+  bool _isCameraInitialized = false;
+  
+  List<Detection> _currentDetections = [];
+  Map<String, dynamic>? _selectedResult;
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _initializeModelAndCamera();
   }
 
-  Future<void> _pickImage(ImageSource source) async {
+  Future<void> _initializeModelAndCamera() async {
+    await _tfliteService.loadModel();
+    if (mounted) {
+      _setupCamera();
+    }
+  }
+
+  Future<void> _setupCamera() async {
     try {
-      final picked = await _picker.pickImage(source: source, maxWidth: 1024, imageQuality: 85);
-      if (picked != null) {
-        setState(() {
-          _imageFile = File(picked.path);
-          _result = null;
+      final cameras = await availableCameras();
+      if (cameras.isEmpty) return;
+
+      _cameraController = CameraController(
+        cameras.first,
+        ResolutionPreset.medium,
+        enableAudio: false,
+        imageFormatGroup: Platform.isIOS ? ImageFormatGroup.bgra8888 : ImageFormatGroup.yuv420,
+      );
+
+      await _cameraController!.initialize();
+      if (!mounted) return;
+
+      setState(() => _isCameraInitialized = true);
+
+      // Start streaming for real-time inference
+      _cameraController!.startImageStream((CameraImage image) {
+        if (_isDetecting || !_tfliteService.isLoaded) return;
+        _isDetecting = true;
+
+        _tfliteService.detect(image).then((detections) {
+          if (mounted) {
+            setState(() {
+              _currentDetections = detections;
+              // If high confidence detection is found, auto-trigger result sheet
+              if (detections.isNotEmpty && detections.first.confidence > 0.6 && _selectedResult == null) {
+                _showResult(detections.first);
+              }
+            });
+          }
+          _isDetecting = false;
+        }).catchError((e) {
+          _isDetecting = false;
         });
-        _detectDisease();
-      }
+      });
     } catch (e) {
-      if (mounted) {
+      print('Error initializing camera: $e');
+    }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    final CameraController? cameraController = _cameraController;
+
+    if (cameraController == null || !cameraController.value.isInitialized) {
+      return;
+    }
+
+    if (state == AppLifecycleState.inactive) {
+      cameraController.dispose();
+    } else if (state == AppLifecycleState.resumed) {
+      _setupCamera();
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _cameraController?.dispose();
+    _tfliteService.dispose();
+    super.dispose();
+  }
+
+  Future<void> _pickGalleryImage() async {
+    try {
+      final picked = await _picker.pickImage(source: ImageSource.gallery, maxWidth: 1024, imageQuality: 85);
+      if (picked != null) {
+        // Fallback for static image inference could be added here
+        // For now, simulated offline mapping for gallery
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Could not open camera/gallery. Please check permissions. Error: $e'),
-            backgroundColor: Colors.red,
-            duration: const Duration(seconds: 4),
-          ),
+          const SnackBar(content: Text('Gallery inference requires image conversion. Using mock for gallery.')),
         );
       }
-    }
-  }
-
-  Future<void> _detectDisease() async {
-    if (_imageFile == null) return;
-    setState(() => _isLoading = true);
-    
-    // UI Simulation delay to show the scanning animation (simulating TFLite inference time)
-    await Future.delayed(const Duration(seconds: 2));
-
-    try {
-      // Offline Simulated TFLite Prediction
-      // In a real app with the .tflite model, we would use tflite_flutter here.
-      final mockData = {
-        'success': true,
-        'data': {
-          'pest': 'leaf_blight',
-          'confidence': 0.89,
-          'description': 'Leaf blight appears as dry, brown spots on the leaves. It spreads quickly in humid conditions.',
-          'treatment': [
-            'Remove affected leaves immediately.',
-            'Spray copper-based fungicide.',
-            'Ensure proper plant spacing for air circulation.'
-          ]
-        }
-      };
-
-      setState(() => _result = mockData);
-      _showResultBottomSheet();
     } catch (e) {
-      setState(() => _isLoading = false);
-    } finally {
-      if (mounted) setState(() => _isLoading = false);
+      // Ignore
     }
   }
 
-  void _showResultBottomSheet() {
+  void _showResult(Detection detection) {
+    if (_selectedResult != null) return; // Prevent multiple sheets
+    
+    final dbEntry = DiseaseData.diseaseDb[detection.label] ?? DiseaseData.diseaseDb['healthy']!;
+    
+    setState(() {
+      _selectedResult = {
+        'pest': detection.label,
+        'confidence': detection.confidence,
+        'description': dbEntry['description'],
+        'treatment': dbEntry['treatment'],
+      };
+    });
+    
+    // Pause stream while showing sheet
+    _cameraController?.stopImageStream();
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
+      isDismissible: false,
       builder: (context) => _buildBottomSheet(),
-    );
+    ).then((_) {
+      if (mounted) {
+        setState(() => _selectedResult = null);
+        _setupCamera(); // Resume
+      }
+    });
   }
 
   Widget _buildBottomSheet() {
-    final pest = _result?['data']?['pest']?.toString().replaceAll('_', ' ').toUpperCase() ?? 'UNKNOWN DISEASE';
-    final confidence = _result?['data']?['confidence'] as double? ?? 0.0;
-    final description = _result?['data']?['description']?.toString() ?? 'No description available.';
-    final treatmentList = _result?['data']?['treatment'] as List<dynamic>? ?? [];
+    final pest = _selectedResult?['pest']?.toString().replaceAll('_', ' ').toUpperCase() ?? 'UNKNOWN';
+    final confidence = _selectedResult?['confidence'] as double? ?? 0.0;
+    final description = _selectedResult?['description']?.toString() ?? '';
+    final treatmentList = _selectedResult?['treatment'] as List<String>? ?? [];
     final treatment = treatmentList.isNotEmpty ? '• ${treatmentList.join('\n• ')}' : 'No treatment info.';
-    final isHighSeverity = confidence > 0.7;
+    final isHighSeverity = confidence > 0.7 && pest != 'HEALTHY';
+    
+    final locale = Provider.of<AppLocale>(context, listen: false);
 
     return Container(
       decoration: const BoxDecoration(
@@ -108,7 +171,6 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Drag handle
           Center(
             child: Container(
               width: 40,
@@ -121,16 +183,18 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Diagnosis result (${(confidence * 100).toStringAsFixed(1)}% match)', style: const TextStyle(color: Colors.grey, fontSize: 13)),
+              Text('${locale.get('diagnosis_result') ?? 'Diagnosis result'} (${(confidence * 100).toStringAsFixed(1)}% match)', 
+                  style: const TextStyle(color: Colors.grey, fontSize: 13)),
               if (isHighSeverity)
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(color: AppTheme.pestRed, borderRadius: BorderRadius.circular(12)),
-                  child: const Row(
+                  child: Row(
                     children: [
-                      Icon(Icons.warning_amber_rounded, color: Colors.white, size: 14),
-                      SizedBox(width: 4),
-                      Text('High Severity', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
+                      const Icon(Icons.warning_amber_rounded, color: Colors.white, size: 14),
+                      const SizedBox(width: 4),
+                      Text(locale.get('high_severity') ?? 'High Severity', 
+                           style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
                     ],
                   ),
                 ),
@@ -147,7 +211,6 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
           
           const SizedBox(height: 20),
           
-          // Treatment Box
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(16),
@@ -158,7 +221,8 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text('Recommended Treatment', style: TextStyle(color: AppTheme.primaryGreen, fontSize: 12, fontWeight: FontWeight.bold)),
+                Text(locale.get('recommended_treatment') ?? 'Recommended Treatment', 
+                     style: const TextStyle(color: AppTheme.primaryGreen, fontSize: 12, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 8),
                 Text(
                   treatment,
@@ -176,30 +240,20 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
                 child: OutlinedButton(
                   onPressed: () {
                     Navigator.pop(context);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Saved to My Disease Scans in Profile!'),
-                        backgroundColor: AppTheme.primaryGreen,
-                        duration: Duration(seconds: 3),
-                      ),
-                    );
                   },
                   style: OutlinedButton.styleFrom(
                     side: const BorderSide(color: AppTheme.primaryGreen),
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   ),
-                  child: const Text('Save to Profile', style: TextStyle(color: AppTheme.primaryGreen, fontWeight: FontWeight.bold)),
+                  child: const Text('Discard', style: TextStyle(color: AppTheme.primaryGreen, fontWeight: FontWeight.bold)),
                 ),
               ),
               const SizedBox(width: 12),
               Expanded(
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pop(context); // Close sheet
-                    // Ask the chatbot
-                    final chatMsg = 'How do I organically treat $pest?';
-                    // We can just push the chatbot screen, the user can type it. Or we can inject it via provider if imported, but to keep it simple:
+                    Navigator.pop(context);
                     Navigator.pushNamed(context, '/chatbot');
                   },
                   style: ElevatedButton.styleFrom(
@@ -207,7 +261,7 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   ),
-                  child: const Text('Ask AI: Organic', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                  child: const Text('Ask AI', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                 ),
               ),
             ],
@@ -220,28 +274,36 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final locale = Provider.of<AppLocale>(context);
+
     return Scaffold(
-      backgroundColor: const Color(0xFF2E3B2F), // Dark greenish background for scanner
+      backgroundColor: Colors.black,
       body: Stack(
         children: [
-          // Background Image (Live Camera Feed simulation)
-          if (_imageFile != null)
-            Positioned.fill(
-              child: kIsWeb 
-                  ? Image.network(_imageFile!.path, fit: BoxFit.cover)
-                  : Image.file(_imageFile!, fit: BoxFit.cover),
+          // Camera Preview
+          if (_isCameraInitialized && _cameraController != null)
+            SizedBox(
+              width: size.width,
+              height: size.height,
+              child: FittedBox(
+                fit: BoxFit.cover,
+                child: SizedBox(
+                  width: _cameraController!.value.previewSize?.height ?? size.width,
+                  height: _cameraController!.value.previewSize?.width ?? size.height,
+                  child: CameraPreview(_cameraController!),
+                ),
+              ),
             )
           else
-            Positioned.fill(
-              child: Center(
-                child: Icon(Icons.eco_rounded, size: 300, color: AppTheme.primaryGreen.withOpacity(0.4)),
-              ),
-            ),
+            const Center(child: CircularProgressIndicator(color: AppTheme.primaryGreen)),
           
-          // Dark overlay
-          Positioned.fill(
-            child: Container(color: Colors.black.withOpacity(0.3)),
-          ),
+          // Bounding Box Overlays
+          if (_currentDetections.isNotEmpty && _selectedResult == null)
+            CustomPaint(
+              size: size,
+              painter: BoundingBoxPainter(_currentDetections, size),
+            ),
 
           // Header
           Positioned(
@@ -252,68 +314,27 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 GestureDetector(
-                  onTap: () {
-                    if (Navigator.canPop(context)) {
-                      Navigator.pop(context);
-                    } else {
-                      Navigator.pushReplacementNamed(context, '/home');
-                    }
-                  },
+                  onTap: () => Navigator.pop(context),
                   child: Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(color: Colors.black.withOpacity(0.4), shape: BoxShape.circle),
                     child: const Icon(Icons.arrow_back, color: Colors.white),
                   ),
                 ),
-                GestureDetector(
-                  onTap: () => _pickImage(ImageSource.camera),
-                  child: Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(color: Colors.black.withOpacity(0.4), shape: BoxShape.circle),
-                    child: const Icon(Icons.camera_alt_outlined, color: Colors.white),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.5),
+                    borderRadius: BorderRadius.circular(20),
                   ),
-                ),
-              ],
-            ),
-          ),
-          
-          // Scanner UI overlay
-          Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (_isLoading) ...[
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    decoration: BoxDecoration(color: Colors.black.withOpacity(0.6), borderRadius: BorderRadius.circular(20)),
-                    child: const Text('Scanning leaf...', style: TextStyle(color: Colors.white, fontSize: 14)),
-                  ),
-                  const SizedBox(height: 12),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                    decoration: BoxDecoration(color: AppTheme.accentDark, borderRadius: BorderRadius.circular(8)),
-                    child: const Text('Detected', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
-                  ),
-                ],
-                const SizedBox(height: 20),
-                // Orange brackets graphic
-                SizedBox(
-                  width: 280,
-                  height: 280,
-                  child: Stack(
+                  child: Row(
                     children: [
-                      // Top Left
-                      Positioned(top: 0, left: 0, child: Container(width: 40, height: 4, color: AppTheme.accent)),
-                      Positioned(top: 0, left: 0, child: Container(width: 4, height: 40, color: AppTheme.accent)),
-                      // Top Right
-                      Positioned(top: 0, right: 0, child: Container(width: 40, height: 4, color: AppTheme.accent)),
-                      Positioned(top: 0, right: 0, child: Container(width: 4, height: 40, color: AppTheme.accent)),
-                      // Bottom Left
-                      Positioned(bottom: 0, left: 0, child: Container(width: 40, height: 4, color: AppTheme.accent)),
-                      Positioned(bottom: 0, left: 0, child: Container(width: 4, height: 40, color: AppTheme.accent)),
-                      // Bottom Right
-                      Positioned(bottom: 0, right: 0, child: Container(width: 40, height: 4, color: AppTheme.accent)),
-                      Positioned(bottom: 0, right: 0, child: Container(width: 4, height: 40, color: AppTheme.accent)),
+                      const Icon(Icons.center_focus_weak, color: Colors.white, size: 16),
+                      const SizedBox(width: 8),
+                      Text(
+                        _tfliteService.isLoaded ? 'Model Ready' : 'Loading Model...',
+                        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
+                      )
                     ],
                   ),
                 ),
@@ -321,8 +342,8 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
             ),
           ),
           
-          // Demo Buttons
-          if (!_isLoading && _result == null)
+          // Bottom Actions
+          if (_selectedResult == null)
             Positioned(
               bottom: 40,
               left: 20,
@@ -330,25 +351,13 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
               child: Row(
                 children: [
                   Expanded(
-                    child: ElevatedButton.icon(
-                      onPressed: () => _pickImage(ImageSource.camera),
-                      icon: const Icon(Icons.camera_alt),
-                      label: const Text('Take Photo', style: TextStyle(fontWeight: FontWeight.bold)),
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        backgroundColor: AppTheme.primaryGreen,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
                     child: OutlinedButton.icon(
-                      onPressed: () => _pickImage(ImageSource.gallery),
+                      onPressed: _pickGalleryImage,
                       icon: const Icon(Icons.photo_library, color: Colors.white),
-                      label: const Text('Gallery', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                      label: Text(locale.get('gallery') ?? 'Gallery', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
+                        backgroundColor: Colors.black.withOpacity(0.6),
                         side: BorderSide(color: Colors.white.withOpacity(0.5)),
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                       ),
@@ -361,4 +370,55 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> {
       ),
     );
   }
+}
+
+class BoundingBoxPainter extends CustomPainter {
+  final List<Detection> detections;
+  final Size screenSize;
+
+  BoundingBoxPainter(this.detections, this.screenSize);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = AppTheme.primaryGreen
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 3.0;
+
+    final bgPaint = Paint()
+      ..color = AppTheme.primaryGreen.withOpacity(0.8)
+      ..style = PaintingStyle.fill;
+
+    for (var detection in detections) {
+      // Map bounding box to screen coordinates
+      // Note: This relies on the camera preview filling the screen.
+      final rect = detection.boundingBox;
+      
+      canvas.drawRect(rect, paint);
+
+      // Draw label text background
+      final textSpan = TextSpan(
+        text: '${detection.label} ${(detection.confidence * 100).toStringAsFixed(0)}%',
+        style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
+      );
+      final textPainter = TextPainter(
+        text: textSpan,
+        textDirection: TextDirection.ltr,
+      );
+      textPainter.layout();
+
+      final labelRect = Rect.fromLTWH(
+        rect.left,
+        rect.top - 24,
+        textPainter.width + 12,
+        24,
+      );
+      canvas.drawRRect(RRect.fromRectAndRadius(labelRect, const Radius.circular(4)), bgPaint);
+      
+      textPainter.paint(canvas, Offset(rect.left + 6, rect.top - 20));
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
 }

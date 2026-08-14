@@ -66,6 +66,9 @@ dependencies:
   supabase_flutter: ^2.12.4
   google_sign_in: ^7.2.0
   supabase: ^2.10.6
+  tflite_flutter: ^0.12.1
+  image: ^4.8.0
+  path_provider: ^2.1.6
 
 dev_dependencies:
   flutter_test:
@@ -79,4 +82,5 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/animations/
+    - assets/models/
     - .env
