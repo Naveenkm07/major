@@ -159,11 +159,6 @@ class DiseaseData {
       "treatment": ["Treatment information not available yet."],
       "prevention": ["Prevention information not available yet."],
     },
-    "Wheat_Septoria": {
-      "description": "Wheat septoria.",
-      "treatment": ["Treatment information not available yet."],
-      "prevention": ["Prevention information not available yet."],
-    },
     "Wheat_Smut": {
       "description": "Wheat smut.",
       "treatment": ["Treatment information not available yet."],
