@@ -109,14 +109,27 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> with Wi
     try {
       final picked = await _picker.pickImage(source: ImageSource.gallery, maxWidth: 1024, imageQuality: 85);
       if (picked != null) {
-        // Fallback for static image inference could be added here
-        // For now, simulated offline mapping for gallery
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Gallery inference requires image conversion. Using mock for gallery.')),
-        );
+        setState(() => _isDetecting = true);
+        _cameraController?.stopImageStream();
+        
+        final detections = await _tfliteService.detectFromFile(picked.path);
+        
+        setState(() {
+          _isDetecting = false;
+          _currentDetections = detections;
+          if (detections.isNotEmpty) {
+            _showResult(detections.first);
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('No disease detected in the image.')),
+            );
+            _setupCamera(); // Resume camera if nothing found
+          }
+        });
       }
     } catch (e) {
-      // Ignore
+      setState(() => _isDetecting = false);
+      print('Gallery error: $e');
     }
   }
 
