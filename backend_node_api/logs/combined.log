@@ -1317,3 +1317,261 @@
 {"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:00:50"}
 {"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:00:50"}
 {"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:00:55"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:01:25"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:01:25"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:01:25"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:01:25"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:01:30"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:02:00"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:02:00"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:02:00"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:02:00"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:02:05"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:02:35"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:02:35"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:02:35"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:02:35"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:02:40"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:03:10"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:03:10"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:03:10"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:03:10"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:03:15"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:03:45"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:03:45"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:03:45"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:03:45"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:03:50"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:04:20"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:04:20"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:04:20"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:04:20"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:04:25"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:04:55"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:04:55"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:04:55"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:04:55"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:05:00"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:05:30"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:05:30"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:05:30"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:05:30"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:05:35"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:06:05"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:06:05"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:06:05"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:06:05"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:06:10"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:06:40"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:06:40"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:06:40"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:06:40"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:06:45"}
+{"level":"error","message":"Not authorized — no token provided","service":"krushikadhara-api","stack":"Error: Not authorized — no token provided\n    at Z:\\major\\backend_node_api\\src\\middleware\\auth.js:17:15\n    at Z:\\major\\backend_node_api\\src\\utils\\helpers.js:17:21\n    at Layer.handle [as handle_request] (Z:\\major\\backend_node_api\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (Z:\\major\\backend_node_api\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at Route.dispatch (Z:\\major\\backend_node_api\\node_modules\\express\\lib\\router\\route.js:119:3)\n    at Layer.handle [as handle_request] (Z:\\major\\backend_node_api\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at Z:\\major\\backend_node_api\\node_modules\\express\\lib\\router\\index.js:284:15\n    at router.process_params (Z:\\major\\backend_node_api\\node_modules\\express\\lib\\router\\index.js:346:12)\n    at next (Z:\\major\\backend_node_api\\node_modules\\express\\lib\\router\\index.js:280:10)\n    at router.handle (Z:\\major\\backend_node_api\\node_modules\\express\\lib\\router\\index.js:175:3)","timestamp":"2026-08-14 21:06:58","url":"/api/v1/auth/me"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:07:15"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:07:15"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:07:15"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:07:15"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:07:20"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:07:50"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:07:50"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:07:50"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:07:50"}
+{"level":"error","message":"Not authorized — no token provided","service":"krushikadhara-api","stack":"Error: Not authorized — no token provided\n    at Z:\\major\\backend_node_api\\src\\middleware\\auth.js:17:15\n    at Z:\\major\\backend_node_api\\src\\utils\\helpers.js:17:21\n    at Layer.handle [as handle_request] (Z:\\major\\backend_node_api\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (Z:\\major\\backend_node_api\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at Route.dispatch (Z:\\major\\backend_node_api\\node_modules\\express\\lib\\router\\route.js:119:3)\n    at Layer.handle [as handle_request] (Z:\\major\\backend_node_api\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at Z:\\major\\backend_node_api\\node_modules\\express\\lib\\router\\index.js:284:15\n    at router.process_params (Z:\\major\\backend_node_api\\node_modules\\express\\lib\\router\\index.js:346:12)\n    at next (Z:\\major\\backend_node_api\\node_modules\\express\\lib\\router\\index.js:280:10)\n    at router.handle (Z:\\major\\backend_node_api\\node_modules\\express\\lib\\router\\index.js:175:3)","timestamp":"2026-08-14 21:07:51","url":"/api/v1/auth/me"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:07:55"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:08:25"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:08:25"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:08:25"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:08:25"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:08:30"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:09:00"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:09:00"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:09:00"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:09:00"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:09:05"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:09:35"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:09:35"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:09:35"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:09:35"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:09:40"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:10:10"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:10:10"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:10:10"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:10:10"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:10:15"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:10:45"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:10:45"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:10:45"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:10:45"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:10:50"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:11:20"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:11:20"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:11:20"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:11:20"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:11:25"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:11:55"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:11:55"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:11:55"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:11:55"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:12:00"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:12:30"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:12:30"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:12:30"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:12:30"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:12:35"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:13:05"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:13:05"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:13:05"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:13:05"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:13:10"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:13:40"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:13:40"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:13:40"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:13:40"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:13:45"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:14:15"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:14:15"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:14:15"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:14:15"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:14:20"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:14:50"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:14:50"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:14:50"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:14:50"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:14:55"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:15:25"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:15:25"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:15:25"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:15:25"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:15:30"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:16:00"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:16:00"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:16:00"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:16:00"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:16:05"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:16:35"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:16:35"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:16:35"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:16:35"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:16:40"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:17:10"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:17:10"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:17:10"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:17:10"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:17:15"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:17:45"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:17:45"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:17:45"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:17:45"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:17:50"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:18:20"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:18:20"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:18:20"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:18:20"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:18:25"}
+{"level":"error","message":"Not authorized — no token provided","service":"krushikadhara-api","stack":"Error: Not authorized — no token provided\n    at Z:\\major\\backend_node_api\\src\\middleware\\auth.js:17:15\n    at Z:\\major\\backend_node_api\\src\\utils\\helpers.js:17:21\n    at Layer.handle [as handle_request] (Z:\\major\\backend_node_api\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (Z:\\major\\backend_node_api\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at Route.dispatch (Z:\\major\\backend_node_api\\node_modules\\express\\lib\\router\\route.js:119:3)\n    at Layer.handle [as handle_request] (Z:\\major\\backend_node_api\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at Z:\\major\\backend_node_api\\node_modules\\express\\lib\\router\\index.js:284:15\n    at router.process_params (Z:\\major\\backend_node_api\\node_modules\\express\\lib\\router\\index.js:346:12)\n    at next (Z:\\major\\backend_node_api\\node_modules\\express\\lib\\router\\index.js:280:10)\n    at router.handle (Z:\\major\\backend_node_api\\node_modules\\express\\lib\\router\\index.js:175:3)","timestamp":"2026-08-14 21:18:41","url":"/api/v1/auth/me"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:18:55"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:18:55"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:18:55"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:18:55"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:19:00"}
+{"level":"error","message":"Not authorized — no token provided","service":"krushikadhara-api","stack":"Error: Not authorized — no token provided\n    at Z:\\major\\backend_node_api\\src\\middleware\\auth.js:17:15\n    at Z:\\major\\backend_node_api\\src\\utils\\helpers.js:17:21\n    at Layer.handle [as handle_request] (Z:\\major\\backend_node_api\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (Z:\\major\\backend_node_api\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at Route.dispatch (Z:\\major\\backend_node_api\\node_modules\\express\\lib\\router\\route.js:119:3)\n    at Layer.handle [as handle_request] (Z:\\major\\backend_node_api\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at Z:\\major\\backend_node_api\\node_modules\\express\\lib\\router\\index.js:284:15\n    at router.process_params (Z:\\major\\backend_node_api\\node_modules\\express\\lib\\router\\index.js:346:12)\n    at next (Z:\\major\\backend_node_api\\node_modules\\express\\lib\\router\\index.js:280:10)\n    at router.handle (Z:\\major\\backend_node_api\\node_modules\\express\\lib\\router\\index.js:175:3)","timestamp":"2026-08-14 21:19:07","url":"/api/v1/auth/me"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:19:30"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:19:30"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:19:30"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:19:30"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:19:35"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:20:05"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:20:05"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:20:05"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:20:05"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:20:10"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:20:40"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:20:40"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:20:40"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:20:40"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:20:45"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:21:15"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:21:15"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:21:15"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:21:15"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:21:20"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:21:50"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:21:50"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:21:50"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:21:50"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:21:55"}
+{"level":"error","message":"Not authorized — no token provided","service":"krushikadhara-api","stack":"Error: Not authorized — no token provided\n    at Z:\\major\\backend_node_api\\src\\middleware\\auth.js:17:15\n    at Z:\\major\\backend_node_api\\src\\utils\\helpers.js:17:21\n    at Layer.handle [as handle_request] (Z:\\major\\backend_node_api\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at next (Z:\\major\\backend_node_api\\node_modules\\express\\lib\\router\\route.js:149:13)\n    at Route.dispatch (Z:\\major\\backend_node_api\\node_modules\\express\\lib\\router\\route.js:119:3)\n    at Layer.handle [as handle_request] (Z:\\major\\backend_node_api\\node_modules\\express\\lib\\router\\layer.js:95:5)\n    at Z:\\major\\backend_node_api\\node_modules\\express\\lib\\router\\index.js:284:15\n    at router.process_params (Z:\\major\\backend_node_api\\node_modules\\express\\lib\\router\\index.js:346:12)\n    at next (Z:\\major\\backend_node_api\\node_modules\\express\\lib\\router\\index.js:280:10)\n    at router.handle (Z:\\major\\backend_node_api\\node_modules\\express\\lib\\router\\index.js:175:3)","timestamp":"2026-08-14 21:21:56","url":"/api/v1/auth/me"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:22:25"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:22:25"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:22:25"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:22:25"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:22:30"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:23:00"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:23:00"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:23:00"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:23:00"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:23:05"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:23:35"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:23:35"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:23:35"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:23:35"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:23:40"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:24:10"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:24:10"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:24:10"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:24:10"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:24:15"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:24:45"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:24:45"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:24:45"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:24:45"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:24:50"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:25:20"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:25:20"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:25:20"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:25:20"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:25:25"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:25:55"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:25:55"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:25:55"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:25:55"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:26:00"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:26:30"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:26:30"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:26:30"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:26:30"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:26:35"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:27:05"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:27:05"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:27:05"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:27:05"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:27:10"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:27:40"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:27:40"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:27:40"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:27:40"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:27:45"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:28:15"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:28:15"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:28:15"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:28:15"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:28:20"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:28:50"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:28:50"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:28:50"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:28:50"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:28:55"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:29:25"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:29:25"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:29:25"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:29:25"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:29:30"}
+{"level":"warn","message":"MongoDB disconnected. Attempting to reconnect...","service":"krushikadhara-api","timestamp":"2026-08-14 21:30:00"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:30:00"}
+{"level":"info","message":"Retrying MongoDB connection in 5 seconds...","service":"krushikadhara-api","timestamp":"2026-08-14 21:30:00"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:30:00"}
+{"level":"info","message":"[CRON] Starting market price refresh...","service":"krushikadhara-api","timestamp":"2026-08-14 21:30:00"}
+{"level":"error","message":"Market API fetch failed: Request failed with status code 403","service":"krushikadhara-api","timestamp":"2026-08-14 21:30:01"}
+{"level":"info","message":"[CRON] Market prices refreshed: 0 records (source: error)","service":"krushikadhara-api","timestamp":"2026-08-14 21:30:01"}
+{"level":"info","message":"Connecting to MongoDB... (URI set: YES, host: unknown)","service":"krushikadhara-api","timestamp":"2026-08-14 21:30:05"}
