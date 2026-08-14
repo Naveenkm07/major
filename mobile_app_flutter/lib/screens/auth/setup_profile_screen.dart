@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../config/theme.dart';
 import '../../services/location_service.dart';
 import '../../providers/auth_provider.dart';
+import '../../core/locale.dart';
 
 class SetupProfileScreen extends StatefulWidget {
   const SetupProfileScreen({super.key});
@@ -17,7 +18,7 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
   final _nameCtrl = TextEditingController();
   bool _isLoading = false;
 
-  Future<void> _saveProfile(bool isEnglish) async {
+  Future<void> _saveProfile() async {
     if (_nameCtrl.text.trim().isEmpty) return;
 
     setState(() => _isLoading = true);
@@ -51,11 +52,7 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final bool isEnglish = ModalRoute.of(context)?.settings.arguments as bool? ?? true;
-
-    final String title = isEnglish ? 'What is your name?' : 'ನಿಮ್ಮ ಹೆಸರೇನು?';
-    final String hint = isEnglish ? 'Enter your full name' : 'ನಿಮ್ಮ ಪೂರ್ಣ ಹೆಸರನ್ನು ನಮೂದಿಸಿ';
-    final String buttonText = isEnglish ? 'Continue' : 'ಮುಂದುವರಿಸಿ';
+    final isKannada = Provider.of<AppLocale>(context).isKannada;
 
     return Scaffold(
       backgroundColor: AppTheme.background,
@@ -67,8 +64,8 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                title,
-                style: isEnglish 
+                AppLocale.t(context, 'what_is_name'),
+                style: !isKannada 
                     ? const TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: AppTheme.primaryGreen)
                     : GoogleFonts.notoSansKannada(fontSize: 28, fontWeight: FontWeight.bold, color: AppTheme.primaryGreen),
               ),
@@ -84,7 +81,7 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
                   style: const TextStyle(fontSize: 18),
                   decoration: InputDecoration(
                     border: InputBorder.none,
-                    hintText: hint,
+                    hintText: AppLocale.t(context, 'enter_full_name'),
                     contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                   ),
                 ),
@@ -93,7 +90,7 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
               _isLoading
                   ? const Center(child: CircularProgressIndicator(color: AppTheme.primaryGreen))
                   : ElevatedButton(
-                      onPressed: () => _saveProfile(isEnglish),
+                      onPressed: () => _saveProfile(),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppTheme.primaryGreen,
                         padding: const EdgeInsets.symmetric(vertical: 20),
@@ -101,8 +98,8 @@ class _SetupProfileScreenState extends State<SetupProfileScreen> {
                         elevation: 0,
                       ),
                       child: Text(
-                        buttonText, 
-                        style: isEnglish 
+                        AppLocale.t(context, 'continue_btn'), 
+                        style: !isKannada 
                             ? const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)
                             : GoogleFonts.notoSansKannada(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
                       ),

@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../config/theme.dart';
 import '../../services/location_service.dart';
 import '../../providers/auth_provider.dart';
+import '../../core/locale.dart';
 
 class OtpScreen extends StatefulWidget {
   const OtpScreen({super.key});
@@ -18,7 +19,7 @@ class _OtpScreenState extends State<OtpScreen> {
   final _otpCtrl = TextEditingController();
   bool _isLoading = false;
 
-  Future<void> _verifyOtp(String phoneNumber, bool isEnglish) async {
+  Future<void> _verifyOtp(String phoneNumber) async {
     if (_otpCtrl.text.length < 6) return;
 
     setState(() => _isLoading = true);
@@ -58,7 +59,7 @@ class _OtpScreenState extends State<OtpScreen> {
           final dbUser = authProvider.user;
           // If name is empty or default 'Farmer', ask them to set up their profile
           if (dbUser == null || dbUser.name.isEmpty || dbUser.name.toLowerCase() == 'farmer') {
-            Navigator.pushNamedAndRemoveUntil(context, '/setup-profile', (route) => false, arguments: isEnglish);
+            Navigator.pushNamedAndRemoveUntil(context, '/setup-profile', (route) => false);
           } else {
             Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
           }
@@ -77,21 +78,13 @@ class _OtpScreenState extends State<OtpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Get arguments map from LoginScreen
     final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     final phoneNumber = args?['phoneNumber'];
-    final bool isEnglish = args?['isEnglish'] ?? true;
+    final isKannada = Provider.of<AppLocale>(context).isKannada;
     
     if (phoneNumber == null) {
       return const Scaffold(body: Center(child: Text("Error: No phone number provided.")));
     }
-
-    // Translations
-    final String title = isEnglish ? 'Enter OTP' : 'OTP ನಮೂದಿಸಿ';
-    final String subtitle = isEnglish 
-        ? 'We have sent a 6-digit code to your phone number.' 
-        : 'ನಿಮ್ಮ ಫೋನ್ ಸಂಖ್ಯೆಗೆ ನಾವು 6-ಅಂಕಿಯ ಕೋಡ್ ಕಳುಹಿಸಿದ್ದೇವೆ.';
-    final String buttonText = isEnglish ? 'Verify & Login' : 'ಪರಿಶೀಲಿಸಿ ಮತ್ತು ಲಾಗಿನ್ ಮಾಡಿ';
 
     return Scaffold(
       backgroundColor: AppTheme.background,
@@ -110,8 +103,8 @@ class _OtpScreenState extends State<OtpScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                title,
-                style: isEnglish 
+                AppLocale.t(context, 'enter_otp'),
+                style: !isKannada 
                     ? const TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
@@ -125,8 +118,8 @@ class _OtpScreenState extends State<OtpScreen> {
               ),
               const SizedBox(height: 8),
               Text(
-                subtitle,
-                style: isEnglish 
+                AppLocale.t(context, 'otp_sent'),
+                style: !isKannada 
                     ? const TextStyle(fontSize: 16, color: Colors.grey)
                     : GoogleFonts.notoSansKannada(fontSize: 16, color: Colors.grey),
               ),
@@ -159,7 +152,7 @@ class _OtpScreenState extends State<OtpScreen> {
               _isLoading
                   ? const Center(child: CircularProgressIndicator(color: AppTheme.primaryGreen))
                   : ElevatedButton(
-                      onPressed: () => _verifyOtp(phoneNumber, isEnglish),
+                      onPressed: () => _verifyOtp(phoneNumber),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppTheme.primaryGreen,
                         padding: const EdgeInsets.symmetric(vertical: 20),
@@ -167,8 +160,8 @@ class _OtpScreenState extends State<OtpScreen> {
                         elevation: 0,
                       ),
                       child: Text(
-                        buttonText, 
-                        style: isEnglish 
+                        AppLocale.t(context, 'verify_login'), 
+                        style: !isKannada 
                             ? const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white)
                             : GoogleFonts.notoSansKannada(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
                       ),
