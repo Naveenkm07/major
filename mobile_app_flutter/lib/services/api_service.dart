@@ -186,52 +186,6 @@ class ApiService {
   }
 
   // ═══════════════════════════════════════════════════
-  // AI Service: Pest Detection (Python FastAPI)
-  // ═══════════════════════════════════════════════════
-
-  /// Sends a crop image to POST /api/v1/detect_pest on the AI service.
-  /// Returns JSON with pest label, confidence, treatment, and prevention.
-  Future<Map<String, dynamic>> detectPest(File imageFile) async {
-    final token = await _getToken();
-    final uri = Uri.parse('${AppConstants.backendBaseUrl}/pest-detect');
-
-    final request = http.MultipartRequest('POST', uri);
-    request.headers['Authorization'] = 'Bearer $token';
-
-    // Determine MIME type
-    final ext = imageFile.path.split('.').last.toLowerCase();
-    final mimeType = ext == 'png' ? 'image/png' : 'image/jpeg';
-
-    if (kIsWeb) {
-      final bytes = await imageFile.readAsBytes();
-      request.files.add(
-        http.MultipartFile.fromBytes(
-          'image',
-          bytes,
-          filename: 'upload.$ext',
-          contentType: MediaType.parse(mimeType),
-        ),
-      );
-    } else {
-      request.files.add(
-        await http.MultipartFile.fromPath(
-          'image',
-          imageFile.path,
-          contentType: MediaType.parse(mimeType),
-        ),
-      );
-    }
-
-    final streamedResponse = await request.send().timeout(const Duration(seconds: 30));
-    final responseBody = await streamedResponse.stream.bytesToString();
-    return jsonDecode(responseBody);
-  }
-
-  Future<Map<String, dynamic>> getScanHistory({int page = 1, int limit = 20}) async {
-    return get('/pest-detect/history', query: {'page': page.toString(), 'limit': limit.toString()});
-  }
-
-  // ═══════════════════════════════════════════════════
   // Bookmarks
   // ═══════════════════════════════════════════════════
 
