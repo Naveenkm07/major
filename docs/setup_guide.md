@@ -28,6 +28,7 @@ docker-compose up --build
 # Services:
 #   Backend API:  http://localhost:5000
 #   AI Service:   http://localhost:8000
+#   Admin Panel:  http://localhost:5173
 #   MongoDB:      localhost:27017
 ```
 
@@ -59,6 +60,13 @@ uvicorn app.main:app --reload --port 8000
 cd mobile_app_flutter
 flutter pub get
 flutter run               # Run on connected device/emulator
+```
+
+### Admin Dashboard (React/Vite)
+```bash
+cd admin_panel
+npm install
+npm run dev               # Starts on port 5173
 ```
 
 #### Important: Firebase SMS Region Policy

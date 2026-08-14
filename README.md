@@ -7,18 +7,20 @@ A production-ready smart agriculture mobile application that empowers farmers wi
 ## 🏗️ Architecture
 
 ```
-┌──────────────────────┐
-│  Flutter Mobile App   │
-│  (mobile_app_flutter) │
-└─────────┬────────────┘
-          │ REST API
-┌─────────▼────────────┐
-│  Node.js Express API  │
-│  (backend_node_api)   │
-└─────────┬────────────┘
-          │
-    ┌─────┴──────┐
-    │            │
+┌──────────────────────┐   ┌──────────────────────┐
+│  Flutter Mobile App  │   │  React Admin Panel   │
+│ (mobile_app_flutter) │   │    (admin_panel)     │
+└─────────┬────────────┘   └─────────┬────────────┘
+          │ REST API                 │ REST API
+          └───────────┐  ┌───────────┘
+                      ▼  ▼
+            ┌──────────────────────┐
+            │  Node.js Express API │
+            │  (backend_node_api)  │
+            └─────────┬────────────┘
+                      │
+                ┌─────┴──────┐
+                │            │
 ┌───▼──┐  ┌─────▼──────────┐
 │MongoDB│  │ Python FastAPI  │
 │  DB   │  │ (ai_service)    │
@@ -35,6 +37,7 @@ A production-ready smart agriculture mobile application that empowers farmers wi
 ```
 KrushikaDhara/
 ├── mobile_app_flutter/    # Flutter mobile application
+├── admin_panel/           # React/Vite Admin Dashboard
 ├── backend_node_api/      # Node.js Express REST API
 ├── ai_service_python/     # Python FastAPI AI microservice
 ├── database_models/       # Shared MongoDB schema definitions
@@ -97,6 +100,13 @@ flutter pub get
 flutter run
 ```
 
+#### Admin Dashboard
+```bash
+cd admin_panel
+npm install
+npm run dev
+```
+
 ## 🔑 Key Features
 
 | Feature | Description |
@@ -114,6 +124,7 @@ flutter run
 | Layer | Technology |
 |-------|-----------|
 | Mobile | Flutter (Dart) |
+| Admin Web | React + Vite |
 | Backend | Node.js + Express |
 | Database | MongoDB + Mongoose |
 | AI Service | Python + FastAPI |
