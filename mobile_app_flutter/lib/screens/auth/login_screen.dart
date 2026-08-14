@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../config/theme.dart';
 import '../../providers/auth_provider.dart';
+import '../../core/locale.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -17,7 +18,6 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _phoneCtrl = TextEditingController();
-  bool _isEnglish = true;
   bool _isLoading = false;
   bool _acceptedTerms = false;
   late TapGestureRecognizer _termsRecognizer;
@@ -29,18 +29,19 @@ class _LoginScreenState extends State<LoginScreen> {
       ..onTap = () {
         showDialog(
           context: context,
-          builder: (context) => AlertDialog(
-            title: Text(_isEnglish ? 'Terms & Privacy' : 'ನಿಯಮಗಳು ಮತ್ತು ಗೌಪ್ಯತೆ', style: const TextStyle(fontWeight: FontWeight.bold)),
-            content: Text(_isEnglish 
-              ? 'By using this app, you agree to follow our guidelines and policies regarding farm data and market usage.' 
-              : 'ಈ ಅಪ್ಲಿಕೇಶನ್ ಬಳಸುವ ಮೂಲಕ, ಕೃಷಿ ಡೇಟಾ ಮತ್ತು ಮಾರುಕಟ್ಟೆ ಬಳಕೆಗೆ ಸಂಬಂಧಿಸಿದ ನಮ್ಮ ಮಾರ್ಗಸೂಚಿಗಳು ಮತ್ತು ನೀತಿಗಳನ್ನು ಅನುಸರಿಸಲು ನೀವು ಒಪ್ಪುತ್ತೀರಿ.'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text('OK', style: TextStyle(color: AppTheme.primaryGreen)),
-              ),
-            ],
-          ),
+          builder: (context) {
+            final isKannada = Provider.of<AppLocale>(context, listen: false).isKannada;
+            return AlertDialog(
+              title: Text(AppLocale.t(context, 'terms_privacy_title'), style: const TextStyle(fontWeight: FontWeight.bold)),
+              content: Text(AppLocale.t(context, 'terms_privacy_content')),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(AppLocale.t(context, 'ok'), style: const TextStyle(color: AppTheme.primaryGreen)),
+                ),
+              ],
+            );
+          },
         );
       };
   }
@@ -51,13 +52,6 @@ class _LoginScreenState extends State<LoginScreen> {
     _phoneCtrl.dispose();
     super.dispose();
   }
-
-  // ── Bilingual text map ─────────────────────────────────
-  String get _welcomeText => _isEnglish ? 'Welcome, Farmer!' : 'ಸ್ವಾಗತ, ರೈತರೇ!';
-  String get _signInText => _isEnglish ? 'Sign In' : 'ಲಾಗಿನ್ ಮಾಡಿ';
-  String get _phoneLabel => _isEnglish ? 'Phone Number' : 'ಫೋನ್ ಸಂಖ್ಯೆ';
-  String get _phoneHint => _isEnglish ? 'Enter phone number' : 'ಫೋನ್ ಸಂಖ್ಯೆ ನಮೂದಿಸಿ';
-  String get _otpButtonText => _isEnglish ? 'Get OTP' : 'OTP ಪಡೆಯಿರಿ';
 
   Future<void> _getOtp() async {
     if (_phoneCtrl.text.isEmpty) return;
@@ -72,7 +66,6 @@ class _LoginScreenState extends State<LoginScreen> {
         setState(() => _isLoading = false);
         Navigator.pushNamed(context, '/otp', arguments: {
           'phoneNumber': phoneNumber,
-          'isEnglish': _isEnglish,
         });
       }
     } catch (e) {
@@ -87,6 +80,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isKannada = Provider.of<AppLocale>(context).isKannada;
+    
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5E8), // warm off-white like the design
       body: SafeArea(
@@ -126,8 +121,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
                           // ── Welcome Text ────────────────
                           Text(
-                            _welcomeText,
-                            style: _isEnglish
+                            AppLocale.t(context, 'welcome'),
+                            style: !isKannada
                                 ? const TextStyle(
                                     fontSize: 30,
                                     fontWeight: FontWeight.w900,
@@ -143,8 +138,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            _signInText,
-                            style: _isEnglish
+                            AppLocale.t(context, 'login'),
+                            style: !isKannada
                                 ? const TextStyle(
                                     fontSize: 16,
                                     color: Colors.grey,
@@ -162,8 +157,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
                           // ── Phone Label ─────────────────
                           Text(
-                            _phoneLabel,
-                            style: _isEnglish
+                            AppLocale.t(context, 'phone'),
+                            style: !isKannada
                                 ? const TextStyle(
                                     fontSize: 14,
                                     color: Colors.grey,
@@ -219,7 +214,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     controller: _phoneCtrl,
                                     keyboardType: TextInputType.phone,
                                     decoration: InputDecoration(
-                                      hintText: _phoneHint,
+                                      hintText: AppLocale.t(context, 'phone_hint'),
                                       hintStyle: const TextStyle(color: Colors.grey, fontSize: 15),
                                       border: InputBorder.none,
                                       enabledBorder: InputBorder.none,
@@ -258,18 +253,18 @@ class _LoginScreenState extends State<LoginScreen> {
                                   child: RichText(
                                     textAlign: TextAlign.left,
                                     text: TextSpan(
-                                      style: _isEnglish
+                                      style: !isKannada
                                           ? const TextStyle(color: Colors.grey, fontSize: 13, height: 1.5, fontFamily: 'Roboto')
                                           : GoogleFonts.notoSansKannada(color: Colors.grey, fontSize: 13, height: 1.5),
                                       children: [
-                                        TextSpan(text: _isEnglish ? 'By continuing you agree to our ' : 'ಮುಂದುವರಿಯುವ ಮೂಲಕ ನೀವು ನಮ್ಮ '),
+                                        TextSpan(text: AppLocale.t(context, 'agree_to')),
                                         TextSpan(
-                                          text: _isEnglish ? 'Terms & Privacy' : 'ನಿಯಮಗಳು ಮತ್ತು ಗೌಪ್ಯತೆಗೆ',
+                                          text: AppLocale.t(context, 'terms_privacy_link'),
                                           style: const TextStyle(color: Colors.blue, fontWeight: FontWeight.bold, decoration: TextDecoration.underline),
                                           recognizer: _termsRecognizer,
                                         ),
-                                        if (!_isEnglish)
-                                          const TextSpan(text: ' ಒಪ್ಪುತ್ತೀರಿ'),
+                                        if (isKannada)
+                                          TextSpan(text: AppLocale.t(context, 'agree_to_suffix')),
                                       ],
                                     ),
                                   ),
@@ -288,7 +283,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   onPressed: () {
                                     if (!_acceptedTerms) {
                                       ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(content: Text(_isEnglish ? 'Please accept the Terms & Privacy first' : 'ದಯವಿಟ್ಟು ಮೊದಲು ನಿಯಮಗಳು ಮತ್ತು ಗೌಪ್ಯತೆಯನ್ನು ಒಪ್ಪಿಕೊಳ್ಳಿ')),
+                                        SnackBar(content: Text(AppLocale.t(context, 'accept_terms_error'))),
                                       );
                                       return;
                                     }
@@ -304,8 +299,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                     elevation: 0,
                                   ),
                                   child: Text(
-                                    _otpButtonText,
-                                    style: _isEnglish
+                                    AppLocale.t(context, 'get_otp'),
+                                    style: !isKannada
                                         ? const TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.bold,
@@ -326,7 +321,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               Padding(
                                 padding: const EdgeInsets.symmetric(horizontal: 16),
                                 child: Text(
-                                  _isEnglish ? 'OR' : 'ಅಥವಾ',
+                                  AppLocale.t(context, 'or'),
                                   style: TextStyle(color: Colors.grey.shade500, fontWeight: FontWeight.w600),
                                 ),
                               ),
@@ -340,7 +335,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             onPressed: _isLoading ? null : () async {
                               if (!_acceptedTerms) {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text(_isEnglish ? 'Please accept the Terms & Privacy first' : 'ದಯವಿಟ್ಟು ಮೊದಲು ನಿಯಮಗಳು ಮತ್ತು ಗೌಪ್ಯತೆಯನ್ನು ಒಪ್ಪಿಕೊಳ್ಳಿ')),
+                                  SnackBar(content: Text(AppLocale.t(context, 'accept_terms_error'))),
                                 );
                                 return;
                               }
@@ -380,8 +375,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                                 const SizedBox(width: 12),
                                 Text(
-                                  _isEnglish ? 'Continue with Google' : 'Google ಮೂಲಕ ಮುಂದುವರಿಯಿರಿ',
-                                  style: _isEnglish 
+                                  AppLocale.t(context, 'continue_google'),
+                                  style: !isKannada 
                                       ? const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)
                                       : GoogleFonts.notoSansKannada(fontSize: 16, fontWeight: FontWeight.w600),
                                 ),
@@ -401,7 +396,7 @@ class _LoginScreenState extends State<LoginScreen> {
               top: 16,
               right: 16,
               child: GestureDetector(
-                onTap: () => setState(() => _isEnglish = !_isEnglish),
+                onTap: () => context.read<AppLocale>().toggleLanguage(),
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                   decoration: BoxDecoration(
@@ -422,7 +417,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       const Icon(Icons.translate_rounded, size: 16, color: Color(0xFF4CAF50)),
                       const SizedBox(width: 6),
                       Text(
-                        _isEnglish ? 'ಕ' : 'A',
+                        !isKannada ? 'ಕ' : 'A',
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
