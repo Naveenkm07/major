@@ -661,3 +661,49 @@
 {"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:32:56"}
 {"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:33:31"}
 {"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:33:31"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:34:06"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:34:06"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:34:41"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:34:41"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:35:16"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:35:16"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:35:51"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:35:51"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:36:26"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:36:26"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:37:01"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:37:01"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:37:36"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:37:36"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:38:11"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:38:11"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:38:46"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:38:46"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:39:21"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:39:21"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:39:56"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:39:56"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:40:31"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:40:31"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:41:06"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:41:06"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:41:41"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:41:41"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:42:16"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:42:16"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:42:51"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:42:51"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:43:26"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:43:26"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:44:01"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:44:01"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:44:36"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:44:36"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:45:11"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:45:11"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:45:46"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:45:46"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:46:21"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:46:21"}
+{"level":"error","message":"MongoDB connection error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:46:56"}
+{"level":"error","message":"MongoDB error: connect ECONNREFUSED ::1:27017, connect ECONNREFUSED 127.0.0.1:27017","service":"krushikadhara-api","timestamp":"2026-08-14 21:46:56"}
