@@ -45,7 +45,10 @@
 - **Gallery Test:** PENDING
 
 ## FINAL STATUS
-🟡 **BLOCKED — TFLITE CONVERSION REQUIRED**
+🔴 **TFLITE VALIDATION FAILED**
+
+### Blocker Details:
+The file `mobile_app_flutter/assets/models/crop_disease_classifier_int8.tflite` was declared generated but physically does not exist in the workspace. Validation scripts (`verify_tflite.py` and `tflite_validation_test.dart`) immediately abort because the model asset is missing.
 
 ### Next Steps:
 1. Upload `colab_convert_tflite.ipynb` to Google Colab.

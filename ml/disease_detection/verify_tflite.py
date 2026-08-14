@@ -15,12 +15,12 @@ try:
 except ImportError:
     pass # Might fail on local environment due to TF issues, it's fine.
 
-TFLITE_MODEL_PATH = "../../mobile_app_flutter/assets/models/crop_disease_classifier_int8.tflite"
-ONNX_MODEL_PATH = "output/best_model.onnx"
-PYTORCH_MODEL_PATH = "output/best_model.pt"
-TEST_DATA_DIR = "../../dataset_split/test"
-LABELS_PATH = "../../mobile_app_flutter/assets/models/disease_labels.txt"
-OUTPUT_REPORT_PATH = "output/tflite_validation_report.json"
+TFLITE_MODEL_PATH = "mobile_app_flutter/assets/models/crop_disease_classifier_int8.tflite"
+ONNX_MODEL_PATH = "ml/disease_detection/output/best_model.onnx"
+PYTORCH_MODEL_PATH = "ml/disease_detection/output/best_model.pt"
+TEST_DATA_DIR = "dataset_split/test"
+LABELS_PATH = "mobile_app_flutter/assets/models/disease_labels.txt"
+OUTPUT_REPORT_PATH = "ml/disease_detection/output/tflite_validation_report.json"
 
 def get_labels():
     with open(LABELS_PATH, "r") as f:
