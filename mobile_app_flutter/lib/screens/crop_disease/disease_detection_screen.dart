@@ -23,7 +23,7 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> with Wi
   bool _isDetecting = false;
   bool _isCameraInitialized = false;
   
-  List<Detection> _currentDetections = [];
+  ClassificationResult? _currentResult;
   Map<String, dynamic>? _selectedResult;
 
   @override
@@ -62,13 +62,13 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> with Wi
         if (_isDetecting || !_tfliteService.isLoaded) return;
         _isDetecting = true;
 
-        _tfliteService.detect(image).then((detections) {
+        _tfliteService.detect(image).then((result) {
           if (mounted) {
             setState(() {
-              _currentDetections = detections;
+              _currentResult = result;
               // If high confidence detection is found, auto-trigger result sheet
-              if (detections.isNotEmpty && detections.first.confidence > 0.6 && _selectedResult == null) {
-                _showResult(detections.first);
+              if (result != null && result.confidence > 0.6 && _selectedResult == null) {
+                _showResult(result);
               }
             });
           }
@@ -112,13 +112,13 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> with Wi
         setState(() => _isDetecting = true);
         _cameraController?.stopImageStream();
         
-        final detections = await _tfliteService.detectFromFile(picked.path);
+        final result = await _tfliteService.detectFromFile(picked.path);
         
         setState(() {
           _isDetecting = false;
-          _currentDetections = detections;
-          if (detections.isNotEmpty) {
-            _showResult(detections.first);
+          _currentResult = result;
+          if (result != null) {
+            _showResult(result);
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(content: Text('No disease detected in the image.')),
@@ -133,15 +133,15 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> with Wi
     }
   }
 
-  void _showResult(Detection detection) {
+  void _showResult(ClassificationResult result) {
     if (_selectedResult != null) return; // Prevent multiple sheets
     
-    final dbEntry = DiseaseData.diseaseDb[detection.label] ?? DiseaseData.diseaseDb['healthy']!;
+    final dbEntry = DiseaseData.diseaseDb[result.label] ?? DiseaseData.diseaseDb['Corn___Healthy']!;
     
     setState(() {
       _selectedResult = {
-        'pest': detection.label,
-        'confidence': detection.confidence,
+        'pest': result.label,
+        'confidence': result.confidence,
         'description': dbEntry['description'],
         'treatment': dbEntry['treatment'],
       };
@@ -311,11 +311,34 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> with Wi
           else
             const Center(child: CircularProgressIndicator(color: AppTheme.primaryGreen)),
           
-          // Bounding Box Overlays
-          if (_currentDetections.isNotEmpty && _selectedResult == null)
-            CustomPaint(
-              size: size,
-              painter: BoundingBoxPainter(_currentDetections, size),
+          // Center Text Overlay for Classification
+          if (_currentResult != null && _selectedResult == null)
+            Positioned(
+              bottom: 120,
+              left: 20,
+              right: 20,
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.7),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: AppTheme.primaryGreen, width: 2),
+                ),
+                child: Column(
+                  children: [
+                    Text(
+                      _currentResult!.label.replaceAll('_', ' '),
+                      style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Confidence: ${(_currentResult!.confidence * 100).toStringAsFixed(1)}%',
+                      style: const TextStyle(color: AppTheme.primaryGreen, fontSize: 14, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ),
             ),
 
           // Header
@@ -385,53 +408,3 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> with Wi
   }
 }
 
-class BoundingBoxPainter extends CustomPainter {
-  final List<Detection> detections;
-  final Size screenSize;
-
-  BoundingBoxPainter(this.detections, this.screenSize);
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = AppTheme.primaryGreen
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 3.0;
-
-    final bgPaint = Paint()
-      ..color = AppTheme.primaryGreen.withOpacity(0.8)
-      ..style = PaintingStyle.fill;
-
-    for (var detection in detections) {
-      // Map bounding box to screen coordinates
-      // Note: This relies on the camera preview filling the screen.
-      final rect = detection.boundingBox;
-      
-      canvas.drawRect(rect, paint);
-
-      // Draw label text background
-      final textSpan = TextSpan(
-        text: '${detection.label} ${(detection.confidence * 100).toStringAsFixed(0)}%',
-        style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.bold),
-      );
-      final textPainter = TextPainter(
-        text: textSpan,
-        textDirection: TextDirection.ltr,
-      );
-      textPainter.layout();
-
-      final labelRect = Rect.fromLTWH(
-        rect.left,
-        rect.top - 24,
-        textPainter.width + 12,
-        24,
-      );
-      canvas.drawRRect(RRect.fromRectAndRadius(labelRect, const Radius.circular(4)), bgPaint);
-      
-      textPainter.paint(canvas, Offset(rect.left + 6, rect.top - 20));
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => true;
-}
