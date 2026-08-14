@@ -12,9 +12,10 @@ graph TD
     classDef db fill:#e57373,stroke:#b71c1c,stroke-width:2px,color:black
     classDef 3rdparty fill:#e0e0e0,stroke:#616161,stroke-width:2px,stroke-dasharray: 5, 5,color:black
 
-    %% Mobile App
+    %% Mobile App & Web
     subgraph "Frontend Layer"
         FlutterApp["📱 KrushikaDhara Mobile App\n(Flutter)"]:::mobile
+        AdminPanel["💻 Admin Dashboard\n(React/Vite)"]:::mobile
     end
 
     %% Network / Entry
@@ -46,9 +47,11 @@ graph TD
     %% Connections
     FlutterApp -- "Caches Data" --> Hive
     FlutterApp -- "Fetches media" --> CDN
+    AdminPanel -- "Fetches media" --> CDN
     CDN -. "Points to" .-> S3
 
     FlutterApp -- "HTTPS / REST" --> AGW
+    AdminPanel -- "HTTPS / REST" --> AGW
     AGW -- "/api/v1/*" --> NodeAPI
 
     NodeAPI -- "CRUD Operations" --> MongoDB
@@ -69,16 +72,19 @@ graph TD
 ### 1. Flutter Mobile Application
 The user-facing mobile app handles offline persistence using **Hive**, state management, and direct connectivity to the API Gateway. Modules include the voice assistant UI, Maps integration for Farmer Connect, and Dashboard metrics.
 
-### 2. Node.js Backend 
+### 2. Admin Dashboard (React/Vite)
+A web-based portal used by administrators to manage farmers, broadcast push notifications, manage government schemes, and monitor platform health.
+
+### 3. Node.js Backend 
 The primary monolith server handling core business logic, including:
 - **JWT Authentication** and Profile Management.
 - **Community Services** handling chat and posts.
 - **Government Schemes** CRUD operations through an admin interface.
 - **Node-Cron Jobs** fetching external API data every 3 hours.
 
-### 3. Python AI Microservice
+### 4. Python AI Microservice
 A stateless containerized service running **FastAPI**. Heavily optimized with **OpenCV-Python-Headless** for image processing and **Transformers/PyTorch** for model inference (Pest Detection and Chatbot). Only the Node.js backend communicates directly with this microservice, hiding it from the public internet.
 
-### 4. Database & Storage
+### 5. Database & Storage
 - **MongoDB Atlas**: Fully managed NoSQL cloud database storing all application state. Secured with VPC peering.
 - **AWS S3**: Scalable object storage for all images uploaded by farmers. Served to the end user via **CloudFront** CDN to reduce latency.
