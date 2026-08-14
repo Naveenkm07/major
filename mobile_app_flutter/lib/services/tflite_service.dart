@@ -6,26 +6,12 @@ import 'package:tflite_flutter/tflite_flutter.dart';
 import 'package:image/image.dart' as img;
 import 'dart:typed_data';
 
-class Detection {
+class ClassificationResult {
   final String label;
+  final int classIndex;
   final double confidence;
-  final Rect boundingBox;
 
-  Detection(this.label, this.confidence, this.boundingBox);
-}
-
-class LetterboxInfo {
-  final double scale;
-  final int padX;
-  final int padY;
-  LetterboxInfo(this.scale, this.padX, this.padY);
-}
-
-// Tensor Layout Enums
-enum TensorLayout {
-  channelsFirst, // [1, Elements, Anchors] (e.g. 1, 42, 8400)
-  anchorsFirst,  // [1, Anchors, Elements] (e.g. 1, 8400, 42)
-  unknown
+  ClassificationResult(this.label, this.classIndex, this.confidence);
 }
 
 class TFLiteService {
@@ -35,9 +21,6 @@ class TFLiteService {
   // Dynamic Tensor Metadata
   int _inputSize = 0;
   int _numClasses = 0;
-  int _numAnchors = 0;
-  int _outputElements = 0;
-  TensorLayout _outputLayout = TensorLayout.unknown;
   
   double _inputScale = 1.0;
   int _inputZeroPoint = 0;
@@ -47,9 +30,7 @@ class TFLiteService {
   int _outputZeroPoint = 0;
   TensorType _outputType = TensorType.float32;
 
-  // Configuration
-  final double confidenceThreshold = 0.5;
-  final double iouThreshold = 0.45;
+  final double confidenceThreshold = 0.50;
 
   bool get isLoaded => _interpreter != null;
   bool get hasValidMetadata => _inputSize > 0 && _numClasses > 0;
@@ -63,18 +44,18 @@ class TFLiteService {
         options.addDelegate(GpuDelegate());
       }
       
-      _interpreter = await Interpreter.fromAsset('assets/models/yolov8_int8.tflite', options: options);
+      // Use the actual trained classifier model
+      _interpreter = await Interpreter.fromAsset('assets/models/crop_disease_classifier_int8.tflite', options: options);
       
       _extractTensorMetadata();
       await _loadLabels();
       _validateCompatibility();
       
-      print('TFLite model loaded successfully');
+      print('TFLite classifier loaded successfully');
       print('Input Shape: $_inputSize x $_inputSize');
       print('Classes: $_numClasses');
-      print('Layout: $_outputLayout');
     } catch (e) {
-      print('Failed to load model: $e');
+      print('Failed to load classifier model: $e');
     }
   }
 
@@ -85,7 +66,8 @@ class TFLiteService {
     final inputTensor = _interpreter!.getInputTensor(0);
     final inputShape = inputTensor.shape; 
     if (inputShape.length == 4) {
-      _inputSize = inputShape[1];
+      // Expected [1, H, W, 3] or [1, 3, H, W]
+      _inputSize = inputShape[1] > 3 ? inputShape[1] : inputShape[2];
     } else {
       throw StateError("Invalid input tensor shape: $inputShape");
     }
@@ -97,22 +79,11 @@ class TFLiteService {
     final outputTensor = _interpreter!.getOutputTensor(0);
     final outputShape = outputTensor.shape; 
     
-    if (outputShape.length == 3) {
-      // Determine layout based on typical YOLOv8 dimensionalities
-      if (outputShape[1] < outputShape[2]) {
-        // [1, Elements, Anchors]
-        _outputLayout = TensorLayout.channelsFirst;
-        _outputElements = outputShape[1];
-        _numAnchors = outputShape[2];
-      } else {
-        // [1, Anchors, Elements]
-        _outputLayout = TensorLayout.anchorsFirst;
-        _numAnchors = outputShape[1];
-        _outputElements = outputShape[2];
-      }
-      _numClasses = _outputElements - 4;
+    if (outputShape.length == 2 && outputShape[0] == 1) {
+      // Classification shape [1, num_classes]
+      _numClasses = outputShape[1];
     } else {
-      throw StateError("Invalid output tensor shape: $outputShape. Expected YOLOv8 rank-3 tensor.");
+      throw StateError("Invalid output tensor shape: $outputShape. Expected classifier rank-2 tensor [1, N].");
     }
     
     _outputType = outputTensor.type;
@@ -123,7 +94,7 @@ class TFLiteService {
   Future<void> _loadLabels() async {
     try {
       final labelData = await rootBundle.loadString('assets/models/disease_labels.txt');
-      _labels = labelData.split('\n').where((s) => s.trim().isNotEmpty).toList();
+      _labels = labelData.split('\n').map((e) => e.trim()).where((s) => s.isNotEmpty).toList();
     } catch (e) {
       throw StateError('Failed to load disease_labels.txt: $e');
     }
@@ -142,140 +113,97 @@ class TFLiteService {
     _interpreter?.close();
   }
 
-  Future<List<Detection>> detectFromFile(String imagePath) async {
-    if (!isLoaded || !hasValidMetadata) return [];
+  Future<ClassificationResult?> detectFromFile(String imagePath) async {
+    if (!isLoaded || !hasValidMetadata) return null;
     
     try {
       final bytes = await File(imagePath).readAsBytes();
       final rgbImage = img.decodeImage(bytes);
-      if (rgbImage == null) return [];
+      if (rgbImage == null) return null;
       
       return _runInference(rgbImage);
     } catch (e) {
       print('Error decoding gallery image: $e');
-      return [];
+      return null;
     }
   }
 
-  Future<List<Detection>> detect(CameraImage cameraImage) async {
-    if (!isLoaded || !hasValidMetadata) return [];
+  Future<ClassificationResult?> detect(CameraImage cameraImage) async {
+    if (!isLoaded || !hasValidMetadata) return null;
 
     final rgbImage = _convertCameraImage(cameraImage);
-    if (rgbImage == null) return [];
+    if (rgbImage == null) return null;
 
     return _runInference(rgbImage);
   }
 
-  // Exposed for unit testing letterbox math
-  LetterboxInfo computeLetterboxInfo(int imgWidth, int imgHeight, int targetSize) {
-    double scale = min(targetSize / imgWidth, targetSize / imgHeight);
-    int newWidth = (imgWidth * scale).round();
-    int newHeight = (imgHeight * scale).round();
+  Future<ClassificationResult?> _runInference(img.Image rgbImage) async {
+    // 1. Classification Preprocessing: Resize and CenterCrop to inputSize x inputSize
+    int minDim = min(rgbImage.width, rgbImage.height);
+    img.Image cropped = img.copyCrop(rgbImage, 
+      x: (rgbImage.width - minDim) ~/ 2, 
+      y: (rgbImage.height - minDim) ~/ 2, 
+      width: minDim, 
+      height: minDim);
     
-    int padX = ((targetSize - newWidth) / 2).round();
-    int padY = ((targetSize - newHeight) / 2).round();
-    
-    return LetterboxInfo(scale, padX, padY);
-  }
+    img.Image resized = img.copyResize(cropped, width: _inputSize, height: _inputSize);
 
-  Future<List<Detection>> _runInference(img.Image rgbImage) async {
-    // 1. Letterbox Preprocessing
-    final lbInfo = computeLetterboxInfo(rgbImage.width, rgbImage.height, _inputSize);
-    final letterboxedImage = _applyLetterbox(rgbImage, lbInfo);
-    
     // 2. Format Input Tensor
     Object inputTensor;
     if (_inputType == TensorType.uint8 || _inputType == TensorType.int8) {
-      inputTensor = _imageToByteListQuantized(letterboxedImage);
+      inputTensor = _imageToByteListQuantized(resized);
     } else {
-      inputTensor = _imageToFloat32List(letterboxedImage);
+      inputTensor = _imageToFloat32List(resized);
     }
 
     // 3. Format Output Buffer
-    var outputTensor = List.filled(_outputElements * _numAnchors, 0.0);
-    var outputBuffer;
-    if (_outputLayout == TensorLayout.channelsFirst) {
-      outputBuffer = outputTensor.reshape([1, _outputElements, _numAnchors]);
+    var outputBuffer = List.filled(1 * _numClasses, 0.0);
+    if (_outputType == TensorType.int8 || _outputType == TensorType.uint8) {
+        var outputTensor = List.filled(1 * _numClasses, 0);
+        _interpreter!.run(inputTensor, [outputTensor]);
+        for(int i=0; i<_numClasses; i++) {
+           outputBuffer[i] = _dequantizeOutput(outputTensor[i]);
+        }
     } else {
-      outputBuffer = outputTensor.reshape([1, _numAnchors, _outputElements]);
+        _interpreter!.run(inputTensor, [outputBuffer]);
     }
 
-    // 4. Run inference
-    _interpreter!.run(inputTensor, outputBuffer);
-
-    // 5. Parse outputs & Revert Letterbox
-    return _parseOutput(outputBuffer[0], rgbImage.width, rgbImage.height, lbInfo);
+    // 4. Parse outputs (Softmax if output does not sum to 1.0 approx)
+    return _parseOutput(outputBuffer);
   }
 
-  img.Image _applyLetterbox(img.Image source, LetterboxInfo lb) {
-    int newWidth = (source.width * lb.scale).round();
-    int newHeight = (source.height * lb.scale).round();
+  ClassificationResult? _parseOutput(List<double> output) {
+    // Check if we need softmax (if max val > 1.0 or sum != 1.0)
+    double sum = output.fold(0.0, (p, c) => p + c);
+    List<double> probabilities = output;
     
-    img.Image resized = img.copyResize(source, width: newWidth, height: newHeight);
-    
-    // Create a grey canvas (114, 114, 114) typical for YOLO
-    img.Image canvas = img.Image(width: _inputSize, height: _inputSize);
-    canvas.clear(img.ColorRgb8(114, 114, 114));
-    
-    img.compositeImage(canvas, resized, dstX: lb.padX, dstY: lb.padY);
-    return canvas;
-  }
-  
-  List<Detection> _parseOutput(List<dynamic> output, int imgWidth, int imgHeight, LetterboxInfo lb) {
-    List<Detection> detections = [];
-
-    for (int i = 0; i < _numAnchors; i++) {
-      double maxClassProb = 0.0;
-      int maxClassIdx = -1;
-      
-      // Dynamic extraction based on layout
-      double getRawOutput(int channelIndex, int anchorIndex) {
-        if (_outputLayout == TensorLayout.channelsFirst) {
-          return _dequantizeOutput(output[channelIndex][anchorIndex]);
-        } else {
-          return _dequantizeOutput(output[anchorIndex][channelIndex]);
+    if (sum < 0.99 || sum > 1.01) {
+        // Apply Softmax
+        double maxVal = output.reduce(max);
+        double expSum = 0.0;
+        List<double> expValues = [];
+        for (var v in output) {
+           double e = exp(v - maxVal);
+           expValues.add(e);
+           expSum += e;
         }
-      }
+        probabilities = expValues.map((e) => e / expSum).toList();
+    }
 
-      for (int c = 0; c < _numClasses; c++) {
-        double prob = getRawOutput(4 + c, i);
-        if (prob > maxClassProb) {
-          maxClassProb = prob;
-          maxClassIdx = c;
-        }
-      }
-
-      if (maxClassProb > confidenceThreshold) {
-        double xc = getRawOutput(0, i);
-        double yc = getRawOutput(1, i);
-        double w = getRawOutput(2, i);
-        double h = getRawOutput(3, i);
-
-        // Remove letterbox padding
-        double unpaddedXc = xc - lb.padX;
-        double unpaddedYc = yc - lb.padY;
-
-        // Scale back to original image
-        double originalXc = unpaddedXc / lb.scale;
-        double originalYc = unpaddedYc / lb.scale;
-        double originalW = w / lb.scale;
-        double originalH = h / lb.scale;
-
-        final rect = Rect.fromCenter(
-          center: Offset(originalXc, originalYc),
-          width: originalW,
-          height: originalH,
-        );
-
-        final label = (_labels != null && maxClassIdx < _labels!.length) 
-            ? _labels![maxClassIdx] 
-            : 'unknown';
-
-        detections.add(Detection(label, maxClassProb, rect));
+    int maxIdx = 0;
+    double maxProb = probabilities[0];
+    for (int i = 1; i < _numClasses; i++) {
+      if (probabilities[i] > maxProb) {
+        maxProb = probabilities[i];
+        maxIdx = i;
       }
     }
+
+    if (maxProb > confidenceThreshold) {
+      return ClassificationResult(_labels![maxIdx], maxIdx, maxProb);
+    }
     
-    return applyNMS(detections);
+    return null; // Return null if below confidence
   }
 
   double _dequantizeOutput(dynamic value) {
@@ -285,41 +213,6 @@ class TFLiteService {
       return value;
     }
     return 0.0;
-  }
-
-  // Exposed for unit testing
-  List<Detection> applyNMS(List<Detection> detections) {
-    if (detections.isEmpty) return [];
-    
-    detections.sort((a, b) => b.confidence.compareTo(a.confidence));
-    
-    List<Detection> finalDetections = [];
-    
-    while (detections.isNotEmpty) {
-      final current = detections.removeAt(0);
-      finalDetections.add(current);
-      
-      detections.removeWhere((candidate) {
-        if (candidate.label == current.label) {
-          final iou = calculateIoU(current.boundingBox, candidate.boundingBox);
-          return iou > iouThreshold;
-        }
-        return false;
-      });
-    }
-    
-    return finalDetections;
-  }
-
-  // Exposed for unit testing
-  double calculateIoU(Rect a, Rect b) {
-    final intersection = a.intersect(b);
-    if (intersection.width < 0 || intersection.height < 0) return 0.0;
-    
-    final intersectionArea = intersection.width * intersection.height;
-    final unionArea = (a.width * a.height) + (b.width * b.height) - intersectionArea;
-    
-    return intersectionArea / unionArea;
   }
 
   Uint8List _imageToByteListQuantized(img.Image image) {
@@ -332,6 +225,9 @@ class TFLiteService {
         final pixel = image.getPixel(x, y);
         
         int quantize(num value) {
+          // Training used ImageNet normalization:
+          // mean = [0.485, 0.456, 0.406], std = [0.229, 0.224, 0.225]
+          // But our INT8 model input scale/zero_point handle the [0, 255] -> INT8 mapping if exported properly.
           double real = value.toDouble();
           int q = (real / _inputScale + _inputZeroPoint).round();
           if (_inputType == TensorType.int8) {
@@ -363,9 +259,10 @@ class TFLiteService {
     for (int y = 0; y < _inputSize; y++) {
       for (int x = 0; x < _inputSize; x++) {
         final pixel = image.getPixel(x, y);
-        buffer[pixelIndex++] = pixel.r / 255.0;
-        buffer[pixelIndex++] = pixel.g / 255.0;
-        buffer[pixelIndex++] = pixel.b / 255.0;
+        // Normalize using ImageNet means since model was trained that way
+        buffer[pixelIndex++] = ((pixel.r / 255.0) - 0.485) / 0.229;
+        buffer[pixelIndex++] = ((pixel.g / 255.0) - 0.456) / 0.224;
+        buffer[pixelIndex++] = ((pixel.b / 255.0) - 0.406) / 0.225;
       }
     }
     return convertedBytes;
