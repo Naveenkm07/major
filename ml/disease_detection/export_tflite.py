@@ -50,7 +50,7 @@ def export_model(model_path, data_yaml, imgsz):
         
         # Typically YOLO saves it as <model_name>_saved_model/<model_name>_int8.tflite
         # We can rename it for convenience if needed, but we leave it to the user.
-        print("\nIMPORTANT: Verify the output filename and rename it to 'yolov8_int8.tflite'")
+        print("\nIMPORTANT: Verify the output filename and rename it to 'mobilenet_v3_int8.tflite'")
         print("Move it to 'mobile_app_flutter/assets/models/' for app consumption.")
     except Exception as e:
         print("\n❌ Export Failed!")

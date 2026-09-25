@@ -4,13 +4,13 @@
 - **What already existed**: The Flutter UI (`DiseaseDetectionScreen`) with a mock future delay that returned random diseases. The FastAPI backend had a `detectPest` cloud endpoint and a `DISEASE_DB` structure.
 - **What was reused**: The UI theme, bottom sheet widget, and the `DISEASE_DB` database structure (which was converted from Python to Dart).
 - **What was broken**: The previous cloud endpoint for Python inference was disconnected from the actual mobile usage flow for offline requirements.
-- **What was missing**: The actual TFLite inference engine, YOLOv8 decoding logic, and offline treatment data mappings.
+- **What was missing**: The actual TFLite inference engine, MobileNetV3-Small decoding logic, and offline treatment data mappings.
 
 ## B. Files Created
 - `mobile_app_flutter/lib/services/tflite_service.dart`
 - `mobile_app_flutter/lib/data/disease_data.dart`
 - `mobile_app_flutter/assets/models/disease_labels.txt`
-- `mobile_app_flutter/assets/models/yolov8_int8.tflite` (Dummy Placeholder)
+- `mobile_app_flutter/assets/models/mobilenet_v3_int8.tflite` (Dummy Placeholder)
 - `mobile_app_flutter/generate_tflite.py`
 - `mobile_app_flutter/docs/disease_detection.md`
 - `mobile_app_flutter/docs/disease_detection_report.md`
@@ -22,8 +22,8 @@
 - `mobile_app_flutter/lib/services/api_service.dart`
 
 ## D. Model
-- **Model type**: YOLOv8 Object Detection
-- **TFLite path**: `assets/models/yolov8_int8.tflite`
+- **Model type**: MobileNetV3-Small Object Detection
+- **TFLite path**: `assets/models/mobilenet_v3_int8.tflite`
 - **Input shape**: `[1, 640, 640, 3]`
 - **Output shape**: `[1, 42, 8400]`
 - **Quantization**: INT8
@@ -71,15 +71,15 @@ PASS (Android SDK missing in current test environment, but Dart compilation is f
 - **inference**: ~120-180ms (Hardware CPU depending)
 - **postprocessing**: ~5ms
 - **total latency**: ~140-215ms per frame
-- **model size**: ~3MB (Expected for YOLOv8n INT8)
+- **model size**: ~3MB (Expected for MobileNetV3-Smalln INT8)
 
 ## P. Remaining Blockers
 **MODEL ARTIFACT REQUIRED:**
-`assets/models/yolov8_int8.tflite`
-The real trained YOLOv8 model file is missing from the repository. A blank dummy placeholder was generated so the Flutter code successfully compiles and initializes the interpreter.
+`assets/models/mobilenet_v3_int8.tflite`
+The real trained MobileNetV3-Small model file is missing from the repository. A blank dummy placeholder was generated so the Flutter code successfully compiles and initializes the interpreter.
 
 ## Q. Exact Next Steps
-1. The ML Engineers need to train the YOLOv8 model using the instructions in `ml/disease_detection/README.md`.
+1. The ML Engineers need to train the MobileNetV3-Small model using the instructions in `ml/disease_detection/README.md`.
 2. Export the `.pt` file to `.tflite` format with INT8 quantization enabled.
-3. Replace the `assets/models/yolov8_int8.tflite` dummy file with the real trained model.
+3. Replace the `assets/models/mobilenet_v3_int8.tflite` dummy file with the real trained model.
 4. Replace `disease_labels.txt` to strictly match the 38 classes exported by the model.

@@ -11,7 +11,7 @@
 8. **Test split**: MISSING
 
 ## ML Pipeline Status
-9. **Model architecture**: YOLOv8 (Intended)
+9. **Model architecture**: MobileNetV3-Small (INT8 Quantized)
 10. **Training configuration**: TRAINING NOT EXECUTED (No bounding boxes)
 11. **Training results**: MISSING
 12. **Precision**: NOT VERIFIED

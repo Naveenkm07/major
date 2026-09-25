@@ -4,7 +4,7 @@ This guide details the complete end-to-end pipeline for converting a raw dataset
 
 ## Pipeline Overview
 
-`DATASET` ➔ `VALIDATION` ➔ `YOLOv8 TRAINING` ➔ `VALIDATION` ➔ `BEST.PT` ➔ `INT8 TFLITE EXPORT` ➔ `TFLITE INSPECTION` ➔ `FLUTTER COMPATIBILITY CHECK` ➔ `PHYSICAL DEVICE TEST`
+`DATASET` ➔ `VALIDATION` ➔ `MobileNetV3-Small TRAINING` ➔ `VALIDATION` ➔ `BEST.PT` ➔ `INT8 TFLITE EXPORT` ➔ `TFLITE INSPECTION` ➔ `FLUTTER COMPATIBILITY CHECK` ➔ `PHYSICAL DEVICE TEST`
 
 ---
 
@@ -26,13 +26,13 @@ python validate_dataset.py /path/to/your/dataset
 
 ---
 
-## 3. YOLOv8 TRAINING & VALIDATION
-We use the Ultralytics YOLOv8 nano (`yolov8n.pt`) checkpoint as our base, because its small size and fast CPU execution makes it ideal for mobile Flutter apps.
+## 3. MobileNetV3-Small TRAINING & VALIDATION
+We use the Ultralytics MobileNetV3-Small nano (`MobileNetV3-Smalln.pt`) checkpoint as our base, because its small size and fast CPU execution makes it ideal for mobile Flutter apps.
 
 Run the training script (supports CPU, GPU, or Multi-GPU):
 ```bash
 # Example training on GPU 0 with batch 16 for 100 epochs
-python train_yolov8.py \
+python train_MobileNetV3-Small.py \
     --data /path/to/your/dataset/data.yaml \
     --epochs 100 \
     --batch 16 \
@@ -53,7 +53,7 @@ python evaluate_model.py \
 ---
 
 ## 4. INT8 TFLITE EXPORT
-Mobile CPUs are extremely fast when executing 8-bit quantized integer math, but drastically slower with 32-bit floats. We must convert `best.pt` to `yolov8_int8.tflite`. 
+Mobile CPUs are extremely fast when executing 8-bit quantized integer math, but drastically slower with 32-bit floats. We must convert `best.pt` to `MobileNetV3-Small_int8.tflite`. 
 
 **CRITICAL:** INT8 quantization requires the `data.yaml` to provide a "representative dataset" so the converter can calculate real activation scales.
 ```bash
@@ -62,7 +62,7 @@ python export_tflite.py \
     --data /path/to/your/dataset/data.yaml \
     --imgsz 640
 ```
-**Expected Outcome:** A file named something like `best_saved_model/best_int8.tflite`. Rename this to `yolov8_int8.tflite`.
+**Expected Outcome:** A file named something like `best_saved_model/best_int8.tflite`. Rename this to `MobileNetV3-Small_int8.tflite`.
 
 ---
 
@@ -70,7 +70,7 @@ python export_tflite.py \
 Before dropping the model into Flutter, verify what the exporter actually created. The input and output tensor shapes determine if the Flutter app will crash.
 
 ```bash
-python inspect_tflite.py --model path/to/yolov8_int8.tflite
+python inspect_tflite.py --model path/to/MobileNetV3-Small_int8.tflite
 ```
 **Expected Outcome:** You should see `Input: [1, 640, 640, 3] INT8` and `Output: Rank 3 INT8`.
 
@@ -82,7 +82,7 @@ Run the official cross-compatibility check against the exact Flutter labels file
 ```bash
 # Ensure the labels file has been updated to match your data.yaml before running
 python verify_flutter_model.py \
-    --model path/to/yolov8_int8.tflite \
+    --model path/to/MobileNetV3-Small_int8.tflite \
     --labels ../../mobile_app_flutter/assets/models/disease_labels.txt
 ```
 **Expected Outcome:** `✅ COMPATIBLE`
@@ -90,7 +90,7 @@ python verify_flutter_model.py \
 ---
 
 ## 7. PHYSICAL DEVICE TEST
-1. Move your verified `yolov8_int8.tflite` to `mobile_app_flutter/assets/models/yolov8_int8.tflite`.
+1. Move your verified `MobileNetV3-Small_int8.tflite` to `mobile_app_flutter/assets/models/MobileNetV3-Small_int8.tflite`.
 2. Update `disease_labels.txt` with your exact `data.yaml` class names.
 3. Update `lib/data/disease_data.dart` to contain matching localized treatments for your classes.
 4. Run the app on a physical Android or iOS device (not an emulator, as emulators lack accurate camera APIs and TFLite hardware acceleration).

@@ -1,10 +1,10 @@
 # KrushikaDhara Disease Detection ML Pipeline
 
-This directory contains instructions and requirements for training, evaluating, and exporting the YOLOv8 INT8 TFLite model used in the KrushikaDhara mobile application.
+This directory contains instructions and requirements for training, evaluating, and exporting the MobileNetV3-Small INT8 TFLite model used in the KrushikaDhara mobile application.
 
 ## 1. Prerequisites
 
-You will need Python 3.9+ and the Ultralytics library for training YOLOv8.
+You will need Python 3.9+ and the Ultralytics library for training MobileNetV3-Small.
 
 ```bash
 pip install ultralytics tensorflow onnx onnx-tf tflite-support
@@ -43,10 +43,10 @@ names:
 
 ## 3. Training the Model
 
-Train the YOLOv8 model with the following command (assuming a `yolov8n.pt` base model):
+Train the MobileNetV3-Small model with the following command (assuming a `MobileNetV3-Smalln.pt` base model):
 
 ```bash
-yolo task=detect mode=train model=yolov8n.pt data=data.yaml epochs=100 imgsz=640 batch=16
+yolo task=detect mode=train model=MobileNetV3-Smalln.pt data=data.yaml epochs=100 imgsz=640 batch=16
 ```
 
 ### Note on Augmentation
@@ -78,12 +78,12 @@ This will produce a file named `best_saved_model/best_int8.tflite`.
 
 Once you have your `best_int8.tflite`:
 
-1. Rename the file to `yolov8_int8.tflite`.
-2. Place it into the Flutter app's assets folder: `mobile_app_flutter/assets/models/yolov8_int8.tflite`.
+1. Rename the file to `mobilenet_v3_int8.tflite`.
+2. Place it into the Flutter app's assets folder: `mobile_app_flutter/assets/models/mobilenet_v3_int8.tflite`.
 3. Update `mobile_app_flutter/assets/models/disease_labels.txt` to strictly match the 38 classes defined in your `data.yaml` exactly in order.
 4. Run the Flutter app. The on-device inference engine will pick it up automatically!
 
 ## 7. Troubleshooting
 
-- **Output shape mismatch**: The Flutter app expects a YOLOv8 output tensor of shape `[1, (4 + num_classes), 8400]`. Ensure you export using YOLOv8, NOT an older architecture.
-- **Input size mismatch**: The default YOLOv8 input is `640x640`. If you export at `416x416`, you must update the input dimensions in `TFLiteService.dart`.
+- **Output shape mismatch**: The Flutter app expects a MobileNetV3-Small output tensor of shape `[1, (4 + num_classes), 8400]`. Ensure you export using MobileNetV3-Small, NOT an older architecture.
+- **Input size mismatch**: The default MobileNetV3-Small input is `640x640`. If you export at `416x416`, you must update the input dimensions in `TFLiteService.dart`.
