@@ -45,4 +45,8 @@ mobile_app_flutter/build/
 .venv/
 
 # Out files
-out*.txt
+out*.txt
+
+# Ignore image datasets
+images/
+
