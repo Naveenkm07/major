@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const voiceController = require('../controllers/voiceController');
-const { protect } = require('../middlewares/auth');
+const { protect } = require('../middleware/auth');
 
 router.post('/process', protect, voiceController.processVoice);
 

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const droneController = require('../controllers/droneController');
-const { protect } = require('../middlewares/auth');
+const { protect } = require('../middleware/auth');
 
 router.post('/analyze', protect, droneController.analyzeDroneFlight);
 

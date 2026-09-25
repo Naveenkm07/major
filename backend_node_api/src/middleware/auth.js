@@ -3,8 +3,11 @@ const config = require('../config');
 const Farmer = require('../models/Farmer');
 const { ApiError, asyncHandler } = require('../utils/helpers');
 
+const supabase = require('../config/supabase');
+
 /**
- * Protect routes – verifies JWT and attaches farmer to req.user
+ * Protect routes – verifies JWT and attaches user/farmer to req.user
+ * Supports both MongoDB custom JWT and Supabase Auth.
  */
 const protect = asyncHandler(async (req, res, next) => {
     let token;
@@ -18,6 +21,17 @@ const protect = asyncHandler(async (req, res, next) => {
     }
 
     try {
+        // Try Supabase verification first if available
+        if (supabase) {
+            const { data, error } = await supabase.auth.getUser(token);
+            if (!error && data?.user) {
+                // Attach Supabase user (fallback to Farmer model for backwards compatibility if needed)
+                req.user = { id: data.user.id, ...data.user };
+                return next();
+            }
+        }
+
+        // Fallback to existing MongoDB JWT verification
         const decoded = jwt.verify(token, config.jwt.secret);
         const farmer = await Farmer.findById(decoded.id);
 

@@ -13,6 +13,11 @@ const config = {
     uri: process.env.MONGODB_URI || 'mongodb://localhost:27017/krushikadhara',
   },
 
+  supabase: {
+    url: process.env.SUPABASE_URL || 'https://kiqgnfilifuqskmgkyaa.supabase.co',
+    serviceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY,
+  },
+
   jwt: {
     secret: process.env.JWT_SECRET || 'dev_secret_key',
     expire: process.env.JWT_EXPIRE || '30d',
