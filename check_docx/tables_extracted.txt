@@ -1,0 +1,71 @@
+
+Table 1:
+Scheme RAG | ChromaDB	+ Llama 3 | Online | Text	/ Audio
+Pest-Weather Engine | Open-Meteo	+ Sentinel-2 NDVI | Online | Push Notification
+Loan Advisory | RAG over DCC Bank / NABARD PDFs | Online | Text	/ Checklist
+Voice Pipeline | Bhashini ASR + NMT + TTS | Online | Audio
+
+Table 2:
+Module | Primary Technology | Connectivity | Output
+Disease & Pest Detection | TFLite + YOLOv8 (INT8 Quantized) | Offline | Visual	+ Text
+Drone Yield & Health Analysis | Backend CNN + Regression Head + Sentinel-2 NDVI | Online (cached after sync) | Heatmap + Yield Estimate
+Equipment Rental Marketplace | Firebase Realtime DB (Geohash) + Bluetooth Mesh | Hybrid | In-App Listings + Chat
+Mandi	Price Alert | Agmarknet API + FCM | Online | Push Notification
+Crop Calendar | Open-Meteo	+ Groq Llama 3 | Online | Text	/ Audio
+
+Table 3:
+Service | Free-Tier Limit | Usage (4-Week Pilot)
+Groq Cloud API | 30 RPM / 14,400 RPD | ~3,800 RPD avg
+Firebase Realtime DB (Spark) | 1 GB storage, 10 GB/mo transfer | 410 MB stored, 2.6	GB transferred
+Oracle Cloud Always Free (ARM) | 4 OCPUs, 24 GB RAM total | 2  OCPUs,  12 GB configured
+data.gov.in Agmarknet API | Free developer key, no published limit | 1	call/day (batch)
+Open-Meteo | Unlimited, no API key | ~1,200 calls/day
+Bhashini ASR + NMT + TTS | Free government service | ~430 calls/day
+ESA	Copernicus Sentinel-2 | Free open access | ~50	tile downloads/week
+
+Table 4:
+Crop / Disease | Precision (%) | Recall (%) | F1 | Inference (ms)
+Bacterial	Blight (Pomegranate) | 92.4 | 90.1 | 0.912 | 174
+Leaf Rust (Ragi) | 91.7 | 93.2 | 0.924 | 181
+Yellow	Mosaic Virus (Soybean) | 89.3 | 88.6 | 0.889 | 183
+Powdery Mildew (Onion) | 94.1 | 91.8 | 0.929 | 178
+Late	Blight (Tomato) | 93.5 | 92.9 | 0.932 | 176
+Overall (Weighted Avg.) | 92.2 | 91.3 | 0.917 | 178.4
+
+Table 5:
+Crop | Plots (n) | MAPE (%) | R² | Hotspot Precision (%)
+Pomegranate | 6 | 9.1 | 0.87 | 88.9
+Onion | 5 | 7.8 | 0.90 | 91.2
+Ragi | 4 | 8.4 | 0.88 | 86.5
+Groundnut | 2 | 9.6 | 0.85 | 84.0
+
+Table 6:
+Tomato | 2 | 7.5 | 0.91 | 90.5
+Overall | 19 | 8.6 | 0.89 | 88.3
+
+Table 7:
+Query Category | Precision (%) | Recall (%) | MRR | Hallucination
+Eligibility (Krishi Bhagya) | 95.2 | 93.1 | 0.91 | 0%
+Document checklist | 96.0 | 94.5 | 0.94 | 0%
+Loan	schemes (KCC/NABARD) | 92.8 | 91.4 | 0.89 | 0%
+Budget schemes (Vasudhamruta) | 93.5 | 90.8 | 0.88 | 0%
+Overall | 94.3 | 92.4 | 0.905 | 0%
+
+Table 8:
+Feature | Krushika-Dhara | Kisan Suvidha | AgroStar | DeHaat | Plantix
+Offline Disease Detection | Yes | No | No | No | Partial
+Kannada Voice Interface | Yes | No | No | No | No
+RAG Scheme Advisory | Yes | No | No | No | No
+Pest-Weather Alerts | Yes | Partial | Yes | Yes | Yes
+Real-time Mandi Prices | Yes | Yes | Yes | Yes | No
+Drone Yield Estimation | Yes | No | No | No | No
+Peer Equipment Rental | Yes | No | No | No | No
+Infrastructure Cost | Zero | Govt.-Funded | Freemium | Freemium | Freemium
+
+Table 9:
+Study | Focus | Offline Mode | Multi-Module Integration | Key Limitation Addressed by KrushikaDhara
+Akhil et al. [3] | Drone	pest classification, paddy only | No | No | Single	crop, classification only, no remedy or yield output, no farmer app
+Geethajali	et al. [4] | AI chatbot: yield, crop selection, disease | No | Partial (chatbot only) | No offline mode, no vernacular voice,	no equipment or price integration
+Rathi et al. [5] | Disease detection,	crop recommendation, price forecasting | Not stated | Partial | No offline mode, no equipment access,	no scheme or voice layer
+Patil et al. [6] | Web-based equipment rental marketplace | No | No | Standalone web app; no GPS-proximity matching,	no offline/mesh fallback,	no farm-advisory integration
+KrushikaDhara (this work) | Disease	+ remedy,	drone yield,	rental, price,	scheme RAG, voice | Yes (core) | Yes	(9 modules) | —

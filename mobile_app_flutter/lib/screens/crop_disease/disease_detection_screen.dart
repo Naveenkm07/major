@@ -196,7 +196,7 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> with Wi
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('${locale.get('diagnosis_result') ?? 'Diagnosis result'} (${(confidence * 100).toStringAsFixed(1)}% match)', 
+              Text('${locale.tr('diagnosis_result') ?? 'Diagnosis result'} (${(confidence * 100).toStringAsFixed(1)}% match)', 
                   style: const TextStyle(color: Colors.grey, fontSize: 13)),
               if (isHighSeverity)
                 Container(
@@ -206,7 +206,7 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> with Wi
                     children: [
                       const Icon(Icons.warning_amber_rounded, color: Colors.white, size: 14),
                       const SizedBox(width: 4),
-                      Text(locale.get('high_severity') ?? 'High Severity', 
+                      Text(locale.tr('high_severity') ?? 'High Severity', 
                            style: const TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.bold)),
                     ],
                   ),
@@ -234,7 +234,7 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> with Wi
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(locale.get('recommended_treatment') ?? 'Recommended Treatment', 
+                Text(locale.tr('recommended_treatment') ?? 'Recommended Treatment', 
                      style: const TextStyle(color: AppTheme.primaryGreen, fontSize: 12, fontWeight: FontWeight.bold)),
                 const SizedBox(height: 8),
                 Text(
@@ -390,7 +390,7 @@ class _DiseaseDetectionScreenState extends State<DiseaseDetectionScreen> with Wi
                     child: OutlinedButton.icon(
                       onPressed: _pickGalleryImage,
                       icon: const Icon(Icons.photo_library, color: Colors.white),
-                      label: Text(locale.get('gallery') ?? 'Gallery', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                      label: Text(locale.tr('gallery') ?? 'Gallery', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         backgroundColor: Colors.black.withOpacity(0.6),
