@@ -14,7 +14,7 @@ const config = {
   },
 
   supabase: {
-    url: process.env.SUPABASE_URL || 'https://kiqgnfilifuqskmgkyaa.supabase.co',
+    url: process.env.SUPABASE_URL || 'https://rjdxlenzwffgwujxbzpb.supabase.co',
     serviceRoleKey: process.env.SUPABASE_SERVICE_ROLE_KEY,
   },
 

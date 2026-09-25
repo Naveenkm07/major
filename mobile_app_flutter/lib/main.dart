@@ -62,8 +62,8 @@ void main() async {
   );
 
   // Initialize Supabase (Hardcoded for Vercel deployment)
-  final supabaseUrl = 'https://kiqgnfilifuqskmgkyaa.supabase.co';
-  final supabaseAnonKey = 'sb_publishable_Hmmhp4FJYoARgEx_pmFHsA_jf0PYqbW';
+  final supabaseUrl = 'https://rjdxlenzwffgwujxbzpb.supabase.co';
+  final supabaseAnonKey = 'sb_publishable_vEYUuw1cnpY8BGfgdNy1Jw_WEhRxTOP';
   if (supabaseUrl.isNotEmpty && supabaseAnonKey.isNotEmpty) {
     await Supabase.initialize(
       url: supabaseUrl,
