@@ -94,6 +94,11 @@ class AppLocale extends ChangeNotifier {
       'analyzing': 'Analyzing...',
       'treatment': 'Treatment',
       'prevention': 'Prevention',
+      'diagnosis_result': 'Diagnosis Result',
+      'high_severity': 'High Severity',
+      'medium_severity': 'Medium Severity',
+      'low_severity': 'Low Severity',
+      'recommended_treatment': 'Recommended Treatment',
 
       // ─── Market ──────────────────────────────
       'search_crop': 'Search crop (e.g., Wheat, Rice)...',
@@ -392,6 +397,11 @@ class AppLocale extends ChangeNotifier {
       'analyzing': 'ವಿಶ್ಲೇಷಿಸಲಾಗುತ್ತಿದೆ...',
       'treatment': 'ಚಿಕಿತ್ಸೆ',
       'prevention': 'ತಡೆಗಟ್ಟುವಿಕೆ',
+      'diagnosis_result': 'ರೋಗನಿರ್ಣಯದ ಫಲಿತಾಂಶ',
+      'high_severity': 'ಹೆಚ್ಚಿನ ತೀವ್ರತೆ',
+      'medium_severity': 'ಮಧ್ಯಮ ತೀವ್ರತೆ',
+      'low_severity': 'ಕಡಿಮೆ ತೀವ್ರತೆ',
+      'recommended_treatment': 'ಶಿಫಾರಸು ಮಾಡಿದ ಚಿಕಿತ್ಸೆ',
 
       // ─── Market ──────────────────────────────
       'search_crop': 'ಬೆಳೆ ಹುಡುಕಿ (ಉದಾ: ಗೋಧಿ, ಭತ್ತ)...',
