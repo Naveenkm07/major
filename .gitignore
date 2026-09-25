@@ -29,3 +29,20 @@ Team No---.pptx
 node_modules/
 venv/
 .env
+
+# Large binary/dataset files - too big for GitHub
+*.zip
+*.tar.gz
+*.tar
+
+# JVM crash logs
+hs_err_pid*.log
+
+# Flutter build artifacts
+mobile_app_flutter/build/
+
+# Python virtual environment
+.venv/
+
+# Out files
+out*.txt
