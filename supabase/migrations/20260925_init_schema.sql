@@ -25,7 +25,7 @@ CREATE TABLE profiles (
 
 -- 2. Equipment (Marketplace)
 CREATE TABLE equipment (
-    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     name TEXT NOT NULL,
     type TEXT NOT NULL,
     owner_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
@@ -43,7 +43,7 @@ CREATE TABLE equipment (
 
 -- 3. Market Prices
 CREATE TABLE market_prices (
-    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     state TEXT NOT NULL,
     district TEXT NOT NULL,
     market TEXT NOT NULL,
@@ -58,7 +58,7 @@ CREATE TABLE market_prices (
 
 -- 4. Pest Scans
 CREATE TABLE pest_scans (
-    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     farmer_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
     image_url TEXT NOT NULL,
     detected_disease TEXT,
