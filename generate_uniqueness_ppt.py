@@ -26,7 +26,6 @@ def create_presentation(out_path):
     slide = prs.slides.add_slide(layout)
     slide.shapes.title.text = "1. Solving the 'Integration Gap'"
     
-    # Add text
     txBox = slide.shapes.add_textbox(Inches(0.5), Inches(1.5), Inches(5), Inches(5))
     tf = txBox.text_frame
     tf.word_wrap = True
@@ -60,12 +59,11 @@ def create_presentation(out_path):
         p.text = "• " + b
         p.font.size = Pt(16)
         
-    # Add Image
     img_path = r"C:\Users\indar\.gemini\antigravity-ide\brain\a51ad55d-cc05-4a05-b053-b7572930ee7a\farmer_app_ui_1790370010020.jpg"
     try:
         slide.shapes.add_picture(img_path, Inches(5.5), Inches(1.5), width=Inches(4))
-    except Exception as e:
-        print("Image 1 failed to load:", e)
+    except Exception:
+        pass
         
     # ---------------------------------------------------------
     # Slide 3: Multi-Tiered AI
@@ -74,7 +72,7 @@ def create_presentation(out_path):
     slide.shapes.title.text = "2. Multi-Tiered AI (Edge + Aerial Fusion)"
     
     txBox = slide.shapes.add_textbox(Inches(0.5), Inches(1.5), Inches(5), Inches(5))
-    tf = txBox.text_frame
+    tf = tf = txBox.text_frame
     tf.word_wrap = True
     
     p = tf.add_paragraph()
@@ -164,10 +162,50 @@ def create_presentation(out_path):
         p.font.size = Pt(16)
         
     # ---------------------------------------------------------
-    # Slide 6: Vernacular Voice LLM
+    # Slide 6: IoT Sandalwood Anti-Poaching System
     # ---------------------------------------------------------
     slide = prs.slides.add_slide(layout)
-    slide.shapes.title.text = "5. Vernacular RAG Advisory System"
+    slide.shapes.title.text = "5. IoT Sandalwood Anti-Poaching System"
+    
+    txBox = slide.shapes.add_textbox(Inches(0.5), Inches(1.5), Inches(5), Inches(5))
+    tf = txBox.text_frame
+    tf.word_wrap = True
+    
+    p = tf.add_paragraph()
+    p.text = "The 'Unified Dashboard' Advantage:"
+    p.font.bold = True
+    p.font.size = Pt(20)
+    p = tf.add_paragraph()
+    p.text = "• Unlike standalone security apps, KrushikaDhara integrates high-value crop security directly into the farmer's primary agricultural dashboard."
+    p.font.size = Pt(16)
+    
+    p = tf.add_paragraph()
+    p.text = "\nMulti-Sensor Data Fusion:"
+    p.font.bold = True
+    p.font.size = Pt(20)
+    p = tf.add_paragraph()
+    p.text = "• Fuses Acoustic (chainsaw sound) and Vibration (accelerometer) sensors to virtually eliminate false positives caused by wind or animals."
+    p.font.size = Pt(16)
+    
+    p = tf.add_paragraph()
+    p.text = "\nTinyML Edge Processing:"
+    p.font.bold = True
+    p.font.size = Pt(20)
+    p = tf.add_paragraph()
+    p.text = "• AI runs locally on the tree's microcontroller. Instead of streaming battery-draining audio to the cloud, it transmits a tiny 1-byte alert signal instantly over LoRa/Mesh."
+    p.font.size = Pt(16)
+
+    img_path = r"C:\Users\indar\.gemini\antigravity-ide\brain\a51ad55d-cc05-4a05-b053-b7572930ee7a\sandalwood_iot_1790370484449.jpg"
+    try:
+        slide.shapes.add_picture(img_path, Inches(5.5), Inches(1.5), width=Inches(4))
+    except Exception:
+        pass
+        
+    # ---------------------------------------------------------
+    # Slide 7: Vernacular Voice LLM
+    # ---------------------------------------------------------
+    slide = prs.slides.add_slide(layout)
+    slide.shapes.title.text = "6. Vernacular RAG Advisory System"
     
     txBox = slide.shapes.add_textbox(Inches(0.5), Inches(1.5), Inches(5), Inches(5))
     tf = txBox.text_frame
@@ -213,5 +251,5 @@ def create_presentation(out_path):
     print(f"Presentation successfully created at {out_path}")
 
 if __name__ == "__main__":
-    out_path = r"Z:\major\KrushikaDhara_Uniqueness_Pitch_v2.pptx"
+    out_path = r"Z:\major\KrushikaDhara_Uniqueness_Pitch_v3.pptx"
     create_presentation(out_path)
