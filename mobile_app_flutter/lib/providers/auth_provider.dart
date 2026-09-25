@@ -276,7 +276,7 @@ class AuthProvider extends ChangeNotifier {
         // We just return true as the flow continues on the new page.
         return true;
       } else {
-        const webClientId = '128779961552-h25gbkvkpufei1imv3a07gg36pifkduo.apps.googleusercontent.com';
+        const webClientId = '579437156136-o5f2pcerepk40c3q2lcst8tn9fm0e260.apps.googleusercontent.com';
         
         final googleSignIn = GoogleSignIn.instance;
         await googleSignIn.initialize(
