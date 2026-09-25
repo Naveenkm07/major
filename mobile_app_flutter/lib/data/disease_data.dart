@@ -189,5 +189,55 @@ class DiseaseData {
         "Plant rust-resistant varieties",
       ],
     },
+    "Healthy_Crop": {
+      "description": "The plant appears healthy with no visible signs of disease or pest damage.",
+      "treatment": ["Continue current care practices"],
+      "prevention": ["Regular crop monitoring every 7 days"],
+    },
+    "Leaf_Blight": {
+      "description": "Leaf blight is a fungal or bacterial disease that causes dark, necrotic spots and lesions on leaves, often leading to defoliation.",
+      "treatment": [
+        "Remove and destroy infected plant parts",
+        "Apply copper-based fungicides or Mancozeb",
+        "Improve air circulation and avoid overhead watering",
+      ],
+      "prevention": [
+        "Ensure adequate spacing between plants",
+        "Use disease-resistant seeds",
+      ],
+    },
+    "Rust_Disease": {
+      "description": "Rust diseases appear as powdery orange, brown, or yellow pustules on the undersides of leaves, stunting plant growth.",
+      "treatment": [
+        "Spray Propiconazole or Hexaconazole immediately",
+        "Apply neem oil as an early organic control",
+      ],
+      "prevention": [
+        "Rotate crops and avoid planting in the same family",
+        "Clear away plant debris at the end of the season",
+      ],
+    },
+    "Powdery_Mildew": {
+      "description": "Powdery mildew forms a white to gray powdery fungal growth on leaves and stems, thriving in high humidity.",
+      "treatment": [
+        "Spray Wettable Sulphur or potassium bicarbonate solutions",
+        "Apply Karathane for severe infections",
+      ],
+      "prevention": [
+        "Water at the base of the plant to keep foliage dry",
+        "Ensure full sun exposure",
+      ],
+    },
+    "Pest_Damage": {
+      "description": "Pest damage can be caused by aphids, mites, caterpillars, or beetles, leading to chewed leaves, yellowing, or stunted growth.",
+      "treatment": [
+        "Spray organic neem oil mixed with mild soap",
+        "Apply Imidacloprid for severe aphid or whitefly infestations",
+      ],
+      "prevention": [
+        "Introduce beneficial insects like ladybugs",
+        "Use sticky traps for monitoring",
+      ],
+    },
   };
 }
