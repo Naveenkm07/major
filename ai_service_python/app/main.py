@@ -16,7 +16,7 @@ from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 
 from app.config import get_settings
-from app.routers import disease, chatbot, crop_recommendation, drone, rag
+from app.routers import disease, chatbot, crop_recommendation, drone, rag, crop_calendar
 # ─── Logging config ──────────────────────────────────
 logging.basicConfig(
     level=logging.INFO,
@@ -107,6 +107,7 @@ app.include_router(chatbot.router)
 app.include_router(crop_recommendation.router)
 app.include_router(drone.router)
 app.include_router(rag.router)
+app.include_router(crop_calendar.router)
 
 
 # ─── Health Check (public) ───────────────────────────

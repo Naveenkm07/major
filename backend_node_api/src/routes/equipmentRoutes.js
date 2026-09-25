@@ -5,7 +5,8 @@ const {
     getEquipment,
     addEquipment,
     updateEquipment,
-    deleteEquipment
+    deleteEquipment,
+    syncBluetoothMesh
 } = require('../controllers/equipmentController');
 
 const { protect } = require('../middleware/auth');
@@ -13,6 +14,8 @@ const { protect } = require('../middleware/auth');
 router.route('/')
     .get(getAllEquipment)
     .post(addEquipment);
+
+router.post('/sync-bluetooth', syncBluetoothMesh);
 
 router.route('/:id')
     .get(getEquipment)
