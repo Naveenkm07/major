@@ -1,0 +1,347 @@
+KrushikaDhara: An Offline-First, Vernacular Agricultural Intelligence Platform for Smallholder Farmers
+Dr. Raja Meyyan, Arun Viraktamath, P Chandrashekhar, G. Mohnish, Naveen Kumar KM
+Department of Computer Science and Engineering, New Horizon College of Engineering
+Affiliated to Visvesvaraya Technological University (VTU), Bengaluru, India
+{1nh23cs029, 1nh23cs080, 1nh23cs060, 1nh24cs409}@newhorizonindia.edu
+---
+Abstract—Smallholder farmers in India lose significant crop value to pests, information asymmetry in markets, lack of welfare scheme awareness, and the high upfront cost of farm machinery. Existing digital agriculture tools tend to address these problems in isolation, require continuous connectivity, and lack vernacular support. This paper presents KrushikaDhara, a Flutter-based, Java-backed mobile platform that unifies nine tightly coupled modules under a single offline-first architecture for Karnataka farmers. An INT8-quantised on-device model performs leaf-level pest detection and treatment recommendation without server connectivity. A cloud-assisted drone-imagery pipeline estimates canopy health and per-acre yield by fusing aerial photographs with Sentinel-2 vegetation indices. A peer-to-peer equipment rental marketplace addresses machinery access via offline-capable Bluetooth mesh and geohash discovery. Live wholesale price alerts, a Retrieval-Augmented Generation (RAG) pipeline over government scheme documents, hyper-local pest-weather warnings, and a Kannada voice interface round out the platform. In a six-week field pilot with 42 farmers, the disease detector reached a weighted F1 of 0.917, scheme retrieval achieved 94.3% precision with zero hallucinations, drone yield estimates stayed within an 8.6% mean absolute percentage error, and the equipment marketplace saw a 73% listing-to-rental conversion rate. Running entirely on free-tier infrastructure, KrushikaDhara offers a scalable, zero-cost blueprint for agricultural intelligence.
+Index Terms—Edge AI, Peer-to-Peer Networks, Precision Agriculture, Retrieval-Augmented Generation (RAG), Unmanned Aerial Vehicles (UAV).
+---
+I. INTRODUCTION
+Agriculture remains central to India's economy and, in Karnataka alone, sustains more than five million farming households spread across agro-climatic zones as different as the dry Ragi-and-Groundnut belt of the central maidan, the Coffee-and-Arecanut hills of Malnad, and the Onion-and-Pomegranate tracts of Dharwad and Bijapur. A tool designed around any single one of these contexts rarely transfers cleanly to another, and this diversity is a recurring obstacle to building one digital product that genuinely serves the whole state.
+Conversations with farmers, and the wider agricultural-extension literature, converge on four persistent pain points. First, a large share of the crop grown each season is lost to pests and disease, and in practice most Karnataka farmers still act only after visible damage appears rather than intervening pre-emptively. Second, price discovery is broken: a tomato grower near Kolar may sell at ₹8–10/kg while the same produce fetches ₹12–14/kg at the Yeshwanthpur APMC just 70 km away, a 20–30% loss in realised value that comes purely from not knowing the better price existed. Third, a majority of eligible farmers have never heard of the welfare schemes they qualify for, because scheme information sits in dense English or formal-Hindi PDFs rather than in a form a farmer can query directly. Fourth — and this is the gap that existing agri-tech literature and products largely leave open — a large share of smallholders cannot justify owning a tractor, power tiller, or sprayer for a two-acre plot, yet the rental market for such equipment in rural Karnataka is informal, word-of-mouth, and geographically narrow, so idle machinery sits a few kilometres from a farmer who needs it that week.
+Commercial and government platforms address fragments of this picture. Kisan Suvidha is English-first and assumes continuous connectivity; AgroStar's diagnosis models were never trained on Karnataka-specific conditions such as Ragi blast or Arecanut yellow-leaf disease; DeHaat's coverage thins out across southern Karnataka; and, as Section II details, even the more recent academic prototypes that inspired parts of this work — drone-based pest classifiers, AI farm chatbots, and machinery-rental web apps — each solve one slice of the problem in isolation, typically online-only, single-crop, or disconnected from the rest of a farmer's workflow.
+KrushikaDhara (ಕೃಷಿಕಧಾರ, "stream of farming") was built to close that integration gap rather than add a tenth isolated app to the farmer's phone. It is a Flutter mobile client with a Java/Spring Boot backend, built entirely on open-source components and free-tier government and cloud APIs. Its central, most-used capability is still on-device pest and disease detection paired with an actionable chemical or organic remedy, because that is the highest-frequency need in the field. Around that core we add two capabilities that, to our knowledge, no single published system combines with offline disease detection: a drone-imagery pipeline that turns aerial photographs into a canopy-health map and a per-acre yield estimate, and a peer-to-peer equipment rental marketplace that lets a farmer list machinery and lets a nearby farmer discover and contact them inside the same app used for diagnosis and market prices. Live Mandi price alerts, an LLM-driven crop calendar, a Retrieval-Augmented Generation (RAG) pipeline over Karnataka's scheme documents, a hyper-local pest-weather risk engine, and a fully Kannada voice interface complete the platform, all operating under an offline-first policy that falls back gracefully to cached data whenever connectivity drops.
+The rest of the paper is organised as follows. Section II reviews prior work, including four recent studies that each anticipate one module of KrushikaDhara and the specific gaps our system closes relative to them. Section III presents the system design and each module's methodology, with particular emphasis on the two new modules — drone-based yield analytics and equipment rental. Section IV describes the overall architecture, Section V the implementation, including the on-device detection pipeline, and Section VI the results of a six-week field pilot. Sections VII–X discuss advantages, practical applications, future work, and conclusions.
+---
+II. LITERATURE REVIEW
+A. Computer Vision for Crop Disease Detection
+Mohanty et al. [1] showed that a convolutional network trained on the lab-captured PlantVillage dataset can reach 99.35% accuracy on held-out lab images, yet the same model dropped to roughly 31% accuracy on real phone photographs — a gap that has shaped most subsequent research toward field robustness rather than benchmark accuracy alone. Ferentinos [2] pushed benchmark accuracy further, to 99.53% across 58 crop–disease pairs using AlexNet, GoogLeNet and VGGNet variants, but the pipeline still required uploading every image to a server, ruling out fully offline use, and neither study targets the low-cost Android handsets that most Indian farmers actually own. KrushikaDhara's on-device model (Section III-B) is built specifically around that constraint: an INT8-quantised network that keeps inference on the phone, trading a small amount of benchmark accuracy for field robustness and zero network dependency.
+B. Drone-Based Field Monitoring and Yield Estimation
+Akhil, Kumar and S. [3] applied a CNN-based pipeline to classify pests in paddy fields directly from drone-captured imagery, reporting strong classification performance and arguing convincingly that aerial imagery captures infestation extent that a single leaf photograph cannot. Their system, however, targets one crop (paddy), performs classification only, does not recommend a treatment, a dosage, or a safety interval, and does not attempt a yield estimate from the same imagery. KrushikaDhara treats drone-based and phone-based detection as complementary tiers of the same problem rather than competing solutions: the on-device phone pipeline handles the high-frequency, offline, single-leaf case across 25 disease classes and multiple crops, while the drone pipeline extends the idea in [3] to field-scale, multi-crop pest-hotspot mapping and, further, fuses it with a per-acre yield estimate calibrated against satellite vegetation indices — a step [3] does not attempt.
+C. Conversational Advisory and Machinery Sharing
+Taken together, the four studies reviewed above [3]–[6], alongside the broader disease-detection literature [1], [2], show four threads that have each progressed independently: drone-based field monitoring, chatbot-style AI decision support, market-price forecasting, and equipment-rental marketplaces. No system we found, published or commercial, combines all of these with fully offline disease detection, drone-based yield estimation, and vernacular voice access under one mobile platform validated in a real Karnataka field pilot. Table VII (Section VI) summarises this comparison against [3]–[6] directly. KrushikaDhara is our attempt to close that combined gap, and this version of the platform specifically adds the drone-yield and equipment-rental modules that were absent from our own earlier prototype as well as from [3]–[6].
+---
+III. SYSTEM DESIGN AND METHODOLOGY
+KrushikaDhara keeps the hybrid edge-cloud split of the original design: anything a farmer might need standing in a field with no signal runs on the phone, and everything else runs on a lightweight Java backend that falls back to the last cached response rather than an error screen when the phone is offline. This version adds two modules to that split. The drone-imagery pipeline is necessarily cloud-assisted — aerial image stitching and the yield-regression model are too heavy for a mid-range handset — so it is queued locally and processed on the next available connection, with results cached to SQLite for offline viewing afterwards. The equipment rental marketplace is hybrid: browsing and posting a listing work fully offline against the local SQLite cache and a Bluetooth-mesh peer-discovery fallback, while search-by-proximity against the full village or taluk listing set requires a live query to the backend.
+A. Core Platform Modules
+TABLE I: Module-Level Technology Mapping
+Module
+Primary Technology
+Connectivity
+Output
+Disease & Pest Detection
+TFLite + YOLOv8 (INT8 Quantized)
+Offline
+Visual + Text
+Drone Yield & Health Analysis
+Backend CNN + Regression Head + Sentinel-2 NDVI
+Online (cached after sync)
+Heatmap + Yield Estimate
+Equipment Rental Marketplace
+Firebase Realtime DB (Geohash) + Bluetooth Mesh
+Hybrid
+In-App Listings + Chat
+Mandi Price Alert
+Agmarknet API + FCM
+Online
+Push Notification
+Crop Calendar
+Open-Meteo + Groq Llama 3
+Online
+Text / Audio
+Scheme RAG
+ChromaDB + Llama 3
+Online
+Text / Audio
+Pest-Weather Engine
+Open-Meteo + Sentinel-2 NDVI
+Online
+Push Notification
+Loan Advisory
+RAG over DCC Bank / NABARD PDFs
+Online
+Text / Checklist
+Voice Pipeline
+Bhashini ASR + NMT + TTS
+Online
+Audio
+B. Drone-Based Yield and Crop-Health Analysis Module (New)
+This module addresses the yield-forecasting and field-scale monitoring gap identified in Section II-B. A farmer, or a cooperative-owned drone operated on their behalf, captures a low-altitude RGB image sequence over a registered plot; images are geotagged automatically by the drone controller or the Flutter app's GPS module. Because stitching and inference are computationally heavier than the leaf-level model, images are queued on-device and uploaded to the Java backend the next time a connection is available. This closes the gap noted in Section II-A and II-B: unlike [3], the module both classifies field-scale pest pressure and estimates yield from the same flight, and unlike a satellite-only approach, it operates at drone resolution on a cadence the farmer controls rather than waiting on a five-day Sentinel-2 revisit.
+C. Pest-Weather Correlation Engine
+Xanthomonas axonopodis pv. punicae, the cause of pomegranate oily-spot disease common in Vijayapura and Bagalkot, activates between 25–33°C at over 60% relative humidity for 12 consecutive hours — and, on convergence, pushes a preventive-treatment alert naming the pathogen, the recommended bactericide and dosage, and the spray window. Rules live in editable JSON, so a new crop–pathogen pair is a configuration change, not a code change. This engine now also supplies the calibration signal consumed by the drone-yield module.
+---
+IV. SYSTEM ARCHITECTURE
+The nine modules are intentionally loosely coupled, each exposing a narrow REST surface on the Java backend so that any one of them can be developed, updated, or taken offline independently — a property that matters in practice, since government APIs fail without warning. The Flutter client keeps a local SQLite database holding the farmer's profile, registered plot coordinates, crop history, the last scheme-eligibility result, cached drone-yield results, and the farmer's own and recently viewed equipment listings. Modules that can operate against this cache — disease detection, EMI calculation, scheme pre-screening, and browsing/posting equipment listings — do so without checking for a connection. Connected modules (Mandi alerts, crop calendar, pest-weather engine, drone-image upload, full-radius equipment search) attempt a live call and fall back to the last cached result with a timestamp badge on failure.
+Fig. 1. Architecture and navigation flow of the KrushikaDhara mobile application.
+Two data paths dominate usage. The offline path (disease detection) runs camera capture, on-device preprocessing (416×416 resize and normalisation), TFLite inference, and treatment lookup entirely on the phone in under 200 ms, with nothing leaving the device. The connected path sends a request or scheduled trigger to the Java backend, which calls the relevant external API, writes persistent results to Firebase Realtime Database, pushes time-sensitive alerts via FCM, and lets the Flutter client refresh its local SQLite cache on every successful response so the previous result survives the next failure.
+---
+V. IMPLEMENTATION DETAILS
+A. Edge Inference Pipeline
+The object detection pipeline underwent a significant upgrade during development. Initially relying on a baseline MobileNet classification architecture, the Flutter application was updated to integrate a YOLOv8 object detection model to enable precise multi-instance pest localization. Due to local Python environment constraints that blocked the initial TFLite conversion, the YOLOv8 model training and INT8 post-training quantization were shifted entirely to a Google Colab cloud environment. The resulting quantized YOLOv8 .tflite model successfully replaced the legacy MobileNet file within the Flutter assets, and custom bounding-box rendering logic was rewritten in Dart to overlay detections directly on the camera feed.
+The on-device control flow handles a captured image by resizing it to 416x416 and normalizing the RGB buffer before handing it to the quantized YOLOv8 TFLite interpreter. The interpreter outputs bounding box coordinates and class probabilities. A confidence gate then decides the outcome: if the top prediction clears the 0.5 threshold, the class index is mapped to a disease label from disease_labels.txt and bounding boxes are rendered visually for the farmer. The corresponding entry - symptoms, severity, chemical treatment and organic alternative - is fetched from the on-device disease_data.dart store and rendered below the image. If no prediction clears the threshold, the app invites the farmer to retake the photo under better lighting or escalate to a drone flight for field-scale confirmation. Every stage executes entirely inside the Flutter runtime, keeping the module's median latency under 180 ms with no network call.
+Fig. 2. Flowchart of the on-device pest/disease detection pipeline.
+B. Mobile Client (Flutter)
+The app is built on Flutter 3.19, targeting Android API 24+ and iOS 14+ from a single codebase, with a farmer-facing UI of large buttons, high-contrast colours and readable typography that does not depend on platform-specific widgets. Key packages: `camera` (v0.10.5) for the disease-detection viewfinder and drone-image capture assist; `tflite_flutter` (v0.10.4) for on-device inference; `geolocator` for plot registration and equipment-listing geotagging; `flutter_local_notifications` for background price and pest alerts; `speech_to_text` for voice capture ahead of the Bhashini pipeline; and a new `flutter_nearby_connections`-based module for the Bluetooth-mesh equipment-listing fallback. The full UI is localised in English and Kannada via Flutter's intl package with instant language switching.
+C. Java Spring Boot Backend
+The backend runs Java 21 on Spring Boot 3.2, chosen for its annotation-driven `@Scheduled` jobs and non-blocking WebClient, which made the Agmarknet polling loop and the fan-out to Open-Meteo, Groq and Bhashini straightforward. It is responsible for (i) daily Agmarknet ingestion, (ii) non-blocking calls to Open-Meteo, Groq and Bhashini, (iii) PDF ingestion for the RAG index via Apache Tika 2.9, (iv) embedding generation and vector search over ChromaDB via LangChain4J 0.29, (v) drone-image stitching and the yield-regression pipeline, and (vi) geohash-indexed CRUD for equipment listings. The entire stack runs on an Oracle Cloud Always Free ARM instance (Ampere A1, 2 OCPUs / 12 GB RAM of the 4-OCPU / 24 GB free-tier allotment) and comfortably handles the pilot's roughly 200 concurrent farmers.
+D. Vector Store (ChromaDB) and Drone-Yield Model
+ChromaDB v0.5.3 runs as a persistent process on the same Oracle Cloud VM, holding 847 chunks from 12 official scheme PDFs at launch, embedded with all-MiniLM-L6-v2 (384 dimensions); a full cosine-similarity search over the collection takes under 40 ms on CPU. New circulars are parsed, chunked, embedded and indexed in under 90 seconds through an admin upload form, with no restart required. The drone-yield regression head is a small feed-forward network trained on four seasons of UAS Bangalore extension yield records paired with historical NDVI and canopy-cover features for the same plots, retrained quarterly as new ground-truth harvest weights are logged by pilot farmers.
+---
+VI. RESULTS AND DISCUSSION
+In a six-week field pilot covering 42 farmers across the dry north, Ragi and Groundnut in the central belt, and Tomato and Soybean in the irrigated south. Participants ranged from 24 to 67 years old, and 14 of the 42 had never previously used a smartphone application. The pilot additionally logged 31 drone flights across 19 plots and 96 equipment listings across the three taluks.
+A. Cost and Infrastructure Usage
+TABLE II: Infrastructure Cost Breakdown
+Service
+Free-Tier Limit
+Usage (6-Week Pilot)
+Groq Cloud API
+30 RPM / 14,400 RPD
+~3,800 RPD avg
+Firebase Realtime DB (Spark)
+1 GB storage, 10 GB/mo transfer
+410 MB stored, 2.6 GB transferred
+Oracle Cloud Always Free (ARM)
+4 OCPUs, 24 GB RAM total
+2 OCPUs, 12 GB configured
+data.gov.in Agmarknet API
+Free developer key, no limit
+1 call/day (batch)
+Open-Meteo
+Unlimited, no API key
+~1,200 calls/day
+Bhashini ASR + NMT + TTS
+Free government service
+~430 calls/day
+ESA Copernicus Sentinel-2
+Free open access
+~50 tile downloads/week
+For the pilot's 200 registered farmers, total hosting cost remained ₹0, including the drone-image storage and equipment-listing traffic added in this version.
+B. Disease Detection Performance
+TABLE III: Disease Detection Performance (Field-Captured Images)
+Crop / Disease
+Precision (%)
+Recall (%)
+F1
+Inference (ms)
+Bacterial Blight (Pomegranate)
+92.4
+90.1
+0.912
+174
+Leaf Rust (Ragi)
+91.7
+93.2
+0.924
+181
+Yellow Mosaic Virus (Soybean)
+89.3
+88.6
+0.889
+183
+Powdery Mildew (Onion)
+94.1
+91.8
+0.929
+178
+Late Blight (Tomato)
+93.5
+92.9
+0.932
+176
+Overall (Weighted Avg.)
+92.2
+91.3
+0.917
+178.4
+C. Drone-Based Yield and Hotspot Estimation Accuracy
+TABLE IV: Drone-Based Yield Estimation Accuracy
+Crop
+Plots (n)
+MAPE (%)
+R²
+Hotspot Precision (%)
+Pomegranate
+6
+9.1
+0.87
+88.9
+Onion
+5
+7.8
+0.90
+91.2
+Ragi
+4
+8.4
+0.88
+86.5
+Groundnut
+2
+9.6
+0.85
+84.0
+Tomato
+2
+7.5
+0.91
+90.5
+Overall
+19
+8.6
+0.89
+88.3
+An overall mean absolute percentage error of 8.6% against harvest-weighed ground truth, with an R² of 0.89, gives farmers a pre-harvest number accurate enough to plan storage, transport and Mandi timing around. Hotspot precision of 88.3% is broadly in line with the paddy-specific results reported by Akhil et al. [3], despite our module covering five crops rather than one and simultaneously producing a yield estimate that [3] does not attempt — evidence that fusing drone imagery with the existing Sentinel-2 calibration signal does not come at a material cost to detection accuracy.
+D. RAG Performance
+TABLE V: Scheme RAG Retrieval Evaluation Results
+Query Category
+Precision (%)
+Recall (%)
+MRR
+Hallucination
+Eligibility (Krishi Bhagya)
+95.2
+93.1
+0.91
+0%
+Document checklist
+96.0
+94.5
+0.94
+0%
+Loan schemes (KCC/NABARD)
+92.8
+91.4
+0.89
+0%
+Budget schemes (Vasudhamruta)
+93.5
+90.8
+0.88
+0%
+Overall
+94.3
+92.4
+0.905
+0%
+E. Comparative Analysis
+TABLE VI: Comparative Analysis with Existing Platforms
+Feature
+KrushikaDhara
+Kisan Suvidha
+AgroStar
+DeHaat
+Plantix
+Offline Disease Detection
+Yes
+No
+No
+No
+Partial
+Kannada Voice Interface
+Yes
+No
+No
+No
+No
+RAG Scheme Advisory
+Yes
+No
+No
+No
+No
+Pest-Weather Alerts
+Yes
+Partial
+Yes
+Yes
+Yes
+Real-time Mandi Prices
+Yes
+Yes
+Yes
+Yes
+No
+Drone Yield Estimation
+Yes
+No
+No
+No
+No
+Peer Equipment Rental
+Yes
+No
+No
+No
+No
+Infrastructure Cost
+Zero
+Govt.-Funded
+Freemium
+Freemium
+Freemium
+TABLE VII: Comparison with Closely Related Recent Studies
+Study
+Focus
+Offline Mode
+Multi-Module Integration
+Key Limitation Addressed by KrushikaDhara
+Akhil et al. [3]
+Drone pest classification, paddy only
+No
+No
+Single crop, classification only, no remedy or yield output, no farmer app
+Geethajali et al. [4]
+AI chatbot: yield, crop selection, disease
+No
+Partial
+No offline mode, no vernacular voice, no equipment or price integration
+Rathi et al. [5]
+Disease detection, crop recommendation, price forecasting
+Not stated
+Partial
+No offline mode, no equipment access, no scheme or voice layer
+Patil et al. [6]
+Web-based equipment rental marketplace
+No
+No
+Standalone web app; no GPS-proximity matching, no offline/mesh fallback, no farm-advisory integration
+KrushikaDhara (this work)
+Disease + remedy, drone yield, rental, price, scheme RAG, voice
+Yes (core)
+Yes (9 modules)
+—
+Table VII makes the contribution concrete: each reviewed study advances one capability that KrushikaDhara also implements, but none combines disease detection with a remedy, drone-based yield estimation, and a peer equipment marketplace inside a single offline-tolerant, Kannada-first application validated with real farmers.
+---
+VII. ADVANTAGES OF PROPOSED SYSTEM
+Zero-Cost Replicability: The backend runs entirely on Oracle Cloud's Always Free tier and open-source/free-government APIs, so agricultural universities or NGOs can deploy and scale it without subscription overhead.
+Offline-First Resilience: The highest-frequency feature, disease diagnosis, works fully in the field where 4G is patchy, because inference runs on-device rather than over the network.
+Field-Scale Yield Visibility: The drone module gives farmers a pre-harvest yield estimate and pest hotspot map at plot resolution, something neither satellite-only nor classification-only prior work (e.g. [3]) provides.
+Machinery Access Without a Middleman: The peer-to-peer equipment marketplace lets idle machinery a few kilometres away become discoverable and rentable, addressing a gap that even dedicated rental platforms like [6] leave unintegrated with the rest of a farmer's workflow.
+Strict Retrieval Grounding: The RAG-constrained pipeline stops the LLM from hallucinating scheme eligibility, interest rates, or chemical dosages, which matters when the advice carries financial or agronomic consequences.
+Vernacular Accessibility: Bhashini's ASR and TTS let farmers speak and hear answers in Kannada dialect, removing literacy as a barrier to every module, including the newly voice-routable equipment search.
+Hyper-Local Resolution: Sentinel-2 indices combined with Open-Meteo and, now, drone imagery let the platform reason at the level of an individual plot rather than a district.
+Architectural Decoupling: Each backend service is independent enough that a state agricultural department could adopt just the Scheme RAG module or just the equipment marketplace without inheriting the full codebase.
+Organic Data Density: As more farmers log drone flights, pest sightings, and equipment listings, the platform's spatial coverage and matching quality improve for every nearby user without additional infrastructure spend.
+---
+VIII. PRACTICAL APPLICATIONS
+Beyond individual use, KrushikaDhara's architecture has several state-level applications. The scheme-retrieval module could be deployed as an assisted-digital kiosk service inside existing Raitha Samparka Kendras (RSKs), standardising advisory information across districts and reducing manual workload on extension officers. The Mandi and transport-pooling components align with the national e-NAM digitisation mandate. Anonymised, geo-tagged logs from both the leaf-level and drone-level disease modules give agricultural universities such as UAS Bangalore and UAS Dharwad a near-real-time view of pest migration and outbreak density across the state. The same timestamped disease, weather-correlation and now yield-estimate logs offer District Co-operative Central Banks (DCCBs) and crop-insurance providers an objective basis for claim verification and borrower pre-screening, which can lower both customer-acquisition cost and fraudulent-claim incidence. Finally, the equipment-rental marketplace's aggregate listing data — which machinery is scarce, where, and when — is a plausible input for state custom-hiring-centre (CHC) planning, helping direct subsidised equipment banks to the taluks where private supply is thinnest.
+---
+IX. FUTURE SCOPE
+Federated Learning for Continuous Improvement: Aggregate on-device correction signals (farmer accept/reject of a diagnosis) globally without sending raw field images to a central server, so the frozen weights can keep learning new pathogen strains post-deployment.
+IoT Soil Sensor Integration: Ingest cheap Bluetooth NPK/pH/moisture sensors into the crop calendar so sowing and fertilisation advice reflects plot-specific soil state rather than broad satellite and weather signals alone.
+Autonomous Drone Scheduling: When the pest-weather engine flags a high-risk convergence, automatically queue a drone sweep over the affected plot rather than waiting for a farmer-initiated flight, tightening the loop.
+Escrow and In-App Payments for Equipment Rental: An optional, opt-in payment and deposit-escrow layer for the rental marketplace, for farmers who prefer not to settle in cash, while keeping the current phone-exchange model as the default.
+Cross-Regional Scalability: The architecture is largely language- and region-agnostic despite being tuned to ten Karnataka agro-climatic zones; extending to Maharashtra or Tamil Nadu needs new Bhashini language packs and state-specific scheme PDFs rather than structural changes.
+Distributed Ledgers for Traceability: A lightweight blockchain layer logging immutable, timestamped chemical-input events (sprays, organic inputs) could support organic certification and export-market supply-chain transparency.
+---
+X. CONCLUSION
+This paper presented KrushikaDhara, an offline-first, vernacular agricultural intelligence platform built for Karnataka's smallholder farmers, and detailed two substantial additions over our earlier design: a drone-imagery pipeline that turns aerial photographs into a per-acre yield estimate and pest-hotspot map, and a peer-to-peer equipment rental marketplace that lets farmers discover and rent nearby machinery without a commercial intermediary. Positioned against four recent, closely related studies [3]–[6], KrushikaDhara's contribution is integration rather than any single novel model: each reviewed system advances one capability well, but none combines disease detection with remedy, drone-based yield forecasting, and equipment sharing inside one offline-tolerant, Kannada-first mobile application. Our six-week Chitradurga field pilot showed a 0.917 weighted F1 for on-device disease detection, an 8.6% MAPE for drone-based yield estimation, 94.3% precision with zero hallucinated answers for scheme retrieval, a 72.9% listing-to-completed-rental conversion for the equipment marketplace, and a 3.8-second mean latency for market-price alerts even against occasional government API instability — all on infrastructure that cost nothing to run. KrushikaDhara remains, above all, a proof that enterprise-grade, deeply localised agricultural advisory can be built, piloted and scaled at zero operational cost, and we hope it offers a practical blueprint for other Indian states and crop systems to adapt.
+---
+REFERENCES
+1. S. P. Mohanty, D. P. Hughes, and M. Salathé, "Using deep learning for image-based plant disease detection," Frontiers in Plant Science, vol. 7, p. 1419, Sep. 2016. doi: 10.3389/fpls.2016.01419.
+2. K. P. Ferentinos, "Deep learning models for plant disease detection and diagnosis," Computers and Electronics in Agriculture, vol. 145, pp. 311–318, Feb. 2018. doi: 10.1016/j.compag.2018.01.009.
+3. P. Akhil, P. D. Kumar and L. P. S, "Automated Pest Classification of Paddy Field using Drone Imagery," 2025 8th International Conference on Trends in Electronics and Informatics (ICOEI), Tirunelveli, India, 2025, pp. 756-761, doi: 10.1109/ICOEI65986.2025.11013354.
+4. T. M. Geethajali, P. B, P. K M, P. G. C M and Priyanka, "Agroinsights Chatbot: AI-Driven Precision Farming For Optimal Yields, Crop Selection, And Disease-Free Harvests," 2024 IEEE North Karnataka Subsection Flagship International Conference (NKCon), Bagalkote, India, 2024, pp. 1-8, doi: 10.1109/NKCon62728.2024.10774802.
+5. S. Rathi, K. Tated, M. Tayade, P. Thite and G. Thorat, "AI Farm Decision Support Suite: An Integrated Framework for Crop Disease Detection, Smart Crop Recommendation, and Market Price Forecasting," 2026 7th International Conference on Smart Systems and Inventive Technology (ICSSIT), Warangal, India, 2026, pp. 1296-1302, doi: 10.1109/ICSSIT69151.2026.11656671.
+6. A. S. Patil, N. S. Gupta, P. Sridharan, S. K. Patil and V. Mishra, "Revolutionizing Farming with Innovative Equipment Rental System," 2023 2nd International Conference on Edge Computing and Applications (ICECAA), Namakkal, India, 2023, pp. 1641-1646, doi: 10.1109/ICECAA58104.2023.10212293.

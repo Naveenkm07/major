@@ -22,7 +22,8 @@ const weatherRoutes = require('./routes/weatherRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const equipmentRoutes = require('./routes/equipmentRoutes');
-
+const droneRoutes = require('./routes/droneRoutes');
+const voiceRoutes = require('./routes/voiceRoutes');
 const app = express();
 
 // ─── Security Middleware ───────────────────────────
@@ -75,7 +76,8 @@ app.use(`${apiPrefix}/weather`, weatherRoutes);
 app.use(`${apiPrefix}/notifications`, notificationRoutes);
 app.use(`${apiPrefix}/admin`, adminRoutes);
 app.use(`${apiPrefix}/equipment`, equipmentRoutes);
-
+app.use(`${apiPrefix}/drone`, droneRoutes);
+app.use(`${apiPrefix}/voice`, voiceRoutes);
 // ─── 404 Handler ───────────────────────────────────
 app.use('*', (req, res) => {
     res.status(404).json({

@@ -16,8 +16,7 @@ from fastapi.responses import JSONResponse
 from fastapi.exceptions import RequestValidationError
 
 from app.config import get_settings
-from app.routers import disease, chatbot, crop_recommendation
-
+from app.routers import disease, chatbot, crop_recommendation, drone, rag
 # ─── Logging config ──────────────────────────────────
 logging.basicConfig(
     level=logging.INFO,
@@ -106,6 +105,8 @@ async def global_exception_handler(request: Request, exc: Exception):
 app.include_router(disease.router)
 app.include_router(chatbot.router)
 app.include_router(crop_recommendation.router)
+app.include_router(drone.router)
+app.include_router(rag.router)
 
 
 # ─── Health Check (public) ───────────────────────────
