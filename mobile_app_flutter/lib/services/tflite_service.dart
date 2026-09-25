@@ -34,7 +34,7 @@ class TFLiteService {
       
       // 2. Load Labels
       final labelData = await rootBundle.loadString('assets/models/disease_labels.txt');
-      _labels = labelData.split('\n').where((s) => s.trim().isNotEmpty).toList();
+      _labels = labelData.split('\n').map((s) => s.trim()).where((s) => s.isNotEmpty).toList();
       
       _isLoaded = true;
       print('Real TFLite model loaded successfully! CPU Accelerated.');
