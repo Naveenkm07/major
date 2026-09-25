@@ -106,33 +106,24 @@ def create_presentation(out_path):
         pass
         
     # ---------------------------------------------------------
-    # Slide 4: Offline P2P Equipment Rental
+    # Slide 4: Equipment Rental (Online Mode)
     # ---------------------------------------------------------
     slide = prs.slides.add_slide(layout)
-    slide.shapes.title.text = "3. Bluetooth Mesh Equipment Rental"
+    slide.shapes.title.text = "3. Equipment Rental: The 'Online' Mode"
     
-    txBox = slide.shapes.add_textbox(Inches(0.5), Inches(1.5), Inches(5), Inches(5))
+    txBox = slide.shapes.add_textbox(Inches(0.5), Inches(1.5), Inches(5.5), Inches(5))
     tf = txBox.text_frame
     tf.word_wrap = True
     
     p = tf.add_paragraph()
-    p.text = "The Connectivity Challenge:"
-    p.font.bold = True
-    p.font.size = Pt(20)
-    p = tf.add_paragraph()
-    p.text = "• Traditional rental apps break when a farmer loses 4G signal in the field."
-    p.font.size = Pt(16)
-    
-    p = tf.add_paragraph()
-    p.text = "\nThe Offline Fallback Mechanism:"
+    p.text = "Firebase Realtime Database & Geohashing:"
     p.font.bold = True
     p.font.size = Pt(20)
     
     b3 = [
-        "Uses Firebase Geohashing when online.",
-        "Fails over to a Bluetooth/WiFi-Direct Mesh when offline.",
-        "Farmers broadcast equipment listings directly to nearby phones without a cell tower.",
-        "Allows true Peer-to-Peer (P2P) resource pooling, completely bypassing infrastructure failures."
+        "When a farmer has 4G/3G connectivity, the app operates using a standard Firebase backend.",
+        "It converts GPS coordinates into Geohashes (short grid strings).",
+        "If a farmer searches for a 'Tractor', the app instantly matches them with any listed tractors within their specific Geohash grid (e.g., 5-10 km radius)."
     ]
     for b in b3:
         p = tf.add_paragraph()
@@ -141,15 +132,42 @@ def create_presentation(out_path):
 
     img_path = r"C:\Users\indar\.gemini\antigravity-ide\brain\a51ad55d-cc05-4a05-b053-b7572930ee7a\tractor_bluetooth_1790370034895.jpg"
     try:
-        slide.shapes.add_picture(img_path, Inches(5.5), Inches(1.5), width=Inches(4))
+        slide.shapes.add_picture(img_path, Inches(6.0), Inches(2.0), width=Inches(3.5))
     except Exception:
         pass
-        
+
     # ---------------------------------------------------------
-    # Slide 5: Vernacular Voice LLM
+    # Slide 5: Equipment Rental (Offline Fallback)
     # ---------------------------------------------------------
     slide = prs.slides.add_slide(layout)
-    slide.shapes.title.text = "4. Vernacular RAG Advisory System"
+    slide.shapes.title.text = "4. Equipment Rental: Offline Bluetooth Fallback"
+    
+    txBox = slide.shapes.add_textbox(Inches(0.5), Inches(1.5), Inches(9), Inches(5))
+    tf = txBox.text_frame
+    tf.word_wrap = True
+    
+    p = tf.add_paragraph()
+    p.text = "Traditional apps break completely in rural areas without signal. KrushikaDhara fails over to a Bluetooth/WiFi-Direct Mesh using flutter_nearby_connections."
+    p.font.italic = True
+    p.font.size = Pt(16)
+    
+    b_offline = [
+        "Broadcasting: A farmer's phone locally broadcasts a tiny, encrypted Bluetooth beacon containing equipment details (e.g., 'Power Tiller, ₹500/hr, Contact: 98765XXXXX').",
+        "Peer Discovery: If another farmer walks within ~50-100 meters and searches, their phone picks up the Bluetooth broadcast directly.",
+        "Mesh Hopping: If Farmer A and C are far apart, but B is in the middle, B acts as an invisible 'bridge', passing the listing from A to C.",
+        "Offline Handshake: Farmers find the listing on-screen via Bluetooth and can complete the rental by walking over or making a standard 2G voice call."
+    ]
+    
+    for b in b_offline:
+        p = tf.add_paragraph()
+        p.text = "• " + b
+        p.font.size = Pt(16)
+        
+    # ---------------------------------------------------------
+    # Slide 6: Vernacular Voice LLM
+    # ---------------------------------------------------------
+    slide = prs.slides.add_slide(layout)
+    slide.shapes.title.text = "5. Vernacular RAG Advisory System"
     
     txBox = slide.shapes.add_textbox(Inches(0.5), Inches(1.5), Inches(5), Inches(5))
     tf = txBox.text_frame
@@ -195,5 +213,5 @@ def create_presentation(out_path):
     print(f"Presentation successfully created at {out_path}")
 
 if __name__ == "__main__":
-    out_path = r"Z:\major\KrushikaDhara_Uniqueness_Pitch.pptx"
+    out_path = r"Z:\major\KrushikaDhara_Uniqueness_Pitch_v2.pptx"
     create_presentation(out_path)
