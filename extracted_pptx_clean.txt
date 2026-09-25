@@ -1,0 +1,161 @@
+--- Slide 1 ---
+            Department of Computer Science and Engineering                                      Academic Year (2025-26)                                       22CSE74 : Project Phase-II                 KrushikaDhara: Cloud-Based Smart Farming  Decision Platform  
+Team Members
+1NH23CS029-  ARUN VIRAKTAMATH
+1NH23CS080- G. MOHNISH
+1NH24CS409- NAVEEN KUMAR KM
+1NH23CS060- CHANDRASHEKHAR
+
+Under the Guidance of
+Dr. Raja Meyyan, Prof and HOD, CSE, NHCE
+
+
+--- Slide 2 ---
+OUTLINE OF THE PRESENTATION
+Abstract
+Introduction
+Motivation
+Objectives
+Social Relevance
+Literature Review
+Scope of the project
+Proposed System
+Design and Methodology
+Results (40% output)
+Plan for Completion of Project
+References
+Discussion on Paper Publication
+
+--- Slide 3 ---
+Abstract
+Smallholder farmers in Karnataka lose crop value to pests, price information asymmetry, low welfare-scheme awareness, and the high upfront cost of farm machinery.
+Existing digital agriculture tools solve these problems in isolation, need continuous connectivity, and lack vernacular support.
+KrushikaDhara is a Flutter-based, Java/Spring-Boot-backed platform that unifies nine tightly coupled modules under one offline-first architecture for Karnataka farmers.
+An INT8-quantised on-device model performs leaf-level pest detection and treatment recommendation with zero server dependency.
+A cloud-assisted drone pipeline fuses aerial imagery with Sentinel-2 indices for canopy health and per-acre yield; a P2P rental marketplace uses Bluetooth mesh + geohash discovery for equipment access.
+Validated in a six-week, 42-farmer field pilot — results in Section VI — entirely on free-tier infrastructure.
+22CSE74 - PROJECT PHASE – II
+
+--- Slide 4 ---
+Introduction
+Agriculture sustains 5M+ farming households across Karnataka's diverse agro-climatic zones — Ragi/Groundnut (Maidan), Coffee/Arecanut (Malnad), Onion/Pomegranate (Dharwad/Bijapur).
+A tool built around any single crop context rarely transfers cleanly to another — a recurring obstacle to one product serving the whole state.
+Commercial platforms (Kisan Suvidha, AgroStar, DeHaat) each solve fragments: English-first, connectivity-dependent, not tuned to Karnataka-specific diseases, or thin coverage in the south.
+KrushikaDhara closes this integration gap rather than adding a tenth isolated app to a farmer's phone.
+Built entirely on open-source components and free-tier government + cloud APIs — zero recurring infrastructure cost.
+22CSE74 - PROJECT PHASE – II
+
+--- Slide 5 ---
+Motivation
+Pest & Disease Loss: most Karnataka farmers act only after visible crop damage appears, rather than intervening pre-emptively.
+Broken Price Discovery: a Kolar tomato grower sells at ₹8–10/kg while the same produce fetches ₹12–14/kg 70 km away at Yeshwanthpur APMC — a 20–30% loss.
+Low Scheme Awareness: eligible farmers rarely know of welfare schemes because information sits in dense English/Hindi PDFs, not a queryable form.
+Inaccessible Machinery: smallholders can't justify owning a tractor/tiller/sprayer for a 2-acre plot; rental markets stay informal and word-of-mouth.
+22CSE74 - PROJECT PHASE – II
+
+--- Slide 6 ---
+Objectives
+Deliver fully offline, on-device pest/disease detection with actionable chemical or organic treatment guidance.
+Estimate per-acre yield and map pest hotspots by fusing drone imagery with Sentinel-2 vegetation indices.
+Enable a peer-to-peer equipment rental marketplace using geohash discovery with a Bluetooth-mesh offline fallback.
+Provide hallucination-free scheme and loan advisory via a Retrieval-Augmented Generation pipeline grounded in official documents.
+Deliver live Mandi price alerts and hyper-local pest-weather risk warnings.
+Offer a fully Kannada voice interface so literacy is not a barrier to any module.
+22CSE74 - PROJECT PHASE – II
+
+--- Slide 7 ---
+Social Relevance
+Directly targets 5M+ smallholder farming households in Karnataka, many with limited literacy and intermittent connectivity.
+Vernacular (Kannada) voice access removes literacy as a barrier to diagnosis, prices, schemes and equipment search.
+Zero-cost architecture makes the platform replicable by agricultural universities and NGOs without subscription overhead.
+Scheme-RAG module can be deployed as an assisted-digital kiosk inside Raitha Samparka Kendras (RSKs), standardising advisory delivery.
+Aggregate disease and yield logs can support DCCB / crop-insurance claim verification and state custom-hiring-centre planning.
+22CSE74 - PROJECT PHASE – II
+
+--- Slide 8 ---
+Literature Review
+Mohanty et al. [1]: lab-trained CNN reached 99.35% accuracy on PlantVillage images but dropped to ~31% on real phone photos — no field robustness.
+Ferentinos [2]: 99.53% accuracy across 58 crop-disease pairs, but requires uploading every image to a server — not offline.
+Akhil et al. [3]: drone-based pest classification for paddy only — single crop, no treatment or yield output.
+Geethajali et al. [4]: AI chatbot for yield/crop selection — no offline mode, no vernacular voice.
+Rathi et al. [5]: disease detection + price forecasting — no equipment access, no scheme or voice layer.
+Patil et al. [6]: web-based equipment rental — no GPS-proximity matching, no offline/mesh fallback.
+Gap: no published or commercial system combines offline disease detection, drone yield estimation and vernacular voice in one validated platform.
+22CSE74 - PROJECT PHASE – II
+
+--- Slide 9 ---
+Scope of the Project
+Nine loosely-coupled modules covering diagnosis, drone yield analytics, equipment rental, market prices, crop calendar, scheme RAG, pest-weather alerts, loan advisory and voice access.
+Targets Karnataka's ten agro-climatic zones; architecture is language- and region-agnostic and can extend to other states with new Bhashini language packs and scheme documents.
+Flutter 3.19 client (Android API 24+ / iOS 14+) with a Java 21 / Spring Boot 3.2 backend on Oracle Cloud's Always-Free ARM tier.
+Out of scope for this version: in-app escrow payments, IoT soil-sensor ingestion and autonomous drone scheduling — identified as future work.
+22CSE74 - PROJECT PHASE – II
+
+--- Slide 10 ---
+Proposed System
+Disease & Pest Detection – TFLite + YOLOv8 (INT8 Quantised) – Offline.
+Drone Yield & Health Analysis – Backend CNN + Regression Head + Sentinel-2 NDVI – Online, cached.
+Equipment Rental Marketplace – Firebase Realtime DB (Geohash) + Bluetooth Mesh – Hybrid.
+Mandi Price Alert – Agmarknet API + FCM – Online.
+Crop Calendar – Open-Meteo + Groq Llama 3 – Online.
+Scheme RAG – ChromaDB + Llama 3 (LangChain4J) – Online.
+Pest-Weather Engine – Open-Meteo + Sentinel-2 NDVI – Online.
+Loan Advisory – RAG over DCC Bank / NABARD PDFs – Online.
+Voice Pipeline – Bhashini ASR + NMT + TTS – Online.
+22CSE74 - PROJECT PHASE – II
+
+--- Slide 11 ---
+Design and Methodology
+Edge Inference: capture → resize to 416×416 → normalise → quantised YOLOv8 TFLite interpreter → confidence gate at 0.5 → disease label + treatment fetched from on-device store. Median latency 178.4 ms, no network call.
+Mobile Client: Flutter 3.19, Android API 24+ / iOS 14+, tflite_flutter, camera, geolocator, flutter_nearby_connections; EN/KN via intl.
+Java Backend: Spring Boot 3.2 on Java 21 – @Scheduled Agmarknet ingestion, non-blocking WebClient to Open-Meteo/Groq/Bhashini, Apache Tika 2.9 for PDF ingestion.
+Vector Store & Drone Model: ChromaDB 0.5.3, 847 chunks, all-MiniLM-L6-v2 (384-dim), <40 ms cosine search; feed-forward yield-regression head, retrained quarterly.
+All services run on one Oracle Cloud Always-Free ARM instance (2 OCPU / 12 GB RAM), serving ~200 concurrent pilot farmers.
+22CSE74 - PROJECT PHASE – II
+
+--- Slide 12 ---
+
+--- Slide 13 ---
+
+--- Slide 14 ---
+Results (40% Output)
+To be added:
+Field pilot overview (42 farmers, 31 drone flights, 96 equipment listings)
+Disease detection performance – Table III
+Drone-based yield & hotspot accuracy – Table IV
+Scheme RAG retrieval evaluation – Table V
+Infrastructure / cost breakdown – Table II
+Comparative analysis with existing platforms – Table VI
+22CSE74 - PROJECT PHASE – II
+
+--- Slide 15 ---
+Plan for Completion of Project
+Federated Learning: aggregate on-device farmer accept/reject signals without sending raw images to a central server, for continuous model improvement.
+IoT Soil-Sensor Integration: ingest Bluetooth NPK/pH/moisture sensor data into the crop calendar for plot-specific advice.
+Autonomous Drone Scheduling: auto-queue a drone sweep on a high-risk pest-weather convergence.
+Escrow & In-App Payments: opt-in payment/deposit-escrow layer for equipment rental.
+Cross-Regional Scale-Up: extend beyond Karnataka to Maharashtra / Tamil Nadu with new Bhashini language packs and state scheme documents.
+22CSE74 - PROJECT PHASE – II
+
+--- Slide 16 ---
+References
+[1]  S. P. Mohanty, D. P. Hughes, M. Salathé, “Using deep learning for image-based plant disease detection,” Frontiers in Plant Science, vol. 7, p. 1419, 2016.
+[2]  K. P. Ferentinos, “Deep learning models for plant disease detection and diagnosis,” Computers and Electronics in Agriculture, vol. 145, pp. 311–318, 2018.
+[3]  P. Akhil, P. D. Kumar, L. P. S, “Automated Pest Classification of Paddy Field using Drone Imagery,” ICOEI 2025, Tirunelveli, India, pp. 756–761.
+[4]  T. M. Geethajali et al., “Agroinsights Chatbot: AI-Driven Precision Farming,” IEEE NKCon 2024, Bagalkote, India, pp. 1–8.
+[5]  S. Rathi et al., “AI Farm Decision Support Suite,” ICSSIT 2026, Warangal, India, pp. 1296–1302.
+[6]  A. S. Patil et al., “Revolutionizing Farming with Innovative Equipment Rental System,” ICECAA 2023, Namakkal, India, pp. 1641–1646.
+22CSE74 - PROJECT PHASE – II
+
+--- Slide 17 ---
+Discussion on Paper Publication
+Title: “KrushikaDhara: An Offline-First, Vernacular Agricultural Intelligence Platform for Smallholder Farmers.”
+Authors: Dr. Raja Meyyan, Arun Viraktamath, P Chandrashekhar, G. Mohnish, Naveen Kumar KM — Dept. of CSE, NHCE (VTU).
+Manuscript formatted per IEEE conference template and marked publish-ready, with full field-pilot results and comparative evaluation against four closely related recent studies.
+Index Terms: Edge AI, Peer-to-Peer Networks, Precision Agriculture, Retrieval-Augmented Generation (RAG), Unmanned Aerial Vehicles (UAV).
+Contribution framed as integration, not a single novel model — no prior system combines offline disease detection, drone-based yield forecasting, and equipment sharing in one Kannada-first platform.
+Target venue: an IEEE-sponsored conference in precision agriculture / edge-AI systems; submission planned following Phase-II review feedback.
+22CSE74 - PROJECT PHASE – II
+
+--- Slide 18 ---
+
