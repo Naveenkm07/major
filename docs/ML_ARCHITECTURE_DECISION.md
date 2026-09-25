@@ -18,11 +18,11 @@ The KrushikaDhara Flutter application currently implements a YOLO Object Detecti
 - **YOLO detection:** **INCOMPATIBLE**. Object detection mathematically requires spatial annotations (x, y, w, h). They do not exist here.
 - **Classification:** **COMPATIBLE**. The dataset is already perfectly structured for image classification tasks (1 label per image, indicated by folder name).
 
-## 4. Option A — YOLOv8 Detection
+## 4. Option A — Object Detection (Considered, Not Used)
 - **Advantages:** Provides spatial context (shows exactly *where* the disease is on the leaf), which increases user trust. Can detect multiple diseases on a single leaf.
 - **Disadvantages:** Much heavier model, requires complex NMS post-processing, much harder to annotate.
 - **Dataset requirements:** Requires drawing bounding boxes on thousands of images manually.
-- **Project compatibility:** Fully supported by the current codebase, but completely unsupported by the current dataset.
+- **Project compatibility:** Completely unsupported by the current dataset (no bounding box annotations exist).
 
 ## 5. Option B — CNN/Image Classification
 - **Advantages:** Solves the core business problem (identifying the disease to prescribe treatment). Faster inference, smaller model size, works perfectly with the existing dataset.
