@@ -66,6 +66,26 @@ class AuthProvider extends ChangeNotifier {
     return false;
   }
 
+  // --- BYPASS LOGIN FOR HOD PRESENTATION ---
+  Future<void> demoLogin() async {
+    _isLoading = true;
+    notifyListeners();
+    await Future.delayed(const Duration(milliseconds: 800));
+    _user = UserModel(
+      id: 'demo-12345',
+      name: 'Demo Farmer',
+      email: 'demo@krushikadhara.com',
+      phone: '0000000000',
+      role: 'farmer',
+      location: LocationModel(state: 'Karnataka', district: 'Mandya', village: 'Demo Village'),
+      stats: UserStatsModel(diseaseScans: 12, communityPosts: 3, marketAlerts: 5, schemesApplied: 2),
+    );
+    _isAuthenticated = true;
+    _isLoading = false;
+    notifyListeners();
+  }
+
+
   Future<bool> register(Map<String, dynamic> userData) async {
     _isLoading = true;
     _error = null;

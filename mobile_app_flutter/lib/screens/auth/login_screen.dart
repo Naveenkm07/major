@@ -55,6 +55,17 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> _getOtp() async {
     if (_phoneCtrl.text.isEmpty) return;
+
+    // --- BYPASS LOGIN FOR HOD PRESENTATION ---
+    if (_phoneCtrl.text.trim() == '0000000000') {
+      final auth = Provider.of<AuthProvider>(context, listen: false);
+      await auth.demoLogin();
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, '/home');
+      }
+      return;
+    }
+
     setState(() => _isLoading = true);
     String phoneNumber = '+91${_phoneCtrl.text.trim()}';
 
